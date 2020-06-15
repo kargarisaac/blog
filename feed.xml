@@ -1,4 +1,20 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://kargarisaac.github.io/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="https://kargarisaac.github.io/blog/" rel="alternate" type="text/html" /><updated>2020-06-15T07:50:25-05:00</updated><id>https://kargarisaac.github.io/blog/feed.xml</id><title type="html">Isaac Kargar</title><subtitle>My posts about Machine Learning</subtitle><entry><title type="html">DDPG</title><link href="https://kargarisaac.github.io/blog/rl/2020/06/15/rl-series-ddpg.html" rel="alternate" type="text/html" title="DDPG" /><published>2020-06-15T00:00:00-05:00</published><updated>2020-06-15T00:00:00-05:00</updated><id>https://kargarisaac.github.io/blog/rl/2020/06/15/rl-series-ddpg</id><content type="html" xml:base="https://kargarisaac.github.io/blog/rl/2020/06/15/rl-series-ddpg.html">&lt;h1 id=&quot;ddpg&quot;&gt;DDPG&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://kargarisaac.github.io/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="https://kargarisaac.github.io/blog/" rel="alternate" type="text/html" /><updated>2020-06-15T07:56:44-05:00</updated><id>https://kargarisaac.github.io/blog/feed.xml</id><title type="html">Isaac Kargar</title><subtitle>My posts about Machine Learning</subtitle><entry><title type="html">RL algorithms</title><link href="https://kargarisaac.github.io/blog/rl/2020/06/15/rl-series-ddpg.html" rel="alternate" type="text/html" title="RL algorithms" /><published>2020-06-15T00:00:00-05:00</published><updated>2020-06-15T00:00:00-05:00</updated><id>https://kargarisaac.github.io/blog/rl/2020/06/15/rl-series-ddpg</id><content type="html" xml:base="https://kargarisaac.github.io/blog/rl/2020/06/15/rl-series-ddpg.html">&lt;h1 id=&quot;rl-algorithms&quot;&gt;RL Algorithms&lt;/h1&gt;
+
+&lt;p&gt;In this post I will overview different single and multi-agent Reinforcement Learning (RL) algorithms. I will update this post and add algorithms periodically.&lt;/p&gt;
+
+&lt;h2 id=&quot;single-agent&quot;&gt;Single agent&lt;/h2&gt;
+
+&lt;h3 id=&quot;dqn&quot;&gt;DQN&lt;/h3&gt;
+
+&lt;h3 id=&quot;reinforce&quot;&gt;Reinforce&lt;/h3&gt;
+
+&lt;h3 id=&quot;a2c&quot;&gt;A2C&lt;/h3&gt;
+
+&lt;h3 id=&quot;a3c&quot;&gt;A3C&lt;/h3&gt;
+
+&lt;h3 id=&quot;ppo&quot;&gt;PPO&lt;/h3&gt;
+
+&lt;h3 id=&quot;ddpg&quot;&gt;DDPG&lt;/h3&gt;
 
 &lt;p&gt;This algorithm is from the &lt;em&gt;“Continuous Control with Deep Reinforcement Learning”&lt;/em&gt; &lt;a href=&quot;https://arxiv.org/pdf/1509.02971.pdf&quot;&gt;paper&lt;/a&gt; and uses the ideas from deep q-learning in the continuous action domain and is a model-free method based on the deterministic policy gradient.&lt;/p&gt;
 
@@ -22,7 +38,25 @@
 
 &lt;p&gt;I also found the Spinningup implementation of DDPG very clear and understandable too. You can find it &lt;a href=&quot;https://github.com/openai/spinningup/blob/master/spinup/algos/pytorch/ddpg/ddpg.py&quot;&gt;here&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;For POMDP problems, it is possible to use LSTMs or any other RNN layers to get a sequence of observations. It needs a different type of replay buffer which I will write another post about that.&lt;/p&gt;</content><author><name></name></author><summary type="html">DDPG</summary></entry><entry><title type="html">AlphaGo - Mastering the game of Go with deep neural networks and tree search</title><link href="https://kargarisaac.github.io/blog/jupyter/2020/04/12/AlphaGo.html" rel="alternate" type="text/html" title="AlphaGo - Mastering the game of Go with deep neural networks and tree search" /><published>2020-04-12T00:00:00-05:00</published><updated>2020-04-12T00:00:00-05:00</updated><id>https://kargarisaac.github.io/blog/jupyter/2020/04/12/AlphaGo</id><content type="html" xml:base="https://kargarisaac.github.io/blog/jupyter/2020/04/12/AlphaGo.html">&lt;!--
+&lt;p&gt;For POMDP problems, it is possible to use LSTMs or any other RNN layers to get a sequence of observations. It needs a different type of replay buffer for sequential data.&lt;/p&gt;
+
+&lt;h3 id=&quot;sac&quot;&gt;SAC&lt;/h3&gt;
+
+&lt;h3 id=&quot;ape-x&quot;&gt;Ape-X&lt;/h3&gt;
+
+&lt;h3 id=&quot;r2d2&quot;&gt;R2D2&lt;/h3&gt;
+
+&lt;h3 id=&quot;impala&quot;&gt;IMPALA&lt;/h3&gt;
+
+&lt;h3 id=&quot;never-give-up&quot;&gt;Never Give-Up&lt;/h3&gt;
+
+&lt;h3 id=&quot;agent57&quot;&gt;Agent57&lt;/h3&gt;
+
+&lt;h2 id=&quot;multi-agent&quot;&gt;Multi-Agent&lt;/h2&gt;
+
+&lt;h3 id=&quot;maddpg&quot;&gt;MADDPG&lt;/h3&gt;
+
+&lt;h3 id=&quot;coma&quot;&gt;COMA&lt;/h3&gt;</content><author><name></name></author><summary type="html">RL Algorithms</summary></entry><entry><title type="html">AlphaGo - Mastering the game of Go with deep neural networks and tree search</title><link href="https://kargarisaac.github.io/blog/jupyter/2020/04/12/AlphaGo.html" rel="alternate" type="text/html" title="AlphaGo - Mastering the game of Go with deep neural networks and tree search" /><published>2020-04-12T00:00:00-05:00</published><updated>2020-04-12T00:00:00-05:00</updated><id>https://kargarisaac.github.io/blog/jupyter/2020/04/12/AlphaGo</id><content type="html" xml:base="https://kargarisaac.github.io/blog/jupyter/2020/04/12/AlphaGo.html">&lt;!--
 #################################################
 ### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
 #################################################

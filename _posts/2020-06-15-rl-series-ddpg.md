@@ -1,5 +1,3 @@
-<!-- # RL Series - DDPG -->
-
 ---
 title: "RL Series - DDPG"
 description: "In this post, I talk about DDPG algorithm which is an on-policy RL algorithm with replay buffer and for continous action spaces."

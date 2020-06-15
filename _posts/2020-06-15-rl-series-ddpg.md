@@ -1,17 +1,15 @@
 ---
-title: "RL Series - DDPG"
+title: "DDPG"
 description: "In this post, I talk about DDPG algorithm which is an off-policy RL algorithm for continous action spaces."
 layout: post
 toc: true
 comments: true
 hide: false
 search_exclude: true
-categories: [fastpages]
+categories: [RL]
 ---
 
-# RL Series - DDPG
-
-This is part of my [RL-series](https://medium.com/@kargarisaac/rl-series-implementation-in-pytorch-bbeedb033866) posts.
+# DDPG
 
 This algorithm is from the _“Continuous Control with Deep Reinforcement Learning”_ [paper](https://arxiv.org/pdf/1509.02971.pdf) and uses the ideas from deep q-learning in the continuous action domain and is a model-free method based on the deterministic policy gradient.
 

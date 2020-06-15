@@ -9,13 +9,13 @@
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="In this post, I talk about DDPG algorithm which is an off-policy RL algorithm for continous action spaces." />
 <meta property="og:description" content="In this post, I talk about DDPG algorithm which is an off-policy RL algorithm for continous action spaces." />
-<link rel="canonical" href="https://kargarisaac.github.io/blog/fastpages/2020/06/15/rl-series-ddpg.html" />
-<meta property="og:url" content="https://kargarisaac.github.io/blog/fastpages/2020/06/15/rl-series-ddpg.html" />
+<link rel="canonical" href="https://kargarisaac.github.io/blog/rl-series/2020/06/15/rl-series-ddpg.html" />
+<meta property="og:url" content="https://kargarisaac.github.io/blog/rl-series/2020/06/15/rl-series-ddpg.html" />
 <meta property="og:site_name" content="Isaac Kargar" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-06-15T00:00:00-05:00" />
 <script type="application/ld+json">
-{"description":"In this post, I talk about DDPG algorithm which is an off-policy RL algorithm for continous action spaces.","@type":"BlogPosting","headline":"RL Series - DDPG","url":"https://kargarisaac.github.io/blog/fastpages/2020/06/15/rl-series-ddpg.html","datePublished":"2020-06-15T00:00:00-05:00","dateModified":"2020-06-15T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://kargarisaac.github.io/blog/fastpages/2020/06/15/rl-series-ddpg.html"},"@context":"https://schema.org"}</script>
+{"description":"In this post, I talk about DDPG algorithm which is an off-policy RL algorithm for continous action spaces.","@type":"BlogPosting","headline":"RL Series - DDPG","url":"https://kargarisaac.github.io/blog/rl-series/2020/06/15/rl-series-ddpg.html","datePublished":"2020-06-15T00:00:00-05:00","dateModified":"2020-06-15T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://kargarisaac.github.io/blog/rl-series/2020/06/15/rl-series-ddpg.html"},"@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/blog/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://kargarisaac.github.io/blog/feed.xml" title="Isaac Kargar" /><link rel="shortcut icon" type="image/x-icon" href="/blog/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
 <title>RL Series - DDPG | Isaac Kargar</title>
@@ -24,13 +24,13 @@
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="In this post, I talk about DDPG algorithm which is an off-policy RL algorithm for continous action spaces." />
 <meta property="og:description" content="In this post, I talk about DDPG algorithm which is an off-policy RL algorithm for continous action spaces." />
-<link rel="canonical" href="https://kargarisaac.github.io/blog/fastpages/2020/06/15/rl-series-ddpg.html" />
-<meta property="og:url" content="https://kargarisaac.github.io/blog/fastpages/2020/06/15/rl-series-ddpg.html" />
+<link rel="canonical" href="https://kargarisaac.github.io/blog/rl-series/2020/06/15/rl-series-ddpg.html" />
+<meta property="og:url" content="https://kargarisaac.github.io/blog/rl-series/2020/06/15/rl-series-ddpg.html" />
 <meta property="og:site_name" content="Isaac Kargar" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-06-15T00:00:00-05:00" />
 <script type="application/ld+json">
-{"description":"In this post, I talk about DDPG algorithm which is an off-policy RL algorithm for continous action spaces.","@type":"BlogPosting","headline":"RL Series - DDPG","url":"https://kargarisaac.github.io/blog/fastpages/2020/06/15/rl-series-ddpg.html","datePublished":"2020-06-15T00:00:00-05:00","dateModified":"2020-06-15T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://kargarisaac.github.io/blog/fastpages/2020/06/15/rl-series-ddpg.html"},"@context":"https://schema.org"}</script>
+{"description":"In this post, I talk about DDPG algorithm which is an off-policy RL algorithm for continous action spaces.","@type":"BlogPosting","headline":"RL Series - DDPG","url":"https://kargarisaac.github.io/blog/rl-series/2020/06/15/rl-series-ddpg.html","datePublished":"2020-06-15T00:00:00-05:00","dateModified":"2020-06-15T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://kargarisaac.github.io/blog/rl-series/2020/06/15/rl-series-ddpg.html"},"@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 <link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
@@ -100,9 +100,10 @@ window.onload = wrap_img;
     </header>
 
   <div class="post-content e-content" itemprop="articleBody">
-    <p>This is part of my <a href="https://medium.com/@kargarisaac/rl-series-implementation-in-pytorch-bbeedb033866">RL-series</a> posts.</p>
+    <ul class="section-nav">
+</ul><p>This is part of my <a href="https://medium.com/@kargarisaac/rl-series-implementation-in-pytorch-bbeedb033866">RL-series</a> posts.</p>
 
-<p>This algorithm is from the “Continuous Control with Deep Reinforcement Learning” paper and uses the ideas from deep q-learning in the continuous action domain and is a model-free method based on the deterministic policy gradient.</p>
+<p>This algorithm is from the <em>“Continuous Control with Deep Reinforcement Learning”</em> <a href="https://arxiv.org/pdf/1509.02971.pdf">paper</a> and uses the ideas from deep q-learning in the continuous action domain and is a model-free method based on the deterministic policy gradient.</p>
 
 <p>In Deterministic Policy Gradient (DPG), for each state, we have one clearly defined action to take (the output of policy is one value for action and for exploration we add a noise, normal noise for example, to the action). But in Stochastic Gradient Descent, we have a distribution over actions (the output of policy is mean and variance of a normal distribution) and sample from that distribution to get the action, for exploration. In another term, in stochastic policy gradient, we have a distribution with mean and variance and we draw a sample from that as an action. When we reduce the variance to zero, the policy will be deterministic.</p>
 
@@ -112,13 +113,13 @@ window.onload = wrap_img;
 
 <p>This algorithm is an actor-critic method and the network structure is as follows:</p>
 
-<p><img src="/blog/images/posts_images/ddpg_post/ddpg_diagram.jpg" alt="" title="DDPG diagram" /></p>
+<p><img src="/blog/assets/posts_images/ddpg_post/ddpg_diagram.jpg" alt="" title="DDPG diagram"></p>
 
 <p>First, the policy network gets the state and outputs the action mean vector. This will be a vector of mean values for different actions. For example, in a self-driving car, there are two continuous actions: steering and acceleration&amp;braking (one continuous value between -x to x, the negative values are for braking and positive values are for acceleration). So we will have two mean for these two actions. To consider exploration, we can use Ornstein-Uhlenbeck or normal noise and add it to the action mean vector in the training phase. In the test phase, we can use the mean vector directly without any added noise. Then this action vector will be concatenated with observation and fed into the Q network. The output of the Q network will be one single value as a state-action value. In DQN, because it had discrete action space, we had multiple state-action values for each action, but here because the action space is continuous, we feed the actions into the Q network and get one single value as the state-action value.</p>
 
 <p>Finally, the sudo code for DDPG is as follows:</p>
 
-<p><img src="/blog/images/posts_images/ddpg_post/ddpg_algorithm.jpg" alt="" title="DDPG algorithm" /></p>
+<p><img src="/blog/assets/posts_images/ddpg_post/ddpg_algorithm.jpg" alt="" title="DDPG algorithm"></p>
 
 <p>To understand the algorithm better, it’s good to try to implement it and play with its parameters and test it in different environments. Here is a good implementation in PyTorch that you can start with <a href="https://github.com/higgsfield/RL-Adventure-2/blob/master/5.ddpg.ipynb">this</a>.</p>
 
@@ -134,7 +135,7 @@ window.onload = wrap_img;
         theme="github-light"
         crossorigin="anonymous"
         async>
-</script><a class="u-url" href="/blog/fastpages/2020/06/15/rl-series-ddpg.html" hidden></a>
+</script><a class="u-url" href="/blog/rl-series/2020/06/15/rl-series-ddpg.html" hidden></a>
 </article>
       </div>
     </main><footer class="site-footer h-card">

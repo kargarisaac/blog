@@ -1,43 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://kargarisaac.github.io/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="https://kargarisaac.github.io/blog/" rel="alternate" type="text/html" /><updated>2020-06-15T07:43:26-05:00</updated><id>https://kargarisaac.github.io/blog/feed.xml</id><title type="html">Isaac Kargar</title><subtitle>My posts about Machine Learning</subtitle><entry><title type="html">RL Series</title><link href="https://kargarisaac.github.io/blog/fastpages/2020/06/15/rl-series.html" rel="alternate" type="text/html" title="RL Series" /><published>2020-06-15T00:00:00-05:00</published><updated>2020-06-15T00:00:00-05:00</updated><id>https://kargarisaac.github.io/blog/fastpages/2020/06/15/rl-series</id><content type="html" xml:base="https://kargarisaac.github.io/blog/fastpages/2020/06/15/rl-series.html">&lt;h1 id=&quot;rl-series&quot;&gt;RL Series&lt;/h1&gt;
-
-&lt;p&gt;&lt;img src=&quot;/blog/images/posts_images/rl-series/rl-diagram.png&quot; alt=&quot;&quot; title=&quot;Reinforcement Learning Diagram&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;I decided to read and learn more about different RL algorithms. Here is a list of the algorithms that I hope I can learn about: (I try to select the correct name for different techniques as much as I can)&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;DQN&lt;/li&gt;
-  &lt;li&gt;REINFORCE&lt;/li&gt;
-  &lt;li&gt;A2C and A3C&lt;/li&gt;
-  &lt;li&gt;TRPO&lt;/li&gt;
-  &lt;li&gt;PPO&lt;/li&gt;
-  &lt;li&gt;DDPG&lt;/li&gt;
-  &lt;li&gt;SAC&lt;/li&gt;
-  &lt;li&gt;Ape-X&lt;/li&gt;
-  &lt;li&gt;R2D2&lt;/li&gt;
-  &lt;li&gt;IMPALA&lt;/li&gt;
-  &lt;li&gt;Never Give-Up&lt;/li&gt;
-  &lt;li&gt;Agent57&lt;/li&gt;
-  &lt;li&gt;MADDPG&lt;/li&gt;
-  &lt;li&gt;COMA&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Maybe I try a technique on several environments or several techniques on an environment. I also hope that I can implement some model-based RL and multi-agent RL techniques too. I will work on self-driving cars and RL in my PhD and will try to test some of these techniques in some environments such as CARLA or CarRacing gym env.
-There are a lot of good resources to learn about RL that I will use and you can find some of them here:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;David Silver’s &lt;a href=&quot;https://www.youtube.com/watch?list=PLzuuYNsE1EZAXYR4FJ75jcJseBmo4KQ9-&amp;amp;v=2pWv7GOvuf0&quot;&gt;RL course&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;http://rail.eecs.berkeley.edu/deeprlcourse/&quot;&gt;CS 285 at UC Berkeley- Deep Reinforcement Learning&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;http://web.stanford.edu/class/cs234/index.html&quot;&gt;CS234: Reinforcement Learning Winter 2020&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://www.youtube.com/watch?list=PLdAoL1zKcqTXFJniO3Tqqn6xMBBL07EDc&amp;amp;v=xoxz-OmcL1Q&quot;&gt;CS885: Reinforcement Learning tought by Prof. Poupart - University of Waterloo&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;Arthur Juliani’s &lt;a href=&quot;https://medium.com/@awjuliani&quot;&gt;blog posts&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;Jonathan Hui’s &lt;a href=&quot;https://medium.com/@jonathan_hui/rl-deep-reinforcement-learning-series-833319a95530&quot;&gt;blog posts&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;Thomas Simonini’s &lt;a href=&quot;https://simoninithomas.github.io/Deep_reinforcement_learning_Course/&quot;&gt;blog posts&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;And many more resources that you can find through the internet.
-I reviewed these resources through the #100DaysOfMLCode challenge, the RL course at Aalto University and the studies that I’m doing for my PhD. I think that’s it for this post. We will continue with DQN in the next post.&lt;/p&gt;</content><author><name></name></author><summary type="html">RL Series</summary></entry><entry><title type="html">RL Series - DDPG</title><link href="https://kargarisaac.github.io/blog/fastpages/2020/06/15/rl-series-ddpg.html" rel="alternate" type="text/html" title="RL Series - DDPG" /><published>2020-06-15T00:00:00-05:00</published><updated>2020-06-15T00:00:00-05:00</updated><id>https://kargarisaac.github.io/blog/fastpages/2020/06/15/rl-series-ddpg</id><content type="html" xml:base="https://kargarisaac.github.io/blog/fastpages/2020/06/15/rl-series-ddpg.html">&lt;h1 id=&quot;rl-series---ddpg&quot;&gt;RL Series - DDPG&lt;/h1&gt;
-
-&lt;p&gt;This is part of my &lt;a href=&quot;https://medium.com/@kargarisaac/rl-series-implementation-in-pytorch-bbeedb033866&quot;&gt;RL-series&lt;/a&gt; posts.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://kargarisaac.github.io/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="https://kargarisaac.github.io/blog/" rel="alternate" type="text/html" /><updated>2020-06-15T07:50:25-05:00</updated><id>https://kargarisaac.github.io/blog/feed.xml</id><title type="html">Isaac Kargar</title><subtitle>My posts about Machine Learning</subtitle><entry><title type="html">DDPG</title><link href="https://kargarisaac.github.io/blog/rl/2020/06/15/rl-series-ddpg.html" rel="alternate" type="text/html" title="DDPG" /><published>2020-06-15T00:00:00-05:00</published><updated>2020-06-15T00:00:00-05:00</updated><id>https://kargarisaac.github.io/blog/rl/2020/06/15/rl-series-ddpg</id><content type="html" xml:base="https://kargarisaac.github.io/blog/rl/2020/06/15/rl-series-ddpg.html">&lt;h1 id=&quot;ddpg&quot;&gt;DDPG&lt;/h1&gt;
 
 &lt;p&gt;This algorithm is from the &lt;em&gt;“Continuous Control with Deep Reinforcement Learning”&lt;/em&gt; &lt;a href=&quot;https://arxiv.org/pdf/1509.02971.pdf&quot;&gt;paper&lt;/a&gt; and uses the ideas from deep q-learning in the continuous action domain and is a model-free method based on the deterministic policy gradient.&lt;/p&gt;
 
@@ -61,7 +22,7 @@ I reviewed these resources through the #100DaysOfMLCode challenge, the RL course
 
 &lt;p&gt;I also found the Spinningup implementation of DDPG very clear and understandable too. You can find it &lt;a href=&quot;https://github.com/openai/spinningup/blob/master/spinup/algos/pytorch/ddpg/ddpg.py&quot;&gt;here&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;For POMDP problems, it is possible to use LSTMs or any other RNN layers to get a sequence of observations. It needs a different type of replay buffer which I will write another post about that.&lt;/p&gt;</content><author><name></name></author><summary type="html">RL Series - DDPG</summary></entry><entry><title type="html">AlphaGo - Mastering the game of Go with deep neural networks and tree search</title><link href="https://kargarisaac.github.io/blog/jupyter/2020/04/12/AlphaGo.html" rel="alternate" type="text/html" title="AlphaGo - Mastering the game of Go with deep neural networks and tree search" /><published>2020-04-12T00:00:00-05:00</published><updated>2020-04-12T00:00:00-05:00</updated><id>https://kargarisaac.github.io/blog/jupyter/2020/04/12/AlphaGo</id><content type="html" xml:base="https://kargarisaac.github.io/blog/jupyter/2020/04/12/AlphaGo.html">&lt;!--
+&lt;p&gt;For POMDP problems, it is possible to use LSTMs or any other RNN layers to get a sequence of observations. It needs a different type of replay buffer which I will write another post about that.&lt;/p&gt;</content><author><name></name></author><summary type="html">DDPG</summary></entry><entry><title type="html">AlphaGo - Mastering the game of Go with deep neural networks and tree search</title><link href="https://kargarisaac.github.io/blog/jupyter/2020/04/12/AlphaGo.html" rel="alternate" type="text/html" title="AlphaGo - Mastering the game of Go with deep neural networks and tree search" /><published>2020-04-12T00:00:00-05:00</published><updated>2020-04-12T00:00:00-05:00</updated><id>https://kargarisaac.github.io/blog/jupyter/2020/04/12/AlphaGo</id><content type="html" xml:base="https://kargarisaac.github.io/blog/jupyter/2020/04/12/AlphaGo.html">&lt;!--
 #################################################
 ### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
 #################################################

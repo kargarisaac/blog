@@ -6,7 +6,7 @@ toc: true
 comments: true
 hide: false
 search_exclude: true
-categories: [RL-series]
+categories: [fastpages]
 ---
 
 This is part of my [RL-series](https://medium.com/@kargarisaac/rl-series-implementation-in-pytorch-bbeedb033866) posts.

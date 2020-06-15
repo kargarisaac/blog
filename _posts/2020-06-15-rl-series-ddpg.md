@@ -1,5 +1,5 @@
 ---
-title: "DDPG"
+title: "RL algorithms"
 description: "In this post, I talk about DDPG algorithm which is an off-policy RL algorithm for continous action spaces."
 layout: post
 toc: true
@@ -9,7 +9,23 @@ search_exclude: true
 categories: [RL]
 ---
 
-# DDPG
+# RL Algorithms
+
+In this post I will overview different single and multi-agent Reinforcement Learning (RL) algorithms. I will update this post and add algorithms periodically.
+
+## Single agent
+
+### DQN
+
+### Reinforce
+
+### A2C
+
+### A3C
+
+### PPO
+
+### DDPG
 
 This algorithm is from the _“Continuous Control with Deep Reinforcement Learning”_ [paper](https://arxiv.org/pdf/1509.02971.pdf) and uses the ideas from deep q-learning in the continuous action domain and is a model-free method based on the deterministic policy gradient.
 
@@ -35,4 +51,22 @@ To understand the algorithm better, it’s good to try to implement it and play 
 
 I also found the Spinningup implementation of DDPG very clear and understandable too. You can find it [here](https://github.com/openai/spinningup/blob/master/spinup/algos/pytorch/ddpg/ddpg.py)
 
-For POMDP problems, it is possible to use LSTMs or any other RNN layers to get a sequence of observations. It needs a different type of replay buffer which I will write another post about that.
+For POMDP problems, it is possible to use LSTMs or any other RNN layers to get a sequence of observations. It needs a different type of replay buffer for sequential data.
+
+### SAC
+
+### Ape-X
+
+### R2D2
+
+### IMPALA
+
+### Never Give-Up
+
+### Agent57
+
+## Multi-Agent 
+
+### MADDPG
+
+### COMA

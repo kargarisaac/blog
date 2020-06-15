@@ -4,12 +4,9 @@ description: "In this post, I talk about DDPG algorithm which is an on-policy RL
 layout: post
 toc: false
 comments: true
-image: images/ddpg_post/ddpg_diagram.png
 hide: false
 search_exclude: true
 categories: [fastpages]
-metadata_key1: metadata_value1
-metadata_key2: metadata_value2
 ---
 
 This is part of my [RL-series](https://medium.com/@kargarisaac/rl-series-implementation-in-pytorch-bbeedb033866) posts.

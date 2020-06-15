@@ -21,16 +21,20 @@ In DDPG, they used function approximators, neural nets, for both action-value fu
 
 This algorithm is an actor-critic method and the network structure is as follows:
 
-![DDPG diagram](images/ddpg_post/ddpg_diagram.png)
+![DDPG diagram](./images/ddpg_post/ddpg_diagram.png)
 
 First, the policy network gets the state and outputs the action mean vector. This will be a vector of mean values for different actions. For example, in a self-driving car, there are two continuous actions: steering and acceleration&braking (one continuous value between -x to x, the negative values are for braking and positive values are for acceleration). So we will have two mean for these two actions. To consider exploration, we can use Ornstein-Uhlenbeck or normal noise and add it to the action mean vector in the training phase. In the test phase, we can use the mean vector directly without any added noise. Then this action vector will be concatenated with observation and fed into the Q network. The output of the Q network will be one single value as a state-action value. In DQN, because it had discrete action space, we had multiple state-action values for each action, but here because the action space is continuous, we feed the actions into the Q network and get one single value as the state-action value.
 
 Finally, the sudo code for DDPG is as follows:
 
-![DDPG algorithm](images/ddpg_post/ddpg_algorithm.png)
+![DDPG algorithm](./images/ddpg_post/ddpg_algorithm.png)
 
 To understand the algorithm better, it’s good to try to implement it and play with its parameters and test it in different environments. Here is a good implementation in PyTorch that you can start with [this](https://github.com/higgsfield/RL-Adventure-2/blob/master/5.ddpg.ipynb). 
 
 I also found the Spinningup implementation of DDPG very clear and understandable too. You can find it [here](https://github.com/openai/spinningup/blob/master/spinup/algos/pytorch/ddpg/ddpg.py)
 
 For POMDP problems, it is possible to use LSTMs or any other RNN layers to get a sequence of observations. It needs a different type of replay buffer which I will write another post about that.
+
+```python
+import numpy as np
+```

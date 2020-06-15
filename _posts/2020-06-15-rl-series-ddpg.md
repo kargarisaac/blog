@@ -1,4 +1,19 @@
-# RL Series - DDPG
+<!-- # RL Series - DDPG -->
+
+---
+title: "RL Series - DDPG"
+description: "In this post, I talk about DDPG algorithm which is an on-policy RL algorithm with replay buffer and for continous action spaces."
+layout: post
+toc: false
+comments: true
+image: images/ddpg_post/ddpg_diagram.png
+hide: false
+search_exclude: true
+categories: [fastpages]
+metadata_key1: metadata_value1
+metadata_key2: metadata_value2
+---
+
 This is part of my [RL-series](https://medium.com/@kargarisaac/rl-series-implementation-in-pytorch-bbeedb033866) posts.
 
 This algorithm is from the “Continuous Control with Deep Reinforcement Learning” paper and uses the ideas from deep q-learning in the continuous action domain and is a model-free method based on the deterministic policy gradient.
@@ -11,13 +26,13 @@ In DDPG, they used function approximators, neural nets, for both action-value fu
 
 This algorithm is an actor-critic method and the network structure is as follows:
 
-![DDPG diagram](/_posts/images/ddpg_diagram.png)
+![DDPG diagram](/images/ddpg_post/ddpg_diagram.png)
 
 First, the policy network gets the state and outputs the action mean vector. This will be a vector of mean values for different actions. For example, in a self-driving car, there are two continuous actions: steering and acceleration&braking (one continuous value between -x to x, the negative values are for braking and positive values are for acceleration). So we will have two mean for these two actions. To consider exploration, we can use Ornstein-Uhlenbeck or normal noise and add it to the action mean vector in the training phase. In the test phase, we can use the mean vector directly without any added noise. Then this action vector will be concatenated with observation and fed into the Q network. The output of the Q network will be one single value as a state-action value. In DQN, because it had discrete action space, we had multiple state-action values for each action, but here because the action space is continuous, we feed the actions into the Q network and get one single value as the state-action value.
 
 Finally, the sudo code for DDPG is as follows:
 
-![DDPG algorithm](/_posts/images/ddpg_algorithm.png)
+![DDPG algorithm](/images/ddpg_post/ddpg_algorithm.png)
 
 To understand the algorithm better, it’s good to try to implement it and play with its parameters and test it in different environments. Here is a good implementation in PyTorch that you can start with [this](https://github.com/higgsfield/RL-Adventure-2/blob/master/5.ddpg.ipynb). 
 

@@ -243,7 +243,7 @@ Actor–critic methods are sometimes referred to as advantage actor–critic (�
     <p>Vanilla REINFORCE or Policy gradient → we use G as gradient rescaler.</p>
   </li>
   <li>
-    <p>REINFORCE with baseline → we use $(G-mean(G))/std(G)$ or $(G-V)$ as gradient rescaler. We do not use $V$ in $G$. $G$ is only the reward to go for every step in the episode → $G_t = r_t + \gamma r_{t+1} + … $</p>
+    <p>REINFORCE with baseline → we use $\frac{G-mean(G)}{std(G)}$ or $(G-V)$ as gradient rescaler. We do not use $V$ in $G$. $G$ is only the reward to go for every step in the episode → $G_t = r_t + \gamma r_{t+1} + … $</p>
   </li>
   <li>
     <p>Actor-Critic → we use $V$ in the first term of gradient rescaler and call it Advantage ($A$):</p>

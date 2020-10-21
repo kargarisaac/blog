@@ -1,8 +1,37 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://kargarisaac.github.io/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="https://kargarisaac.github.io/blog/" rel="alternate" type="text/html" /><updated>2020-10-21T09:34:10-05:00</updated><id>https://kargarisaac.github.io/blog/feed.xml</id><title type="html">Isaac Kargar</title><subtitle>My posts about Machine Learning</subtitle><entry><title type="html">RL algorithms</title><link href="https://kargarisaac.github.io/blog/rl/2020/06/15/rl-series-ddpg.html" rel="alternate" type="text/html" title="RL algorithms" /><published>2020-06-15T00:00:00-05:00</published><updated>2020-06-15T00:00:00-05:00</updated><id>https://kargarisaac.github.io/blog/rl/2020/06/15/rl-series-ddpg</id><content type="html" xml:base="https://kargarisaac.github.io/blog/rl/2020/06/15/rl-series-ddpg.html">&lt;h1 id=&quot;rl-algorithms&quot;&gt;RL Algorithms&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://kargarisaac.github.io/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="https://kargarisaac.github.io/blog/" rel="alternate" type="text/html" /><updated>2020-10-21T09:46:53-05:00</updated><id>https://kargarisaac.github.io/blog/feed.xml</id><title type="html">Isaac Kargar</title><subtitle>My posts about Machine Learning</subtitle><entry><title type="html">RL algorithms</title><link href="https://kargarisaac.github.io/blog/rl/2020/06/15/rl-series-ddpg.html" rel="alternate" type="text/html" title="RL algorithms" /><published>2020-06-15T00:00:00-05:00</published><updated>2020-06-15T00:00:00-05:00</updated><id>https://kargarisaac.github.io/blog/rl/2020/06/15/rl-series-ddpg</id><content type="html" xml:base="https://kargarisaac.github.io/blog/rl/2020/06/15/rl-series-ddpg.html">&lt;h1 id=&quot;rl-algorithms&quot;&gt;RL Algorithms&lt;/h1&gt;
 
 &lt;p&gt;In this post I will overview different single and multi-agent Reinforcement Learning (RL) algorithms. I will update this post and add algorithms periodically.&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;/blog/images/posts_images/rl-series/rl-diagram.png&quot; alt=&quot;RL diagram&quot; title=&quot;RL diagram&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Here are some resources to learn more about RL!&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;David Silver’s &lt;a href=&quot;https://www.youtube.com/playlist?list=PLzuuYNsE1EZAXYR4FJ75jcJseBmo4KQ9-&quot;&gt;course&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;CS287 at UC Berkeley - Advanced Robotics &lt;a href=&quot;https://www.youtube.com/playlist?list=PLwRJQ4m4UJjNBPJdt8WamRAt4XKc639wF&quot;&gt;course&lt;/a&gt; - Instructor: Pieter Abbeel&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;CS 285 at UC Berkeley - Deep Reinforcement Learning &lt;a href=&quot;http://rail.eecs.berkeley.edu/deeprlcourse/&quot;&gt;course&lt;/a&gt; - Instructor: Sergey Levine&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;CS234 at Stanford - Reinforcement Learning &lt;a href=&quot;http://web.stanford.edu/class/cs234/index.html&quot;&gt;course&lt;/a&gt; - Instructor: Emma Brunskill&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;CS885 at University of Waterloo - Reinforcement Learning &lt;a href=&quot;https://www.youtube.com/playlist?list=PLdAoL1zKcqTXFJniO3Tqqn6xMBBL07EDc&quot;&gt;course&lt;/a&gt; - Instructor: Pascal Poupart&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Arthur Juliani’s &lt;a href=&quot;https://medium.com/@awjuliani&quot;&gt;posts&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Jonathan Hui’s &lt;a href=&quot;https://medium.com/@jonathan_hui/rl-deep-reinforcement-learning-series-833319a95530&quot;&gt;posts&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;A Free &lt;a href=&quot;https://simoninithomas.github.io/deep-rl-course/&quot;&gt;course&lt;/a&gt; in Deep Reinforcement Learning from beginner to expert by Thomas Simonni&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;h2 id=&quot;single-agent&quot;&gt;Single agent&lt;/h2&gt;
 

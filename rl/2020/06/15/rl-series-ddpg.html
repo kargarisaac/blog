@@ -250,9 +250,11 @@ Actor–critic methods are sometimes referred to as advantage actor–critic (�
   </li>
 </ul>
 
-<p>$A_t = Q(s_t, a_t) - V(s_t)$
-$A_t = r_t + \gamma V_{s_{t+1}} - V_{s_t}$ → for one-step
-$A_t = r_t + \gamma r_{t+1} + \gamma^2 V_{s_{t+2}} - V_{s_t}$ → for 2-step</p>
+<p>$A_t = Q(s_t, a_t) - V(s_t)$</p>
+
+<p>$A_t = r_t + \gamma V_{s_{t+1}} - V_{s_t}$ → for one-step</p>
+
+<p>$A_t = r_t + \gamma r_{t+1} + \gamma^2 V_{s_{t+2}} - V_{s_t}$ → for 2-step</p>
 
 <p>and so on.</p>
 

@@ -56,7 +56,59 @@ In the training procedure, we use epsilon decay. It means that we consider a big
 In test time, we have to use a greedy policy. It means we have to select the action with the highest value, not randomly anymore (set epsilon to zero actually).
 
 
-### Reinforce
+### REINFORCE
+
+REINFORCE is a Monte-Carlo Policy Gradient (PG) method. In PGs, we try to find a policy to map the state into action directly.
+
+In value-based methods, we find a value function and use it to find the optimal policy. Policy gradient methods can be used for stochastic policies and continuous action spaces. If you want to use DQN for continuous action spaces, you have to discretize your action space. This will reduce the performance and if the number of actions is high, it will be difficult and impossible. But REINFORCE algorithms can be used for discrete or continuous action spaces. They are on-policy because they use the samples gathered from the current policy.
+
+There are different versions of REINFORCE. The first one is without a baseline. It is as follows:
+
+![reinforce algorithm]({{ site.baseurl }}/images/posts_images/rl-series/reinforce.png "from Sutton Barto book: Introduction to Reinforcement Learning")
+
+In this version, we consider a policy (here a neural network) and initialize it with some random weights. Then we play for one episode and after that, we calculate discounted reward from each time step towards the end of the episode. This discounted reward (G in the above sudo code) will be multiplied by the gradient. This G is different based on the environment and the reward function we define. For example, consider that we have three actions. The first action is a bad action and the other two actions are some good actions that will cause more future discounted rewards. If we have three positive G values for three different actions, we are pushing the network towards all of them. Actually, we push the network towards action number one slightly and towards others more. Now consider we have one negative G value for the first action and two G values for the other two actions. Here we are pushing the network far from the first action and towards the other two actions. You see?! the value of G and its sign is important. It guides our gradient direction and its step size. To solve such problems, one way is to use baseline. This will reduce the variance and accelerate the learning procedure. For example, subtract the value of the state from it, or normalize it with the mean and variance of the discounted reward of the current episode. You can see the sudo code for REINFORCE with baseline in the following picture:
+
+![reinforce algorithm]({{ site.baseurl }}/images/posts_images/rl-series/reinforce2.png "from Sutton Barto book: Introduction to Reinforcement Learning")
+
+In this version, first, we initialize the policy and value networks. It is possible to use two separate networks or a multi-head network with a shared part. Then we play an episode and calculate the discounted reward from every step until the end of the episode (reward to go). Then subtract the value (from the learned neural net) for that state from the discounted reward (REINFORCE with baseline) and use it to update the weights of value and policy networks. Then generate another episode and repeat the loop.
+
+In the Sutton&Barto book, they do not consider the above algorithm as actor-critic (another RL algorithm that we will see in the next posts). It learns the value function but it is not used as a critic! I think it is because we do not use the learned value function (critic) in the first term of the policy gradient rescaler (for bootstrapping) to tell us how good is our policy or action in every step or in a batch of actions (in A2C and A3C we do the update every t_max step). In REINFORCE we update the network at the end of each episode.
+
+_"The REINFORCE method follows directly from the policy gradient theorem. Adding a state-value function as a baseline reduces REINFORCE’s variance without introducing bias. Using the state-value function for bootstrapping introduces bias but is often desirable for the same reason that bootstrapping TD methods are often superior to Monte Carlo methods (substantially reduced variance). The state-value function assigns credit to — critizes — the policy’s action selections, and accordingly the former is termed the critic and the latter the actor, and these overall methods are termed actor–critic methods.
+Actor–critic methods are sometimes referred to as advantage actor–critic (“A2C”) methods in the literature."_
+[Sutton&Barto — second edition]
+
+I think Monte-Carlo policy gradient and Actor-Critic policy gradient are good names as I saw in the slides of David Silver course.
+
+![reinforce algorithm]({{ site.baseurl }}/images/posts_images/rl-series/reinforce3.png "[source](https://www.youtube.com/watch?v=KHZVXao4qXs&list=PLqYmG7hTraZDM-OYHWgPebj2MfCFzFObQ&index=7)")
+
+I also saw the following slide from the Deep Reinforcement Learning and Control course (CMU 10703) at Carnegie Mellon University:
+
+![reinforce algorithm]({{ site.baseurl }}/images/posts_images/rl-series/reinforce4.png "[source](https://www.andrew.cmu.edu/course//10-703/slides/Lecture_PG-NatGrad-10-8-2018.pdf)")
+
+Here they consider every method that uses value function (V or Q) as actor-critic and if you just consider reward to go in the policy gradient rescaler, it is REINFORCE. The policy evaluation by the value function can be TD or MC.
+
+Summary of the categorization:
+- Vanilla REINFORCE or Policy gradient --> we use G as gradient rescaler.
+- REINFORCE with baseline --> we use $(G-mean(G))/std(G)$ or $(G-V)$ as gradient rescaler. We do not use $V$ in $G$. $G$ is only the reward to go for every step in the episode --> $G_t = r_t + \gamma r_{t+1} + … $
+- Actor-Critic --> we use $V$ in the first term of gradient rescaler and call it Advantage ($A$):
+$$
+A_t = Q(s_t, a_t) — V(s_t)
+$$
+$$
+A_t = r_t + \gamma * V_{s_{t+1}} — V_{s_t} --> for one-step and
+$$
+$$
+A_t = r_t + \gamma * r_{t+1} + \gamma^2  V_{s_{t+2}} — V_{s_t} --> for 2-step
+$$
+and …
+- In Actor-Critics you can do the update each $N$ step based on your task. This $N$ can be less than an episode.
+
+Anyway, let’s continue.
+
+This algorithm can be used for either discrete or continuous action spaces. In discrete action spaces, it will output a probability distribution over action, which means that the activation function of the output layer is a softmax. For exploration-exploitation, it samples from the actions based on their probabilities. Actions with higher probabilities have more chances to be selected.
+
+In continuous action spaces, the output will not have any softmax. Because the output is a mean for a normal distribution. We consider one neuron for each action and it can have any value. In fact, the policy is a normal distribution and we calculate its mean by a neural network. The variance can be fixed or decrease over time or can be learned. You can consider it as a function of the input state, or define it as a parameter that can be learned by gradient descent. If you want to learn the sigma too, you have to consider the number of actions. For example, if we want to map the front view image of a self-driving car into steering and throttle-brake, we have two continuous actions. So we have to have two mean and two variance for these two actions. During training, we sample from this normal distribution for exploration of the environment, but in the test, we only use the mean as action.
 
 ### A2C
 

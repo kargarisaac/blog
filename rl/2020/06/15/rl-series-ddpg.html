@@ -250,9 +250,9 @@ Actor–critic methods are sometimes referred to as advantage actor–critic (�
   </li>
 </ul>
 
-<p><span class="katex-error" title="ParseError: KaTeX parse error: Expected 'EOF', got '&amp;' at position 73: …+1}} - V_{s_t} &amp;̲rarr; for one-s…" style="color:#cc0000">A_t = Q(s_t, a_t) — V(s_t) \\
- A_t = r_t + \gamma V_{s_{t+1}} - V_{s_t} &amp;rarr; for one-step \\
- A_t = r_t + \gamma r_{t+1} + \gamma^2 V_{s_{t+2}} - V_{s_t}</span>  → for 2-step</p>
+<p>$A_t = Q(s_t, a_t) - V(s_t)$
+$A_t = r_t + \gamma V_{s_{t+1}} - V_{s_t}$ → for one-step
+$A_t = r_t + \gamma r_{t+1} + \gamma^2 V_{s_{t+2}} - V_{s_t}$ → for 2-step</p>
 
 <p>and so on.</p>
 

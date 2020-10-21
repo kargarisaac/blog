@@ -92,7 +92,7 @@ Summary of the categorization:
 
 - Vanilla REINFORCE or Policy gradient &rarr; we use G as gradient rescaler.
 
-- REINFORCE with baseline &rarr; we use $(G-mean(G))/std(G)$ or $(G-V)$ as gradient rescaler. We do not use $V$ in $G$. $G$ is only the reward to go for every step in the episode &rarr; $G_t = r_t + \gamma r_{t+1} + … $
+- REINFORCE with baseline &rarr; we use $\frac{G-mean(G)}{std(G)}$ or $(G-V)$ as gradient rescaler. We do not use $V$ in $G$. $G$ is only the reward to go for every step in the episode &rarr; $G_t = r_t + \gamma r_{t+1} + … $
 
 - Actor-Critic &rarr; we use $V$ in the first term of gradient rescaler and call it Advantage ($A$):
 

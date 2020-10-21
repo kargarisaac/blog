@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://kargarisaac.github.io/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="https://kargarisaac.github.io/blog/" rel="alternate" type="text/html" /><updated>2020-10-21T09:49:39-05:00</updated><id>https://kargarisaac.github.io/blog/feed.xml</id><title type="html">Isaac Kargar</title><subtitle>My posts about Machine Learning</subtitle><entry><title type="html">RL algorithms</title><link href="https://kargarisaac.github.io/blog/rl/2020/06/15/rl-series-ddpg.html" rel="alternate" type="text/html" title="RL algorithms" /><published>2020-06-15T00:00:00-05:00</published><updated>2020-06-15T00:00:00-05:00</updated><id>https://kargarisaac.github.io/blog/rl/2020/06/15/rl-series-ddpg</id><content type="html" xml:base="https://kargarisaac.github.io/blog/rl/2020/06/15/rl-series-ddpg.html">&lt;h1 id=&quot;rl-algorithms&quot;&gt;RL Algorithms&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://kargarisaac.github.io/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="https://kargarisaac.github.io/blog/" rel="alternate" type="text/html" /><updated>2020-10-21T09:50:40-05:00</updated><id>https://kargarisaac.github.io/blog/feed.xml</id><title type="html">Isaac Kargar</title><subtitle>My posts about Machine Learning</subtitle><entry><title type="html">RL algorithms</title><link href="https://kargarisaac.github.io/blog/rl/2020/06/15/rl-series-ddpg.html" rel="alternate" type="text/html" title="RL algorithms" /><published>2020-06-15T00:00:00-05:00</published><updated>2020-06-15T00:00:00-05:00</updated><id>https://kargarisaac.github.io/blog/rl/2020/06/15/rl-series-ddpg</id><content type="html" xml:base="https://kargarisaac.github.io/blog/rl/2020/06/15/rl-series-ddpg.html">&lt;h1 id=&quot;rl-algorithms&quot;&gt;RL Algorithms&lt;/h1&gt;
 
 &lt;p&gt;In this post I will overview different single and multi-agent Reinforcement Learning (RL) algorithms. I will update this post and add algorithms periodically.&lt;/p&gt;
 
@@ -36,6 +36,24 @@
 &lt;h2 id=&quot;single-agent&quot;&gt;Single agent&lt;/h2&gt;
 
 &lt;h3 id=&quot;dqn&quot;&gt;DQN&lt;/h3&gt;
+
+&lt;p&gt;We will take a look at DQN with experience replay buffer and the target network.&lt;/p&gt;
+
+&lt;p&gt;DQN is a value-based method. It means that we try to learn a value function and then use it to achieve the policy. In DQN we use a neural network as a function approximator for our value function. It gets the state as input and outputs the value for different actions in that state. These values are not limited to be between zero and one, like probabilities, and can have other values based on the environment and the reward function we define.&lt;/p&gt;
+
+&lt;p&gt;DQN is an off-policy method which means that we are using data from old policies, the data that we gather in every interaction with the environment and save it in the experience replay buffer, to sample from it later and train the network. The size of the replay buffer should be large enough to reduce the i.i.d property between data that we sample from it.&lt;/p&gt;
+
+&lt;p&gt;To use DQN, the action should be discrete. We can use it for continuous action spaces by discretizing the action space, but it’s better to use other techniques that can handle continuous action spaces such as Policy Gradients.
+First, let’s see the algorithm’s sudo code:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/images/posts_images/rl-series/dqn.png&quot; alt=&quot;DQN algorithm&quot; title=&quot;DQN algorithm&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;In this algorithm, we have experience replay buffer and a target network with a different set of parameters that will be updated every C steps. These tricks help to get a better and more stable method rather than pure DQN. There are a lot of improvements for DQN and we will see some of them in the next posts too.&lt;/p&gt;
+
+&lt;p&gt;First, we initialize the weights of both networks and then start from the initial state s and take action a with epsilon-greedy policy. In the epsilon-greedy policy, we select an action a randomly or using the Q-network. Then we execute the selected action and get the next state, reward, and the done values from the environment and save them in our replay buffer. Then we sample a random batch from the replay buffer and calculate target based on the Bellman equation in the above picture and use MSE loss and gradient descent to update the network weights. We will update the weights of our target network every C steps.&lt;/p&gt;
+
+&lt;p&gt;In the training procedure, we use epsilon decay. It means that we consider a big value for epsilon, such as 1. Then during the training procedure, as we go forward, we reduce its value to something like 0.02 or 0.05, based on the environment. It will help the agent to do more exploration in the first steps and learn more about the environment. It’s better to have some exploration always. That’s a trade-off between exploration-exploitation.
+In test time, we have to use a greedy policy. It means we have to select the action with the highest value, not randomly anymore (set epsilon to zero actually).&lt;/p&gt;
 
 &lt;h3 id=&quot;reinforce&quot;&gt;Reinforce&lt;/h3&gt;
 

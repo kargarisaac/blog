@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://kargarisaac.github.io/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="https://kargarisaac.github.io/blog/" rel="alternate" type="text/html" /><updated>2020-10-21T10:15:21-05:00</updated><id>https://kargarisaac.github.io/blog/feed.xml</id><title type="html">Isaac Kargar</title><subtitle>My posts about Machine Learning</subtitle><entry><title type="html">RL algorithms</title><link href="https://kargarisaac.github.io/blog/rl/2020/06/15/rl-series-ddpg.html" rel="alternate" type="text/html" title="RL algorithms" /><published>2020-06-15T00:00:00-05:00</published><updated>2020-06-15T00:00:00-05:00</updated><id>https://kargarisaac.github.io/blog/rl/2020/06/15/rl-series-ddpg</id><content type="html" xml:base="https://kargarisaac.github.io/blog/rl/2020/06/15/rl-series-ddpg.html">&lt;h1 id=&quot;rl-algorithms&quot;&gt;RL Algorithms&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://kargarisaac.github.io/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="https://kargarisaac.github.io/blog/" rel="alternate" type="text/html" /><updated>2020-10-21T10:17:49-05:00</updated><id>https://kargarisaac.github.io/blog/feed.xml</id><title type="html">Isaac Kargar</title><subtitle>My posts about Machine Learning</subtitle><entry><title type="html">RL algorithms</title><link href="https://kargarisaac.github.io/blog/rl/2020/06/15/rl-series-ddpg.html" rel="alternate" type="text/html" title="RL algorithms" /><published>2020-06-15T00:00:00-05:00</published><updated>2020-06-15T00:00:00-05:00</updated><id>https://kargarisaac.github.io/blog/rl/2020/06/15/rl-series-ddpg</id><content type="html" xml:base="https://kargarisaac.github.io/blog/rl/2020/06/15/rl-series-ddpg.html">&lt;h1 id=&quot;rl-algorithms&quot;&gt;RL Algorithms&lt;/h1&gt;
 
 &lt;p&gt;In this post I will overview different single and multi-agent Reinforcement Learning (RL) algorithms. I will update this post and add algorithms periodically.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/blog/images/posts_images/rl-series/rl-diagram.png&quot; alt=&quot;RL diagram&quot; title=&quot;RL diagram&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/blog/images/posts_images/rl-series/rl-diagram.png&quot; alt=&quot;RL diagram&quot; /&gt; &lt;em&gt;RL diagram&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;Here are some resources to learn more about RL!&lt;/p&gt;
 
@@ -79,11 +79,11 @@ Actor–critic methods are sometimes referred to as advantage actor–critic (�
 
 &lt;p&gt;I think Monte-Carlo policy gradient and Actor-Critic policy gradient are good names as I saw in the slides of David Silver course.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/blog/images/posts_images/rl-series/reinforce3.png&quot; alt=&quot;reinforce algorithm&quot; title=&quot;[source](https://www.youtube.com/watch?v=KHZVXao4qXs&amp;amp;list=PLqYmG7hTraZDM-OYHWgPebj2MfCFzFObQ&amp;amp;index=7)&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/blog/images/posts_images/rl-series/reinforce3.png&quot; alt=&quot;reinforce algorithm&quot; /&gt; &lt;em&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=KHZVXao4qXs&amp;amp;list=PLqYmG7hTraZDM-OYHWgPebj2MfCFzFObQ&amp;amp;index=7&quot;&gt;source&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;I also saw the following slide from the Deep Reinforcement Learning and Control course (CMU 10703) at Carnegie Mellon University:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/blog/images/posts_images/rl-series/reinforce4.png&quot; alt=&quot;reinforce algorithm&quot; title=&quot;[source](https://www.andrew.cmu.edu/course//10-703/slides/Lecture_PG-NatGrad-10-8-2018.pdf)&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/blog/images/posts_images/rl-series/reinforce4.png&quot; alt=&quot;reinforce algorithm&quot; /&gt; &lt;em&gt;&lt;a href=&quot;https://www.andrew.cmu.edu/course//10-703/slides/Lecture_PG-NatGrad-10-8-2018.pdf&quot;&gt;source&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;Here they consider every method that uses value function (V or Q) as actor-critic and if you just consider reward to go in the policy gradient rescaler, it is REINFORCE. The policy evaluation by the value function can be TD or MC.&lt;/p&gt;
 
@@ -104,10 +104,10 @@ Actor–critic methods are sometimes referred to as advantage actor–critic (�
 &lt;p&gt;$$
 A_t = Q(s_t, a_t) — V(s_t)&lt;/p&gt;
 
-&lt;p&gt;A_t = r_t + \gamma  V_{s_{t+1}} — V_{s_t} 
+&lt;p&gt;A_t = r_t + \gamma V_{s_{t+1}} - V_{s_t} 
  → for one-step&lt;/p&gt;
 
-&lt;p&gt;A_t = r_t + \gamma  r_{t+1} + \gamma^2  V_{s_{t+2}} — V_{s_t}
+&lt;p&gt;A_t = r_t + \gamma r_{t+1} + \gamma^2 V_{s_{t+2}} - V_{s_t}
 $$  → for 2-step&lt;/p&gt;
 
 &lt;p&gt;and so on.&lt;/p&gt;

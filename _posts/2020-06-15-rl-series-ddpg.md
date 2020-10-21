@@ -80,7 +80,7 @@ Actor–critic methods are sometimes referred to as advantage actor–critic (�
 
 I think Monte-Carlo policy gradient and Actor-Critic policy gradient are good names as I saw in the slides of David Silver course.
 
-![reinforce algorithm]({{ site.baseurl }}/images/posts_images/rl-series/reinforce3.png) * [source](https://www.youtube.com/watch?v=KHZVXao4qXs&list=PLqYmG7hTraZDM-OYHWgPebj2MfCFzFObQ&index=7) *
+![reinforce algorithm]({{ site.baseurl }}/images/posts_images/rl-series/reinforce3.png " [source](https://www.youtube.com/watch?v=KHZVXao4qXs&list=PLqYmG7hTraZDM-OYHWgPebj2MfCFzFObQ&index=7 ")
 
 I also saw the following slide from the Deep Reinforcement Learning and Control course (CMU 10703) at Carnegie Mellon University:
 

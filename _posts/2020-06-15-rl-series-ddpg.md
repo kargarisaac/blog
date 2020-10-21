@@ -96,11 +96,9 @@ Summary of the categorization:
 
 - Actor-Critic &rarr; we use $V$ in the first term of gradient rescaler and call it Advantage ($A$):
 
-$$
- A_t = Q(s_t, a_t) — V(s_t) \\
- A_t = r_t + \gamma V_{s_{t+1}} - V_{s_t} &rarr; for one-step \\
- A_t = r_t + \gamma r_{t+1} + \gamma^2 V_{s_{t+2}} - V_{s_t}
-$$  &rarr; for 2-step
+$A_t = Q(s_t, a_t) - V(s_t)$
+$A_t = r_t + \gamma V_{s_{t+1}} - V_{s_t}$ &rarr; for one-step
+$A_t = r_t + \gamma r_{t+1} + \gamma^2 V_{s_{t+2}} - V_{s_t}$ &rarr; for 2-step
 
 and so on.
 

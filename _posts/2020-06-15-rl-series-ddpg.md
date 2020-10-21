@@ -13,7 +13,7 @@ categories: [RL]
 
 In this post I will overview different single and multi-agent Reinforcement Learning (RL) algorithms. I will update this post and add algorithms periodically.
 
-![RL diagram](/images/posts_images/rl-series/rl-diagram.png)
+![RL diagram]({{ site.baseurl }}/images/posts_images/rl-series/rl-diagram.png)
 
 ## Single agent
 
@@ -40,7 +40,7 @@ In DDPG, they used function approximators, neural nets, for both action-value fu
 This algorithm is an actor-critic method and the network structure is as follows:
 
 
-![DDPG diagram](/images/posts_images/ddpg_post/ddpg_diagram.jpg)
+![DDPG diagram]({{ site.baseurl }}/images/posts_images/ddpg_post/ddpg_diagram.jpg)
 
 
 First, the policy network gets the state and outputs the action mean vector. This will be a vector of mean values for different actions. For example, in a self-driving car, there are two continuous actions: steering and acceleration&braking (one continuous value between -x to x, the negative values are for braking and positive values are for acceleration). So we will have two mean for these two actions. To consider exploration, we can use Ornstein-Uhlenbeck or normal noise and add it to the action mean vector in the training phase. In the test phase, we can use the mean vector directly without any added noise. Then this action vector will be concatenated with observation and fed into the Q network. The output of the Q network will be one single value as a state-action value. In DQN, because it had discrete action space, we had multiple state-action values for each action, but here because the action space is continuous, we feed the actions into the Q network and get one single value as the state-action value.

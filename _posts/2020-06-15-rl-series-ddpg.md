@@ -80,11 +80,11 @@ Actor–critic methods are sometimes referred to as advantage actor–critic (�
 
 I think Monte-Carlo policy gradient and Actor-Critic policy gradient are good names as I saw in the slides of David Silver course.
 
-![reinforce algorithm]({{ site.baseurl }}/images/posts_images/rl-series/reinforce3.png " [source](https://www.youtube.com/watch?v=KHZVXao4qXs&list=PLqYmG7hTraZDM-OYHWgPebj2MfCFzFObQ&index=7 ")
+![reinforce algorithm]({{ site.baseurl }}/images/posts_images/rl-series/reinforce3.png "source: https://www.youtube.com/watch?v=KHZVXao4qXs&list=PLqYmG7hTraZDM-OYHWgPebj2MfCFzFObQ&index=7")
 
 I also saw the following slide from the Deep Reinforcement Learning and Control course (CMU 10703) at Carnegie Mellon University:
 
-![reinforce algorithm]({{ site.baseurl }}/images/posts_images/rl-series/reinforce4.png) * [source](https://www.andrew.cmu.edu/course//10-703/slides/Lecture_PG-NatGrad-10-8-2018.pdf) *
+![reinforce algorithm]({{ site.baseurl }}/images/posts_images/rl-series/reinforce4.png "source: https://www.andrew.cmu.edu/course//10-703/slides/Lecture_PG-NatGrad-10-8-2018.pdf")
 
 Here they consider every method that uses value function (V or Q) as actor-critic and if you just consider reward to go in the policy gradient rescaler, it is REINFORCE. The policy evaluation by the value function can be TD or MC.
 

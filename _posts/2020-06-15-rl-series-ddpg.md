@@ -37,6 +37,24 @@ Here are some resources to learn more about RL!
 
 ### DQN
 
+We will take a look at DQN with experience replay buffer and the target network. 
+
+DQN is a value-based method. It means that we try to learn a value function and then use it to achieve the policy. In DQN we use a neural network as a function approximator for our value function. It gets the state as input and outputs the value for different actions in that state. These values are not limited to be between zero and one, like probabilities, and can have other values based on the environment and the reward function we define.
+
+DQN is an off-policy method which means that we are using data from old policies, the data that we gather in every interaction with the environment and save it in the experience replay buffer, to sample from it later and train the network. The size of the replay buffer should be large enough to reduce the i.i.d property between data that we sample from it.
+
+To use DQN, the action should be discrete. We can use it for continuous action spaces by discretizing the action space, but it’s better to use other techniques that can handle continuous action spaces such as Policy Gradients.
+First, let’s see the algorithm’s sudo code:
+
+![DQN algorithm]({{ site.baseurl }}/images/posts_images/rl-series/dqn.png "DQN algorithm")
+
+In this algorithm, we have experience replay buffer and a target network with a different set of parameters that will be updated every C steps. These tricks help to get a better and more stable method rather than pure DQN. There are a lot of improvements for DQN and we will see some of them in the next posts too.
+
+First, we initialize the weights of both networks and then start from the initial state s and take action a with epsilon-greedy policy. In the epsilon-greedy policy, we select an action a randomly or using the Q-network. Then we execute the selected action and get the next state, reward, and the done values from the environment and save them in our replay buffer. Then we sample a random batch from the replay buffer and calculate target based on the Bellman equation in the above picture and use MSE loss and gradient descent to update the network weights. We will update the weights of our target network every C steps.
+
+In the training procedure, we use epsilon decay. It means that we consider a big value for epsilon, such as 1. Then during the training procedure, as we go forward, we reduce its value to something like 0.02 or 0.05, based on the environment. It will help the agent to do more exploration in the first steps and learn more about the environment. It’s better to have some exploration always. That’s a trade-off between exploration-exploitation.
+In test time, we have to use a greedy policy. It means we have to select the action with the highest value, not randomly anymore (set epsilon to zero actually).
+
 
 ### Reinforce
 

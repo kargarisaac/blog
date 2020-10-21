@@ -89,19 +89,27 @@ I also saw the following slide from the Deep Reinforcement Learning and Control 
 Here they consider every method that uses value function (V or Q) as actor-critic and if you just consider reward to go in the policy gradient rescaler, it is REINFORCE. The policy evaluation by the value function can be TD or MC.
 
 Summary of the categorization:
-- Vanilla REINFORCE or Policy gradient --> we use G as gradient rescaler.
-- REINFORCE with baseline --> we use $(G-mean(G))/std(G)$ or $(G-V)$ as gradient rescaler. We do not use $V$ in $G$. $G$ is only the reward to go for every step in the episode --> $G_t = r_t + \gamma r_{t+1} + … $
-- Actor-Critic --> we use $V$ in the first term of gradient rescaler and call it Advantage ($A$):
+
+- Vanilla REINFORCE or Policy gradient &rarr; we use G as gradient rescaler.
+
+- REINFORCE with baseline &rarr; we use $(G-mean(G))/std(G)$ or $(G-V)$ as gradient rescaler. We do not use $V$ in $G$. $G$ is only the reward to go for every step in the episode &rarr; $G_t = r_t + \gamma r_{t+1} + … $
+
+- Actor-Critic &rarr; we use $V$ in the first term of gradient rescaler and call it Advantage ($A$):
+
 $$
 A_t = Q(s_t, a_t) — V(s_t)
 $$
+
 $$
-A_t = r_t + \gamma * V_{s_{t+1}} — V_{s_t} --> for one-step and
+A_t = r_t + \gamma * V_{s_{t+1}} — V_{s_t} 
+$$ &rarr; for one-step and
+
 $$
-$$
-A_t = r_t + \gamma * r_{t+1} + \gamma^2  V_{s_{t+2}} — V_{s_t} --> for 2-step
-$$
+A_t = r_t + \gamma * r_{t+1} + \gamma^2  V_{s_{t+2}} — V_{s_t}
+$$  &rarr; for 2-step
+
 and …
+
 - In Actor-Critics you can do the update each $N$ step based on your task. This $N$ can be less than an episode.
 
 Anyway, let’s continue.

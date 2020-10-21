@@ -108,7 +108,7 @@ $$
 A_t = r_t + \gamma * r_{t+1} + \gamma^2  V_{s_{t+2}} — V_{s_t}
 $$  &rarr; for 2-step
 
-and …
+and son on.
 
 - In Actor-Critics you can do the update each $N$ step based on your task. This $N$ can be less than an episode.
 

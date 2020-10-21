@@ -15,9 +15,28 @@ In this post I will overview different single and multi-agent Reinforcement Lear
 
 ![RL diagram]({{ site.baseurl }}/images/posts_images/rl-series/rl-diagram.png "RL diagram")
 
+Here are some resources to learn more about RL!
+
+- David Silver's [course](https://www.youtube.com/playlist?list=PLzuuYNsE1EZAXYR4FJ75jcJseBmo4KQ9-)
+
+- CS287 at UC Berkeley - Advanced Robotics [course](https://www.youtube.com/playlist?list=PLwRJQ4m4UJjNBPJdt8WamRAt4XKc639wF) - Instructor: Pieter Abbeel
+
+- CS 285 at UC Berkeley - Deep Reinforcement Learning [course](http://rail.eecs.berkeley.edu/deeprlcourse/) - Instructor: Sergey Levine
+
+- CS234 at Stanford - Reinforcement Learning [course](http://web.stanford.edu/class/cs234/index.html) - Instructor: Emma Brunskill
+
+- CS885 at University of Waterloo - Reinforcement Learning [course](https://www.youtube.com/playlist?list=PLdAoL1zKcqTXFJniO3Tqqn6xMBBL07EDc) - Instructor: Pascal Poupart 
+
+- Arthur Juliani's [posts](https://medium.com/@awjuliani)
+
+- Jonathan Hui's [posts](https://medium.com/@jonathan_hui/rl-deep-reinforcement-learning-series-833319a95530)
+
+- A Free [course](https://simoninithomas.github.io/deep-rl-course/) in Deep Reinforcement Learning from beginner to expert by Thomas Simonni
+
 ## Single agent
 
 ### DQN
+
 
 ### Reinforce
 

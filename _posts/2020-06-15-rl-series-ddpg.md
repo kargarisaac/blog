@@ -1,6 +1,6 @@
 ---
-title: "RL algorithms"
-description: "In this post, I talk about DDPG algorithm which is an off-policy RL algorithm for continous action spaces."
+title: "Online Reinforcement Learning"
+description: "In this post, I try to summarize some interesting online RL algorithms."
 layout: post
 toc: true
 comments: true
@@ -9,9 +9,9 @@ search_exclude: true
 categories: [RL]
 ---
 
-# RL Algorithms
+# Online Reinforcement Learning
 
-In this post I will overview different single and multi-agent Reinforcement Learning (RL) algorithms. I will update this post and add algorithms periodically.
+In this post I will overview different single and multi-agent online Reinforcement Learning (RL) algorithms. By **online** I mean the algorithms that can interact with an environment and collect data, in contrast to offline RL. I will update this post and add algorithms periodically.
 
 ![RL diagram]({{ site.baseurl }}/images/posts_images/rl-series/rl-diagram.png) *RL diagram*
 

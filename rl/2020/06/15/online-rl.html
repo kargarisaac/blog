@@ -336,7 +336,7 @@ Actor–critic methods are sometimes referred to as advantage actor–critic (�
 
 <p>To solve this problem, the most naive approach is to use single-agent RL algorithms for each agent and treat other agents as part of the environment. Some methods like Independent Q-Learning (IQL) work fine in some multi-agent RL problems in practice but there is no guarantee for them to converge. In IQL, each agent has one separate action-value function that gets the agent’s local observation to select its action based on that. It is also possible to use additional inputs like previous actions as input. Usually, in partially observable environments, we use RNNs to consider a history of several sequential observation-actions.</p>
 
-<p><img src="/blog/images/posts_images/ddpg_post/marl1.png" alt="MARL" title=" source: https://arxiv.org/pdf/1706.05296.pdf "></p>
+<p><img src="/blog/images/posts_images/rl-series/marl1.png" alt="MARL" title=" source: https://arxiv.org/pdf/1706.05296.pdf "></p>
 
 <p>The other approach is to have a fully centralised method to learn and act in a centralised fashion. We can consider this type as a big single-agent problem. This approach is also valid in some problems that you don’t need decentralised execution. For example for traffic management or traffic light management, it is possible to use such approaches.</p>
 
@@ -363,15 +363,15 @@ Actor–critic methods are sometimes referred to as advantage actor–critic (�
 
 <p>This work proposes a way to have separate action-value functions for multiple agents and learn them by just one shared team reward signal. The joint action-value function is a linear summation of all action-value functions of all agents. Actually, by using a single shared reward signal, it tries to learn decomposed value functions for each agent and use it for decentralised execution.</p>
 
-<p><img src="/blog/images/posts_images/ddpg_post/vdn1.png" alt="VDN" title=" source: https://arxiv.org/pdf/1706.05296.pdf "></p>
+<p><img src="/blog/images/posts_images/rl-series/vdn1.png" alt="VDN" title=" source: https://arxiv.org/pdf/1706.05296.pdf "></p>
 
 <p>Consider a case with 2 agents, the reward would be:</p>
 
-<p><img src="/blog/images/posts_images/ddpg_post/vdn2.png" alt="VDN"></p>
+<p><img src="/blog/images/posts_images/rl-series/vdn2.png" alt="VDN"></p>
 
 <p>Then the total Q function is:</p>
 
-<p><img src="/blog/images/posts_images/ddpg_post/vdn3.png" alt="VDN"></p>
+<p><img src="/blog/images/posts_images/rl-series/vdn3.png" alt="VDN"></p>
 
 <p>It is using the same Bellman equation to standard q-learning approach and just replaces Q in that equation with the new Q value.</p>
 
@@ -380,7 +380,7 @@ Actor–critic methods are sometimes referred to as advantage actor–critic (�
 
 <p>QMIX is somehow an extension to value decomposition networks (VDN) but tries to mix the Q-value of different agents in a nonlinear way. They use global state s_t as input to hypernetworks to generate weights and biases of the mixing network.</p>
 
-<p><img src="/blog/images/posts_images/ddpg_post/qmix1.png" alt="QMIX" title=" source: https://arxiv.org/pdf/1803.11485.pdf"></p>
+<p><img src="/blog/images/posts_images/rl-series/qmix1.png" alt="QMIX" title=" source: https://arxiv.org/pdf/1803.11485.pdf"></p>
 
 <p>Here again, the equation to update the weights is the standard Bellman equation in which the Q is replaced with Q_tot in the above figure.</p>
 
@@ -394,15 +394,15 @@ Actor–critic methods are sometimes referred to as advantage actor–critic (�
 
 <p>Multi-Agent DDPG (MADDPG) is a method to use separate actors and critics for each agent and train the critic in a centralised way and use the actor in execution. So each agent has one actor and one critic. The actor has access to its own action-observation data and is trained by them and the critic has access to observation and action of all agents and is trained by all of them.</p>
 
-<p><img src="/blog/images/posts_images/ddpg_post/maddpg.png" alt="MADDPG" title=" source: https://arxiv.org/pdf/1706.02275.pdf "></p>
+<p><img src="/blog/images/posts_images/rl-series/maddpg.png" alt="MADDPG" title=" source: https://arxiv.org/pdf/1706.02275.pdf "></p>
 
 <p>The centralised action-value function for each agent can be written as:</p>
 
-<p><img src="/blog/images/posts_images/ddpg_post/maddpg2.png" alt="MADDPG"></p>
+<p><img src="/blog/images/posts_images/rl-series/maddpg2.png" alt="MADDPG"></p>
 
 <p>And the gradient can be written as follows:</p>
 
-<p><img src="/blog/images/posts_images/ddpg_post/maddpg3.png" alt="MADDPG"></p>
+<p><img src="/blog/images/posts_images/rl-series/maddpg3.png" alt="MADDPG"></p>
 
 <p>As you see, the policy is conditioned on the observation of the agent itself, o_i, and the critic is conditioned on the full state and actions of all agents.
 This separate critic for each agent allows us to have agents with different rewards, cooperative or competitive behaviors.</p>
@@ -416,11 +416,11 @@ This separate critic for each agent allows us to have agents with different rewa
 
 <p>COMA also uses a critic representation that allows the counterfactual baseline to be computed efficiently in a single forward pass.</p>
 
-<p><img src="/blog/images/posts_images/ddpg_post/coma.png" alt="COMA" title=" source: https://www.aaai.org/ocs/index.php/AAAI/AAAI18/paper/viewPaper/17193 "></p>
+<p><img src="/blog/images/posts_images/rl-series/coma.png" alt="COMA" title=" source: https://www.aaai.org/ocs/index.php/AAAI/AAAI18/paper/viewPaper/17193 "></p>
 
 <p>For each agent a, we can then compute an advantage function that compares the Q-value for the current action u^a to a counterfactual baseline that marginalizes out u^a, while keeping the other agents’ actions u^-a fixed:</p>
 
-<p><img src="/blog/images/posts_images/ddpg_post/coma2.png" alt="COMA"></p>
+<p><img src="/blog/images/posts_images/rl-series/coma2.png" alt="COMA"></p>
 
 <p>In contrast to MADDPG, COMA is an on-policy approach and has only one critic network.</p>
 

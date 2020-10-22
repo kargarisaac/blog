@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://kargarisaac.github.io/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="https://kargarisaac.github.io/blog/" rel="alternate" type="text/html" /><updated>2020-10-22T05:56:12-05:00</updated><id>https://kargarisaac.github.io/blog/feed.xml</id><title type="html">Isaac Kargar</title><subtitle>My posts about Machine Learning</subtitle><entry><title type="html">Offline Reinforcement Learning</title><link href="https://kargarisaac.github.io/blog/rl/2020/10/22/offline-rl.html" rel="alternate" type="text/html" title="Offline Reinforcement Learning" /><published>2020-10-22T00:00:00-05:00</published><updated>2020-10-22T00:00:00-05:00</updated><id>https://kargarisaac.github.io/blog/rl/2020/10/22/offline-rl</id><content type="html" xml:base="https://kargarisaac.github.io/blog/rl/2020/10/22/offline-rl.html">&lt;h1 id=&quot;offline-reinforcement-learning&quot;&gt;Offline Reinforcement Learning&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://kargarisaac.github.io/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="https://kargarisaac.github.io/blog/" rel="alternate" type="text/html" /><updated>2020-10-22T05:56:58-05:00</updated><id>https://kargarisaac.github.io/blog/feed.xml</id><title type="html">Isaac Kargar</title><subtitle>My posts about Machine Learning</subtitle><entry><title type="html">Offline Reinforcement Learning</title><link href="https://kargarisaac.github.io/blog/rl/2020/10/22/offline-rl.html" rel="alternate" type="text/html" title="Offline Reinforcement Learning" /><published>2020-10-22T00:00:00-05:00</published><updated>2020-10-22T00:00:00-05:00</updated><id>https://kargarisaac.github.io/blog/rl/2020/10/22/offline-rl</id><content type="html" xml:base="https://kargarisaac.github.io/blog/rl/2020/10/22/offline-rl.html">&lt;h1 id=&quot;offline-reinforcement-learning&quot;&gt;Offline Reinforcement Learning&lt;/h1&gt;
 
 &lt;p&gt;Here I will summarize some offline RL algorithms which sound interesting to me.&lt;/p&gt;</content><author><name></name></author><summary type="html">Offline Reinforcement Learning</summary></entry><entry><title type="html">Online Reinforcement Learning</title><link href="https://kargarisaac.github.io/blog/rl/2020/06/15/online-rl.html" rel="alternate" type="text/html" title="Online Reinforcement Learning" /><published>2020-06-15T00:00:00-05:00</published><updated>2020-06-15T00:00:00-05:00</updated><id>https://kargarisaac.github.io/blog/rl/2020/06/15/online-rl</id><content type="html" xml:base="https://kargarisaac.github.io/blog/rl/2020/06/15/online-rl.html">&lt;h1 id=&quot;online-reinforcement-learning&quot;&gt;Online Reinforcement Learning&lt;/h1&gt;
 
@@ -35,7 +35,7 @@
   &lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h2 id=&quot;single-agent&quot;&gt;Single agent&lt;/h2&gt;
+&lt;h1 id=&quot;single-agent&quot;&gt;Single agent&lt;/h1&gt;
 
 &lt;h3 id=&quot;dqn&quot;&gt;DQN&lt;/h3&gt;
 
@@ -165,11 +165,93 @@ Actor–critic methods are sometimes referred to as advantage actor–critic (�
 
 &lt;h3 id=&quot;agent57&quot;&gt;Agent57&lt;/h3&gt;
 
-&lt;h2 id=&quot;multi-agent&quot;&gt;Multi-Agent&lt;/h2&gt;
+&lt;h1 id=&quot;multi-agent&quot;&gt;Multi-Agent&lt;/h1&gt;
+
+&lt;p&gt;In Multi-Agent Reinforcement Learning (MARL)problems, there are several agents who usually have their own private observation and want to take an action based on that observation. This observation is local and different from the full state of the environment in that time-step. The other problem that we face in such environments is the non-stationary problem because all agents are learning and their behavior would be different during training as they learn to act differently.&lt;/p&gt;
+
+&lt;p&gt;To solve this problem, the most naive approach is to use single-agent RL algorithms for each agent and treat other agents as part of the environment. Some methods like Independent Q-Learning (IQL) work fine in some multi-agent RL problems in practice but there is no guarantee for them to converge. In IQL, each agent has one separate action-value function that gets the agent’s local observation to select its action based on that. It is also possible to use additional inputs like previous actions as input. Usually, in partially observable environments, we use RNNs to consider a history of several sequential observation-actions.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/images/posts_images/ddpg_post/marl1.png&quot; alt=&quot;MARL&quot; title=&quot; source: https://arxiv.org/pdf/1706.05296.pdf &quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The other approach is to have a fully centralised method to learn and act in a centralised fashion. We can consider this type as a big single-agent problem. This approach is also valid in some problems that you don’t need decentralised execution. For example for traffic management or traffic light management, it is possible to use such approaches.&lt;/p&gt;
+
+&lt;p&gt;There is one more case that is somewhere between the previous two ones: centralised training and decentralised execution. Usually in the training procedure, because we train agents in a simulation environment or in a lab, we have access to the full state and information in the training phase. So it is better to use this knowledge. On the other hand, the learned policy should be decentralised in some environments and agents cannot have access to the full state during the execution phase. So having algorithms to use the available knowledge in the training phase and learn a policy that is not dependent on the full state in the execution time is necessary. Here we focus on the last case.&lt;/p&gt;
+
+&lt;p&gt;There are several works that try to propose such an algorithm and can be divided into two groups:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;value-based methods like Value Decomposition Networks (VDN) and QMIX&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;actor-critic methods like MADDPG and COMA&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;value-based-methods&quot;&gt;VALUE-BASED METHODS&lt;/h2&gt;
+
+&lt;p&gt;These approaches try to propose a way to be able to use value-based methods like Q-learning and train them in a centralised way and use them for decentralised execution.&lt;/p&gt;
+
+&lt;h3 id=&quot;vdn&quot;&gt;VDN&lt;/h3&gt;
+
+&lt;p&gt;This work proposes a way to have separate action-value functions for multiple agents and learn them by just one shared team reward signal. The joint action-value function is a linear summation of all action-value functions of all agents. Actually, by using a single shared reward signal, it tries to learn decomposed value functions for each agent and use it for decentralised execution.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/images/posts_images/ddpg_post/vdn1.png&quot; alt=&quot;VDN&quot; title=&quot; source: https://arxiv.org/pdf/1706.05296.pdf &quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Consider a case with 2 agents, the reward would be:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/images/posts_images/ddpg_post/vdn2.png&quot; alt=&quot;VDN&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Then the total Q function is:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/images/posts_images/ddpg_post/vdn3.png&quot; alt=&quot;VDN&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;It is using the same Bellman equation to standard q-learning approach and just replaces Q in that equation with the new Q value.&lt;/p&gt;
+
+&lt;h3 id=&quot;qmix&quot;&gt;QMIX&lt;/h3&gt;
+
+&lt;p&gt;QMIX is somehow an extension to value decomposition networks (VDN) but tries to mix the Q-value of different agents in a nonlinear way. They use global state s_t as input to hypernetworks to generate weights and biases of the mixing network.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/images/posts_images/ddpg_post/qmix1.png&quot; alt=&quot;QMIX&quot; title=&quot; source: https://arxiv.org/pdf/1803.11485.pdf&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Here again, the equation to update the weights is the standard Bellman equation in which the Q is replaced with Q_tot in the above figure.&lt;/p&gt;
+
+&lt;h2 id=&quot;actor-critic-based-methods&quot;&gt;ACTOR-CRITIC BASED METHODS&lt;/h2&gt;
+
+&lt;p&gt;This group of methods tries to use actor-critic architecture to do centralised training and decentralised execution. Usually, they use the full state and additional information which are available in the training phase in the critic network to generate a richer signal for the actor.&lt;/p&gt;
 
 &lt;h3 id=&quot;maddpg&quot;&gt;MADDPG&lt;/h3&gt;
 
-&lt;h3 id=&quot;coma&quot;&gt;COMA&lt;/h3&gt;</content><author><name></name></author><summary type="html">Online Reinforcement Learning</summary></entry><entry><title type="html">AlphaGo - Mastering the game of Go with deep neural networks and tree search</title><link href="https://kargarisaac.github.io/blog/jupyter/2020/04/12/AlphaGo.html" rel="alternate" type="text/html" title="AlphaGo - Mastering the game of Go with deep neural networks and tree search" /><published>2020-04-12T00:00:00-05:00</published><updated>2020-04-12T00:00:00-05:00</updated><id>https://kargarisaac.github.io/blog/jupyter/2020/04/12/AlphaGo</id><content type="html" xml:base="https://kargarisaac.github.io/blog/jupyter/2020/04/12/AlphaGo.html">&lt;!--
+&lt;p&gt;Multi-Agent DDPG (MADDPG) is a method to use separate actors and critics for each agent and train the critic in a centralised way and use the actor in execution. So each agent has one actor and one critic. The actor has access to its own action-observation data and is trained by them and the critic has access to observation and action of all agents and is trained by all of them.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/images/posts_images/ddpg_post/maddpg.png&quot; alt=&quot;MADDPG&quot; title=&quot; source: https://arxiv.org/pdf/1706.02275.pdf &quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The centralised action-value function for each agent can be written as:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/images/posts_images/ddpg_post/maddpg2.png&quot; alt=&quot;MADDPG&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;And the gradient can be written as follows:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/images/posts_images/ddpg_post/maddpg3.png&quot; alt=&quot;MADDPG&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;As you see, the policy is conditioned on the observation of the agent itself, o_i, and the critic is conditioned on the full state and actions of all agents.
+This separate critic for each agent allows us to have agents with different rewards, cooperative or competitive behaviors.&lt;/p&gt;
+
+&lt;h3 id=&quot;coma&quot;&gt;COMA&lt;/h3&gt;
+
+&lt;p&gt;The talk can be found \href{https://www.youtube.com/watch?v=3OVvjE5B9LU}{here}.&lt;/p&gt;
+
+&lt;p&gt;Counterfactual Multi-Agent (COMA) policy gradient is a method for cooperative multi-agent systems and uses a centralised critic to estimate the Q-function and decentralised actors to optimise the agents’ policies. In addition, to address the problem of multi-agent credit assignment, it uses a counterfactual baseline that marginalises out a single agent’s action, while keeping the other agents’ actions fixed. The idea comes from difference rewards, in which each agent learns from a shaped reward D_a = r(s, u) − r(s,(u^-a, c_a)) that compares the global reward to the reward received when the action of agent a is replaced with a default action c_a.&lt;/p&gt;
+
+&lt;p&gt;COMA also uses a critic representation that allows the counterfactual baseline to be computed efficiently in a single forward pass.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/images/posts_images/ddpg_post/coma.png&quot; alt=&quot;COMA&quot; title=&quot; source: https://www.aaai.org/ocs/index.php/AAAI/AAAI18/paper/viewPaper/17193 &quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;For each agent a, we can then compute an advantage function that compares the Q-value for the current action u^a to a counterfactual baseline that marginalizes out u^a, while keeping the other agents’ actions u^-a fixed:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/images/posts_images/ddpg_post/coma2.png&quot; alt=&quot;COMA&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;In contrast to MADDPG, COMA is an on-policy approach and has only one critic network.&lt;/p&gt;</content><author><name></name></author><summary type="html">Online Reinforcement Learning</summary></entry><entry><title type="html">AlphaGo - Mastering the game of Go with deep neural networks and tree search</title><link href="https://kargarisaac.github.io/blog/jupyter/2020/04/12/AlphaGo.html" rel="alternate" type="text/html" title="AlphaGo - Mastering the game of Go with deep neural networks and tree search" /><published>2020-04-12T00:00:00-05:00</published><updated>2020-04-12T00:00:00-05:00</updated><id>https://kargarisaac.github.io/blog/jupyter/2020/04/12/AlphaGo</id><content type="html" xml:base="https://kargarisaac.github.io/blog/jupyter/2020/04/12/AlphaGo.html">&lt;!--
 #################################################
 ### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
 #################################################

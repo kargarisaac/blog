@@ -11,3 +11,5 @@ categories: [RL]
 
 
 # Offline Reinforcement Learning
+
+Here I will summarize some offline RL algorithms which sound interesting to me.

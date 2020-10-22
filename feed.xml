@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://kargarisaac.github.io/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="https://kargarisaac.github.io/blog/" rel="alternate" type="text/html" /><updated>2020-10-22T06:08:04-05:00</updated><id>https://kargarisaac.github.io/blog/feed.xml</id><title type="html">Isaac Kargar</title><subtitle>My posts about Machine Learning</subtitle><entry><title type="html">Offline Reinforcement Learning</title><link href="https://kargarisaac.github.io/blog/rl/2020/10/22/offline-rl.html" rel="alternate" type="text/html" title="Offline Reinforcement Learning" /><published>2020-10-22T00:00:00-05:00</published><updated>2020-10-22T00:00:00-05:00</updated><id>https://kargarisaac.github.io/blog/rl/2020/10/22/offline-rl</id><content type="html" xml:base="https://kargarisaac.github.io/blog/rl/2020/10/22/offline-rl.html">&lt;h1 id=&quot;offline-reinforcement-learning&quot;&gt;Offline Reinforcement Learning&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://kargarisaac.github.io/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="https://kargarisaac.github.io/blog/" rel="alternate" type="text/html" /><updated>2020-10-22T06:13:45-05:00</updated><id>https://kargarisaac.github.io/blog/feed.xml</id><title type="html">Isaac Kargar</title><subtitle>My posts about Machine Learning</subtitle><entry><title type="html">Offline Reinforcement Learning</title><link href="https://kargarisaac.github.io/blog/rl/2020/10/22/offline-rl.html" rel="alternate" type="text/html" title="Offline Reinforcement Learning" /><published>2020-10-22T00:00:00-05:00</published><updated>2020-10-22T00:00:00-05:00</updated><id>https://kargarisaac.github.io/blog/rl/2020/10/22/offline-rl</id><content type="html" xml:base="https://kargarisaac.github.io/blog/rl/2020/10/22/offline-rl.html">&lt;h1 id=&quot;offline-reinforcement-learning&quot;&gt;Offline Reinforcement Learning&lt;/h1&gt;
 
 &lt;p&gt;Here I will summarize some offline RL algorithms which sound interesting to me.&lt;/p&gt;</content><author><name></name></author><summary type="html">Offline Reinforcement Learning</summary></entry><entry><title type="html">Online Reinforcement Learning</title><link href="https://kargarisaac.github.io/blog/rl/2020/06/15/online-rl.html" rel="alternate" type="text/html" title="Online Reinforcement Learning" /><published>2020-06-15T00:00:00-05:00</published><updated>2020-06-15T00:00:00-05:00</updated><id>https://kargarisaac.github.io/blog/rl/2020/06/15/online-rl</id><content type="html" xml:base="https://kargarisaac.github.io/blog/rl/2020/06/15/online-rl.html">&lt;h1 id=&quot;online-reinforcement-learning&quot;&gt;Online Reinforcement Learning&lt;/h1&gt;
 
@@ -202,19 +202,19 @@ Actor–critic methods are sometimes referred to as advantage actor–critic (�
 
 &lt;p&gt;&lt;img src=&quot;/blog/images/posts_images/rl-series/vdn2.png&quot; alt=&quot;VDN&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Then the total Q function is:&lt;/p&gt;
+&lt;p&gt;Then the total $Q$ function is:&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;/blog/images/posts_images/rl-series/vdn3.png&quot; alt=&quot;VDN&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;It is using the same Bellman equation to standard q-learning approach and just replaces Q in that equation with the new Q value.&lt;/p&gt;
+&lt;p&gt;It is using the same Bellman equation to standard q-learning approach and just replaces $Q$ in that equation with the new $Q$ value.&lt;/p&gt;
 
 &lt;h3 id=&quot;qmix&quot;&gt;QMIX&lt;/h3&gt;
 
-&lt;p&gt;QMIX is somehow an extension to value decomposition networks (VDN) but tries to mix the Q-value of different agents in a nonlinear way. They use global state s_t as input to hypernetworks to generate weights and biases of the mixing network.&lt;/p&gt;
+&lt;p&gt;QMIX is somehow an extension to value decomposition networks (VDN) but tries to mix the Q-value of different agents in a nonlinear way. They use global state $s_t$ as input to hypernetworks to generate weights and biases of the mixing network.&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;/blog/images/posts_images/rl-series/qmix1.png&quot; alt=&quot;QMIX&quot; title=&quot; source: https://arxiv.org/pdf/1803.11485.pdf&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Here again, the equation to update the weights is the standard Bellman equation in which the Q is replaced with Q_tot in the above figure.&lt;/p&gt;
+&lt;p&gt;Here again, the equation to update the weights is the standard Bellman equation in which the $Q$ is replaced with $Q_tot$ in the above figure.&lt;/p&gt;
 
 &lt;h2 id=&quot;actor-critic-based-methods&quot;&gt;ACTOR-CRITIC BASED METHODS&lt;/h2&gt;
 
@@ -239,15 +239,15 @@ This separate critic for each agent allows us to have agents with different rewa
 
 &lt;h3 id=&quot;coma&quot;&gt;COMA&lt;/h3&gt;
 
-&lt;p&gt;The talk can be found \href{https://www.youtube.com/watch?v=3OVvjE5B9LU}{here}.&lt;/p&gt;
+&lt;p&gt;The talk can be found &lt;a href=&quot;https://www.youtube.com/watch?v=3OVvjE5B9LU&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;Counterfactual Multi-Agent (COMA) policy gradient is a method for cooperative multi-agent systems and uses a centralised critic to estimate the Q-function and decentralised actors to optimise the agents’ policies. In addition, to address the problem of multi-agent credit assignment, it uses a counterfactual baseline that marginalises out a single agent’s action, while keeping the other agents’ actions fixed. The idea comes from difference rewards, in which each agent learns from a shaped reward D_a = r(s, u) − r(s,(u^-a, c_a)) that compares the global reward to the reward received when the action of agent a is replaced with a default action c_a.&lt;/p&gt;
+&lt;p&gt;Counterfactual Multi-Agent (COMA) policy gradient is a method for cooperative multi-agent systems and uses a centralised critic to estimate the Q-function and decentralised actors to optimise the agents’ policies. In addition, to address the problem of multi-agent credit assignment, it uses a counterfactual baseline that marginalises out a single agent’s action, while keeping the other agents’ actions fixed. The idea comes from difference rewards, in which each agent learns from a shaped reward $D_a = r(s, u) − r(s,(u^{-a}, c_a))$ that compares the global reward to the reward received when the action of agent $a$ is replaced with a default action $c_a$.&lt;/p&gt;
 
 &lt;p&gt;COMA also uses a critic representation that allows the counterfactual baseline to be computed efficiently in a single forward pass.&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;/blog/images/posts_images/rl-series/coma.png&quot; alt=&quot;COMA&quot; title=&quot; source: https://www.aaai.org/ocs/index.php/AAAI/AAAI18/paper/viewPaper/17193 &quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;For each agent a, we can then compute an advantage function that compares the Q-value for the current action u^a to a counterfactual baseline that marginalizes out u^a, while keeping the other agents’ actions u^-a fixed:&lt;/p&gt;
+&lt;p&gt;For each agent $a$, we can then compute an advantage function that compares the Q-value for the current action $u^a$ to a counterfactual baseline that marginalizes out $u^a$, while keeping the other agents’ actions $u^{-a}$ fixed:&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;/blog/images/posts_images/rl-series/coma2.png&quot; alt=&quot;COMA&quot; /&gt;&lt;/p&gt;
 

@@ -369,20 +369,20 @@ Actor–critic methods are sometimes referred to as advantage actor–critic (�
 
 <p><img src="/blog/images/posts_images/rl-series/vdn2.png" alt="VDN"></p>
 
-<p>Then the total Q function is:</p>
+<p>Then the total $Q$ function is:</p>
 
 <p><img src="/blog/images/posts_images/rl-series/vdn3.png" alt="VDN"></p>
 
-<p>It is using the same Bellman equation to standard q-learning approach and just replaces Q in that equation with the new Q value.</p>
+<p>It is using the same Bellman equation to standard q-learning approach and just replaces $Q$ in that equation with the new $Q$ value.</p>
 
 <h3 id="qmix">
 <a class="anchor" href="#qmix" aria-hidden="true"><span class="octicon octicon-link"></span></a>QMIX</h3>
 
-<p>QMIX is somehow an extension to value decomposition networks (VDN) but tries to mix the Q-value of different agents in a nonlinear way. They use global state s_t as input to hypernetworks to generate weights and biases of the mixing network.</p>
+<p>QMIX is somehow an extension to value decomposition networks (VDN) but tries to mix the Q-value of different agents in a nonlinear way. They use global state $s_t$ as input to hypernetworks to generate weights and biases of the mixing network.</p>
 
 <p><img src="/blog/images/posts_images/rl-series/qmix1.png" alt="QMIX" title=" source: https://arxiv.org/pdf/1803.11485.pdf"></p>
 
-<p>Here again, the equation to update the weights is the standard Bellman equation in which the Q is replaced with Q_tot in the above figure.</p>
+<p>Here again, the equation to update the weights is the standard Bellman equation in which the $Q$ is replaced with $Q_tot$ in the above figure.</p>
 
 <h2 id="actor-critic-based-methods">
 <a class="anchor" href="#actor-critic-based-methods" aria-hidden="true"><span class="octicon octicon-link"></span></a>ACTOR-CRITIC BASED METHODS</h2>
@@ -410,15 +410,15 @@ This separate critic for each agent allows us to have agents with different rewa
 <h3 id="coma">
 <a class="anchor" href="#coma" aria-hidden="true"><span class="octicon octicon-link"></span></a>COMA</h3>
 
-<p>The talk can be found \href{https://www.youtube.com/watch?v=3OVvjE5B9LU}{here}.</p>
+<p>The talk can be found <a href="https://www.youtube.com/watch?v=3OVvjE5B9LU">here</a>.</p>
 
-<p>Counterfactual Multi-Agent (COMA) policy gradient is a method for cooperative multi-agent systems and uses a centralised critic to estimate the Q-function and decentralised actors to optimise the agents’ policies. In addition, to address the problem of multi-agent credit assignment, it uses a counterfactual baseline that marginalises out a single agent’s action, while keeping the other agents’ actions fixed. The idea comes from difference rewards, in which each agent learns from a shaped reward D_a = r(s, u) − r(s,(u^-a, c_a)) that compares the global reward to the reward received when the action of agent a is replaced with a default action c_a.</p>
+<p>Counterfactual Multi-Agent (COMA) policy gradient is a method for cooperative multi-agent systems and uses a centralised critic to estimate the Q-function and decentralised actors to optimise the agents’ policies. In addition, to address the problem of multi-agent credit assignment, it uses a counterfactual baseline that marginalises out a single agent’s action, while keeping the other agents’ actions fixed. The idea comes from difference rewards, in which each agent learns from a shaped reward $D_a = r(s, u) − r(s,(u^{-a}, c_a))$ that compares the global reward to the reward received when the action of agent $a$ is replaced with a default action $c_a$.</p>
 
 <p>COMA also uses a critic representation that allows the counterfactual baseline to be computed efficiently in a single forward pass.</p>
 
 <p><img src="/blog/images/posts_images/rl-series/coma.png" alt="COMA" title=" source: https://www.aaai.org/ocs/index.php/AAAI/AAAI18/paper/viewPaper/17193 "></p>
 
-<p>For each agent a, we can then compute an advantage function that compares the Q-value for the current action u^a to a counterfactual baseline that marginalizes out u^a, while keeping the other agents’ actions u^-a fixed:</p>
+<p>For each agent $a$, we can then compute an advantage function that compares the Q-value for the current action $u^a$ to a counterfactual baseline that marginalizes out $u^a$, while keeping the other agents’ actions $u^{-a}$ fixed:</p>
 
 <p><img src="/blog/images/posts_images/rl-series/coma2.png" alt="COMA"></p>
 

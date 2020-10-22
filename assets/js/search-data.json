@@ -1,20 +1,11 @@
 {
   
     
-        "post0": {
-            "title": "Offline Rl",
-            "content": "Offline Reinforcement Learning .",
-            "url": "https://kargarisaac.github.io/blog/2020/10/22/offline-RL.html",
-            "relUrl": "/2020/10/22/offline-RL.html",
-            "date": " • Oct 22, 2020"
-        }
-        
-    
   
     
   
     
-        ,"post2": {
+        "post2": {
             "title": "AlphaGo - Mastering the game of Go with deep neural networks and tree search",
             "content": ". . . . . . . . . That’s it for the first one. In the next post, I will review the AlphaGo Zero paper. .",
             "url": "https://kargarisaac.github.io/blog/jupyter/2020/04/12/AlphaGo.html",

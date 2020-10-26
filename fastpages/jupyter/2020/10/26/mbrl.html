@@ -109,7 +109,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      5 min read
+      6 min read
     
 </span></p>
 
@@ -417,6 +417,67 @@ $$</p>
     
 </figure>
 </p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Structured-latent-state-transition-models">Structured latent state-transition models<a class="anchor-link" href="#Structured-latent-state-transition-models"> </a></h3><p>Another thing that you can do if you have a little bit more domain knowledge is to add a little bit of structure into your latent state. For example, if you know that the scene that you are trying to model consists of objects, then you can try to actually explicitly detect those objects, segment them out and then learn those transitions between objects.</p>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/learn_model11.png" alt="" />
+    
+    
+</figure>
+</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Recurrent-value-models">Recurrent value models<a class="anchor-link" href="#Recurrent-value-models"> </a></h3><p>The idea is that when you unroll your latent-state, you additionally predict the value of the state at each point of the furture, in addition to reward. we can train the model without necessarily needing to train using observations, but just training it by predicting the value progressing toward actual observed values when you roll it out in the real environment.</p>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/learn_model12.png" alt="" />
+    
+    
+</figure>
+</p>
+<p>why this is useful? because some types of planners actually only need you to predict values rather than predicting states lime MCTS (monte carlo tree search).</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Non-Parametric-models">Non-Parametric models<a class="anchor-link" href="#Non-Parametric-models"> </a></h3><p>So far we talked about parametric ways of learning the model. We can also use non-parametric methods like graphs.</p>
+<p>For example the replay buffer that we use in off-policy methods can be seen as an approximation to a type of model where if you have enough data in your replay buffer then you sample from buffer, it basically access the density model over your transitions. You can use extra replay to basically get the same level performances you would get using a model based method which learns a parametric model.</p>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/learn_model13.png" alt="" />
+    
+    
+</figure>
+</p>
+<p>The other work we can do using data in buffer is to use data points and learn the transition between them and interpolate to find states between those states in buffer. Somehow learning a distribution and use it to generate new datapoints.</p>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/learn_model14.png" alt="" />
+    
+    
+</figure>
+</p>
+<p>Another form of non-parametric transition is a symbolic description which is popular in the planning community not in the deep learning community.</p>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/learn_model14.png" alt="" />
+    
+    
+</figure>
+</p>
+<p>The other form of non-parametric models is gaussian processes which gives us strong predictions using very very small amout of data. PILCO is one example of these algorithms.</p>
 
 </div>
 </div>

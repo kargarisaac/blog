@@ -1,11 +1,22 @@
 {
   
     
+        "post0": {
+            "title": "Model Based Reinforcement Learning (MBRL)",
+            "content": "",
+            "url": "https://kargarisaac.github.io/blog/2020/10/26/mbrl.html",
+            "relUrl": "/2020/10/26/mbrl.html",
+            "date": " • Oct 26, 2020"
+        }
+        
+    
+  
+    
   
     
   
     
-        "post2": {
+        ,"post3": {
             "title": "AlphaGo - Mastering the game of Go with deep neural networks and tree search",
             "content": ". . . . . . . . . That’s it for the first one. In the next post, I will review the AlphaGo Zero paper. .",
             "url": "https://kargarisaac.github.io/blog/jupyter/2020/04/12/AlphaGo.html",

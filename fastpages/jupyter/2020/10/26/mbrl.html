@@ -109,7 +109,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      2 min read
+      5 min read
     
 </span></p>
 
@@ -156,6 +156,13 @@ window.onload = wrap_img;
 </div>
     
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This post is a summary of the model-based RL tutorial at ICML-2020. You can find the videos <a href="https://sites.google.com/view/mbrl-tutorial">here</a>.</p>
+
+</div>
+</div>
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Introduction-and-Motivation">Introduction and Motivation<a class="anchor-link" href="#Introduction-and-Motivation"> </a></h2><p>Having access to a model of the world and using it for decision making is a powerful idea. 
@@ -220,6 +227,15 @@ $$</p>
 <li>A model of future returns: $G_t = Q(s_t, a_t)$ or $G_t = V(s_t)$</li>
 </ul>
 <p>Typically when someone says MBRL, he/she means the firs two items.</p>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/model.png" alt="" />
+    
+    
+</figure>
+</p>
+<p>Sometimes we know the ground truth dynamics and rewards. Might as well use them! Like game environments or simulators like Mujoco, Carla, and so on.</p>
+<p>But we don't have access to the model in all cases, so we need to learn the model. In cases like in robots, complex physical dynamics, and interaction with humans.</p>
 
 </div>
 </div>
@@ -257,6 +273,146 @@ $$</p>
 <p><figure>
   
     <img class="docimage" src="/blog/images/copied_from_nb/images/mbrl_vs_mfrl.png" alt="" />
+    
+    
+</figure>
+</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="How-to-learn-a-model?">How to learn a model?<a class="anchor-link" href="#How-to-learn-a-model?"> </a></h2><p>There are two different dimensions that are useful to pay attention to:</p>
+<ul>
+<li><p>representation of the features for the states that the model is being learned over them</p>
+</li>
+<li><p>representation of the transition between states</p>
+</li>
+</ul>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/learn_model.png" alt="" />
+    
+    
+</figure>
+</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>In continue we take a look at different transition models.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="state-transition-models">state-transition models<a class="anchor-link" href="#state-transition-models"> </a></h3><p>In some cases, we know equations of motion and dynamics but we don't know the exact parameters like mass. We can use system identification to estimate unknown parameters like mass. But these sort of cases require having a lot of domain knowledge about how exactly the system works.</p>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/learn_model2.png" alt="" />
+    
+    
+</figure>
+
+<figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/learn_model3.png" alt="" />
+    
+    
+</figure>
+</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>In some cases that we don't know the dynamics of motion, we can simply use an MLP to get a concatenation of $s_t, a_t$ and output the next state $s_{t+1}$.</p>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/learn_model4.png" alt="" />
+    
+    
+</figure>
+</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>In cases that we have some, not perfect, domain knowledge about the environment, we can use graph neural networks (GNNs) to model the agent (robot). For example in Mujoco we can model a robot (agent) with nodes as its body parts and edges as joint and learn the physics engine.</p>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/learn_model5.png" alt="" />
+    
+    
+</figure>
+</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="observation-transition-models">observation-transition models<a class="anchor-link" href="#observation-transition-models"> </a></h3><p>In this cases, we don't have access to states (low level states like joint angles), but we have access to images. The MDP for this cases would be like this:</p>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/learn_model6.png" alt="" />
+    
+    
+</figure>
+</p>
+<p>So what can we do with this?</p>
+<ul>
+<li>Directly predict transitions between observations (observation-transition models)</li>
+</ul>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/learn_model7.png" alt="" />
+    
+    
+</figure>
+</p>
+<ul>
+<li>Reconstruct observation at every timestep: Using sth like LSTMs. Here we need to reconstruct the whole observation in each timestep. The images can be blurry in these cases.</li>
+</ul>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/learn_model8.png" alt="" />
+    
+    
+</figure>
+</p>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/learn_model88.png" alt="" />
+    
+    
+</figure>
+</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="latent-state-transition-models">latent state-transition models<a class="anchor-link" href="#latent-state-transition-models"> </a></h3><p>Another option when we have just access to observation is to instead of making transition between observations we can infere a latent state and then make transitions in that latent space (latent state-transition models) not in the observation space. It would be much faster than reconstructing the observation on every timestep. We take our initial observation or perhaps the last couple of observations and embed them into the latent state and then unroll it in time and do predictions in $z$ instead of $o$.</p>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/learn_model9.png" alt="" />
+    
+    
+</figure>
+</p>
+<p>Usually we use the observation and reconstruct it during training but at test time we can unroll it very quickly. we can also reconstruct observation at each timestep we want (not necessarily in all timesteps).</p>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/learn_model10.png" alt="" />
     
     
 </figure>

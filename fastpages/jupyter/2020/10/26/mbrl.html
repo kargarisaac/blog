@@ -109,7 +109,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      14 min read
+      15 min read
     
 </span></p>
 
@@ -164,6 +164,11 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h4"><a href="#Strengthening-the-policy">Strengthening the policy </a>
 <ul>
 <li class="toc-entry toc-h5"><a href="#What-is-the-difference-between-background-and-decision-time-planning?">What is the difference between background and decision-time planning? </a></li>
+<li class="toc-entry toc-h5"><a href="#What-is-the-difference-between-discrete-and-continuous-planning?">What is the difference between discrete and continuous planning? </a>
+<ul>
+<li class="toc-entry toc-h6"><a href="#MCTS-(monte-carlo-tree-search)">MCTS (monte carlo tree search) </a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -802,6 +807,116 @@ $$<p>So how we can use this derivatives to calculate $\nabla_{\theta}J$ ?</p>
 </li>
 </ul>
 <p>We can mix and match background and decision-time plannings.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h5 id="What-is-the-difference-between-discrete-and-continuous-planning?">
+<a class="anchor" href="#What-is-the-difference-between-discrete-and-continuous-planning?" aria-hidden="true"><span class="octicon octicon-link"></span></a>What is the difference between discrete and continuous planning?<a class="anchor-link" href="#What-is-the-difference-between-discrete-and-continuous-planning?"> </a>
+</h5>
+<p>It depends on the problem which you want to solve. So it is not a choice that you can make. For example in controlling a robot, the actions might be the torques for the motors (continuous), or in biomechanical settings it might be muscle excitations (continuous), or in medical problems the treatment that should be applied (discrete).</p>
+<p>The distinction between discrete and continuous actions is not significant for background planning methods.</p>
+<ul>
+<li>You just learn a stochastic policies that sample either from discrete or continuous distributions.</li>
+</ul>
+$$
+a \sim \pi(.|s) \quad \leftarrow Gaussian, categorical, ...
+$$<ul>
+<li>Backpropagation is still possible via some reparametrization techniques. See <em>Jang et al (2016). Categorical reparametrization with Gumbel-Softmax</em> for an example.</li>
+</ul>
+<p>In either of these cases (continuous and discrete in background planning methods), because you are optimizing over expectations, your final objective and optimization problem is still smooth wrt the policy parameters.</p>
+$$
+J(\theta) = E_{\pi}[\sum_t r_t], \quad a_t \sim \pi(.|s_t, \theta)
+$$<p>But for decision-time planning, this distinction leads to specialized methods for discrete and continuous actions: discrete search or continuous trajectory optimization.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let's see some examples to be able to compare them.</p>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc14.png" alt="">
+    
+    
+</figure>
+</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h6 id="MCTS-(monte-carlo-tree-search)">
+<a class="anchor" href="#MCTS-(monte-carlo-tree-search)" aria-hidden="true"><span class="octicon octicon-link"></span></a>MCTS (monte carlo tree search)<a class="anchor-link" href="#MCTS-(monte-carlo-tree-search)"> </a>
+</h6>
+<p>This algorithm is in discrete actions group and is used in alpha-go and alpha-zero. You keep track of Q-value, which is long term reward, for all states and actions ideally that you want to consider. And also the number of times that the state and action has been previously visited.</p>
+<ol>
+<li>Initialize $Q_0(s, a) = 0, N_0(s, a)=0, k=0$</li>
+</ol>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc15.png" alt="">
+    
+    
+</figure>
+</p>
+<ol>
+<li>Expansion: Starting from the current situation and expand nodes and selecting actions according to a search policy: </li>
+</ol>
+<p>
+$$\pi_k(s) = Q_k(s,a)$$
+</p>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc16.png" alt="">
+    
+    
+</figure>
+</p>
+<ol>
+<li>Evaluation: When a new node is reached, estimate its long-term value using Monte-Carlo rollouts</li>
+</ol>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc17.png" alt="">
+    
+    
+</figure>
+</p>
+<ol>
+<li>Backup: propagate the Q-values to parent nodes:</li>
+</ol>
+$$
+Q_{k+1}(s, a) = \frac{Q_k(s,a) N_k(s,a) + R}{N_k(s,a)+1}
+$$$$
+N_{k+1}(s,a) = N_k(s,a)+1
+$$<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc18.png" alt="">
+    
+    
+</figure>
+</p>
+<ol>
+<li>Repeat Steps 2-4 until search budget is exhausted.
+$$
+k = k + 1
+$$</li>
+</ol>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc19.png" alt="">
+    
+    
+</figure>
+</p>
 
 </div>
 </div>

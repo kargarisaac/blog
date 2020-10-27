@@ -218,7 +218,7 @@ and peration research and energy applications (how to allocate renewable energy 
 <p>In sequential decision making, the agent will interact with the world by doing action $a$ and getting the next state $s$ and reward $r$.</p>
 <p><figure>
   
-    <img class="docimage" src="/blog/images/copied_from_nb/images/rl.png" alt="">
+    <img class="docimage" src="/blog/images/copied_from_nb/images/rl.png" alt="" style="max-width: 400px">
     
     
 </figure>
@@ -604,17 +604,24 @@ $$</p>
 <p>As we saw earlier, we can use the model in three different ways. In continue, we will see some examples of each case.</p>
 <p><figure>
   
-    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc.png" alt="">
+    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc.png" alt="" style="max-width: 300px">
     
     
 </figure>
 </p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h4 id="Simulating-the-environment">
 <a class="anchor" href="#Simulating-the-environment" aria-hidden="true"><span class="octicon octicon-link"></span></a>Simulating the environment<a class="anchor-link" href="#Simulating-the-environment"> </a>
 </h4>
 <p><figure>
   
-    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc2.png" alt="">
+    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc2.png" alt="" style="max-width: 150px">
     
     
 </figure>
@@ -648,7 +655,7 @@ $$</p>
 </h4>
 <p><figure>
   
-    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc5.png" alt="">
+    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc5.png" alt="" style="max-width: 150px">
     
     
 </figure>
@@ -668,6 +675,13 @@ $$<p>Now we need to apply gradient ascent (for maximization) on policy gradient 
     
 </figure>
 </p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <p>Accurate and smooth models, aside from imaginary experiences, offer derivatives:</p>
 $$
 s_{t+1} = f_s(s_t, a_t) \quad  r_t = f_r(s_t, a_t)
@@ -676,7 +690,7 @@ $$$$
 $$<p>And they are able to answer questions such as: <em>how do small changes in action change next state or reward any of other quantities?</em></p>
 <p><figure>
   
-    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc7.png" alt="">
+    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc7.png" alt="" style="max-width: 150px">
     
     
 </figure>
@@ -686,6 +700,13 @@ $$<p>And they are able to answer questions such as: <em>how do small changes in 
 $$
  J(\theta) \approx \sum_{t=0}^{H} \gamma^t r_t  , \quad a_t = \pi_{\theta}(s_t) , \quad s_{t+1} = f_s(s_t, a_t), \quad r_t=f_r(s_t,a_t)
 $$<p>So how we can use this derivatives to calculate $\nabla_{\theta}J$ ?</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <p><figure>
   
     <img class="docimage" src="/blog/images/copied_from_nb/images/mbc8.png" alt="">
@@ -735,7 +756,7 @@ $$<p>So how we can use this derivatives to calculate $\nabla_{\theta}J$ ?</p>
 <p>In background planning, we can think of it as answering the question "how do I learn how to act in any possible situation to succeed and reach the goal?"</p>
 <p><figure>
   
-    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc10.png" alt="">
+    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc10.png" alt="" style="max-width: 300px">
     
     
 </figure>
@@ -748,7 +769,7 @@ $$<p>So how we can use this derivatives to calculate $\nabla_{\theta}J$ ?</p>
 <p>In decision-time planning, we want to answer the question "what is the best sequence of actions just for my current situation to succeed or reach the goal?"</p>
 <p><figure>
   
-    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc11.png" alt="">
+    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc11.png" alt="" style="max-width: 300px">
     
     
 </figure>
@@ -789,7 +810,7 @@ $$<p>So how we can use this derivatives to calculate $\nabla_{\theta}J$ ?</p>
 </ul>
 <p><figure>
   
-    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc13.png" alt="">
+    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc13.png" alt="" style="max-width: 500px">
     
     
 </figure>
@@ -808,7 +829,7 @@ $$<p>So how we can use this derivatives to calculate $\nabla_{\theta}J$ ?</p>
 <p><em>Same for discrete and contiinuous actions</em>: background planning has a very unified treatment of discrete and continuous actions which is conceptually simpler. In decision-time planning, there are different algorithms for discrete and continuous actions. we will see in the following sections more about them.</p>
 </li>
 </ul>
-<p>We can mix and match background and decision-time plannings.</p>
+<p>We can also mix and match background and decision-time plannings.</p>
 
 </div>
 </div>
@@ -843,7 +864,7 @@ $$<p>But for decision-time planning, this distinction leads to specialized metho
 <p>Let's see some examples to be able to compare them.</p>
 <p><figure>
   
-    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc14.png" alt="">
+    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc14.png" alt="" style="max-width: 400px">
     
     
 </figure>
@@ -864,7 +885,7 @@ $$<p>But for decision-time planning, this distinction leads to specialized metho
 </ol>
 <p><figure>
   
-    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc15.png" alt="">
+    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc15.png" alt="" style="max-width: 150px">
     
     
 </figure>
@@ -877,7 +898,7 @@ $$\pi_k(s) = Q_k(s,a)$$
 </p>
 <p><figure>
   
-    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc16.png" alt="">
+    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc16.png" alt="" style="max-width: 150px">
     
     
 </figure>
@@ -887,7 +908,7 @@ $$\pi_k(s) = Q_k(s,a)$$
 </ol>
 <p><figure>
   
-    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc17.png" alt="">
+    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc17.png" alt="" style="max-width: 200px">
     
     
 </figure>
@@ -901,7 +922,7 @@ $$$$
 N_{k+1}(s,a) = N_k(s,a)+1
 $$<p><figure>
   
-    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc18.png" alt="">
+    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc18.png" alt="" style="max-width: 300px">
     
     
 </figure>
@@ -914,7 +935,7 @@ $$</li>
 </ol>
 <p><figure>
   
-    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc19.png" alt="">
+    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc19.png" alt="" style="max-width: 300px">
     
     
 </figure>
@@ -935,7 +956,7 @@ $$</li>
 </ol>
 <p><figure>
   
-    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc20.png" alt="">
+    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc20.png" alt="" style="max-width: 200px">
     
     
 </figure>
@@ -946,7 +967,7 @@ $$</li>
 </ol>
 <p><figure>
   
-    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc21.png" alt="">
+    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc21.png" alt="" style="max-width: 200px">
     
     
 </figure>
@@ -972,7 +993,7 @@ $$<ol>
 </ol>
 <p><figure>
   
-    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc22.png" alt="">
+    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc22.png" alt="" style="max-width: 200px">
     
     
 </figure>

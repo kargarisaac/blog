@@ -109,7 +109,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      15 min read
+      16 min read
     
 </span></p>
 
@@ -167,8 +167,10 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h5"><a href="#What-is-the-difference-between-discrete-and-continuous-planning?">What is the difference between discrete and continuous planning? </a>
 <ul>
 <li class="toc-entry toc-h6"><a href="#MCTS-(monte-carlo-tree-search)">MCTS (monte carlo tree search) </a></li>
+<li class="toc-entry toc-h6"><a href="#Trajectory-Optimization">Trajectory Optimization </a></li>
 </ul>
 </li>
+<li class="toc-entry toc-h5"><a href="#Variety-and-motivations-of-continuous-planning-methods">Variety and motivations of continuous planning methods </a></li>
 </ul>
 </li>
 </ul>
@@ -891,7 +893,7 @@ $$\pi_k(s) = Q_k(s,a)$$
 </figure>
 </p>
 <ol>
-<li>Backup: propagate the Q-values to parent nodes:</li>
+<li>Backup: Propagate the Q-values to parent nodes:</li>
 </ol>
 $$
 Q_{k+1}(s, a) = \frac{Q_k(s,a) N_k(s,a) + R}{N_k(s,a)+1}
@@ -918,6 +920,82 @@ $$</li>
 </figure>
 </p>
 
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h6 id="Trajectory-Optimization">
+<a class="anchor" href="#Trajectory-Optimization" aria-hidden="true"><span class="octicon octicon-link"></span></a>Trajectory Optimization<a class="anchor-link" href="#Trajectory-Optimization"> </a>
+</h6>
+<p>Instead of keeping track of a tree of many possibilities, you just keep track of one possible action sequence.</p>
+<ol>
+<li>Initialize $a_0, ..., a_H$ from guess</li>
+</ol>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc20.png" alt="">
+    
+    
+</figure>
+</p>
+<ol>
+<li>
+<strong>Expansion</strong>: execute sequence of actions $a = a_0, ..., a_H$ to get a sequence of states $s_1, ..., s_H$</li>
+</ol>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc21.png" alt="">
+    
+    
+</figure>
+</p>
+<ol>
+<li>
+<p><strong>Evaluation</strong>: get trajectory reward $J(a) = \sum_{t=0}^H r_t$</p>
+</li>
+<li>
+<p><strong>Back-propagation</strong>: because everything is differentiable, you can just calculate the gradient of the reward via back-propagation using reward model derivatives and transition model derivatives.</p>
+</li>
+</ol>
+$$
+\nabla_a J = \sum_{t=0}^H \nabla_a r_t
+$$$$
+\nabla_a r_t = \nabla_s f_r(s_t, a_t) \nabla_a s_t + \nabla_a f_r (s_t, a_t)
+$$$$
+\nabla_a s_t = \nabla_a f_s(s_{t-1}, a_{t-1}) + \nabla_s f_s(s_{t-1}, a_{t-1})\nabla_a s_{t-1}
+$$$$
+\nabla_a s_{t-1} = ...
+$$<ol>
+<li>Update all actions via gradient ascent $ a \leftarrow a + \nabla_a J$ and repeat steps 2-5.</li>
+</ol>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc22.png" alt="">
+    
+    
+</figure>
+</p>
+<p>The differences between discrete and continuous actions can be summarized as follows:</p>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc23.png" alt="">
+    
+    
+</figure>
+</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The continuous example we saw above can be categorize in <strong>shooting methods</strong>.</p>
+<h5 id="Variety-and-motivations-of-continuous-planning-methods">
+<a class="anchor" href="#Variety-and-motivations-of-continuous-planning-methods" aria-hidden="true"><span class="octicon octicon-link"></span></a>Variety and motivations of continuous planning methods<a class="anchor-link" href="#Variety-and-motivations-of-continuous-planning-methods"> </a>
+</h5>
 </div>
 </div>
 </div>

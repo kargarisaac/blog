@@ -109,7 +109,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      19 min read
+      25 min read
     
 </span></p>
 
@@ -177,6 +177,24 @@ window.onload = wrap_img;
 </li>
 </ul>
 </li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#Model-based-control-in-the-loop">Model-based control in the loop </a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#Gathering-data-to-train-models">Gathering data to train models </a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#Fixed-off-line-datasets">Fixed off-line datasets </a></li>
+<li class="toc-entry toc-h4"><a href="#Data-augmentation">Data augmentation </a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h3"><a href="#Acting-under-imperfect-models">Acting under imperfect models </a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#Replan-via-model-predictive-control">Replan via model-predictive control </a></li>
+<li class="toc-entry toc-h4"><a href="#Plan-conservatively">Plan conservatively </a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h3"><a href="#Estimating-model-uncertainty">Estimating model uncertainty </a></li>
+<li class="toc-entry toc-h3"><a href="#Combining-planning-and-learning">Combining planning and learning </a></li>
 </ul>
 </li>
 </ul><!--
@@ -254,11 +272,15 @@ $$</p>
 <li>Collect data $D= \{ s_t, a_t, r_{t+1}, s_{t+1} \}_{t=0}^T$.</li>
 <li>Model-free: learn policy directly from data</li>
 </ul>
-<p>$$ D \rightarrow \pi e.g. Q-learning, policy gradient</p>
+<p>
+$$ D \rightarrow \pi \quad \text{e.g. Q-learning, policy gradient}$$
+</p>
 <ul>
 <li>Model-based: learn model, then use it to <strong>learn</strong> or <strong>improve</strong> a policy </li>
 </ul>
-<p>$ D \rightarrow f \rightarrow \pi$</p>
+<p>
+$$ D \rightarrow f \rightarrow \pi$$
+</p>
 
 </div>
 </div>
@@ -1165,6 +1187,335 @@ f_s(s_t, a_t) \approx As_t + Ba_t, \quad f_r(s_t, a_t) \approx s_t^TQs_t + a_t^T
 $$<p>Then it becomes Linear-Quadratic Regulator (LQR) problem and can be solved exactly.</p>
 <p>For iLQR, locally approximate the model around current solution, solve LQR problem to update solution, and repeat.</p>
 <p>For Differential dynamic programming (DDP) is similar, but with higher-order expansion of $f_s$.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Model-based-control-in-the-loop">
+<a class="anchor" href="#Model-based-control-in-the-loop" aria-hidden="true"><span class="octicon octicon-link"></span></a>Model-based control in the loop<a class="anchor-link" href="#Model-based-control-in-the-loop"> </a>
+</h2>
+<p>We want to answer this question that how to both learn the model and act based on that simultaneusly?</p>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc33.png" alt="" style="max-width: 300px">
+    
+    
+</figure>
+</p>
+<h3 id="Gathering-data-to-train-models">
+<a class="anchor" href="#Gathering-data-to-train-models" aria-hidden="true"><span class="octicon octicon-link"></span></a>Gathering data to train models<a class="anchor-link" href="#Gathering-data-to-train-models"> </a>
+</h3>
+<p>How we can gather data to train the model? this is kind of a chicken or the egg problem. Bad policy leads to bad experience, leads to bad model, leads to bad policy ...</p>
+<p>This leads to some training stability issues in practice. There are some recent works in game theory to provide criteria for stability. See "Rajeswaran et al (2020). A Game Theoretic Framework for Model Based Reinforcement Learning." for example.</p>
+<h4 id="Fixed-off-line-datasets">
+<a class="anchor" href="#Fixed-off-line-datasets" aria-hidden="true"><span class="octicon octicon-link"></span></a>Fixed off-line datasets<a class="anchor-link" href="#Fixed-off-line-datasets"> </a>
+</h4>
+<p>Another way to address this in the loop issues is to see if we can actually train from a fixed experience that is not related to the policy. Some options that we have are:</p>
+<ul>
+<li>Human demonstration</li>
+<li>Manually-engineered policy rollouts</li>
+<li>Another (sub-optimal) policy</li>
+</ul>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc34.png" alt="" style="max-width: 400px">
+    
+    
+</figure>
+</p>
+<p>This leads to a recent popular topic <em>model-based offline reinforcement learning</em>. You can see some recent works like <em>Kidambi et al (2020). MOReL: Model-Based Offline Reinforcement Learning.</em>, 
+<em>Yu et al (2020). MOPO: Model-based Offline Policy Optimization.
+See also: Levine et al (2020).</em>, and <em>Offline Reinforcement Learning: Tutorial, Review, and Perspectives on Open Problems.</em></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Data-augmentation">
+<a class="anchor" href="#Data-augmentation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Data augmentation<a class="anchor-link" href="#Data-augmentation"> </a>
+</h4>
+<p>Another way to generate data is to use the model to generate data to train itself. For example, in <em>Venkatraman et al (2014). Data as Demonstrator.</em>. You might have some trajectory of real experiment that you got by taking certain actions, then you roll out the model and train to pull its predicted next states to true next states.</p>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc35.png" alt="" style="max-width: 200px">
+    
+    
+</figure>
+</p>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc36.png" alt="" style="max-width: 400px">
+    
+    
+</figure>
+</p>
+<p>There are also some adversarial approaches to generate data to self-audit the model like <em>Lin et al (2020). Model-based Adversarial Meta-Reinforcement Learning.</em> and <em>Du et al (2019). Model-Based Planning with Energy Models.</em></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>But even if we do all of these works, models are not going to be perfect. We cannot have experience everywhere and there will be some approximation errors always.These small errors propagate and compound. We may end up in some states that are a little bit furthur away from true data which might be an unfamiliar situation. So it might end up making even bigger errors next time around and so on and so forth that the model rollouts might actually land very far away over time from where you would expected them to be.</p>
+<p>What's worse is that the planner might actually intentionally <em>exploit</em> these model errors to achieve the goal.</p>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc37.png" alt="" style="max-width: 200px">
+    
+    
+</figure>
+</p>
+<p>This leads to longer model rollouts to be less reliable.</p>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc38.png" alt="" style="max-width: 400px">
+    
+    
+</figure>
+</p>
+<p>You can check <em>Janner et al (2019). When to Trust Your Model:
+Model-Based Policy Optimization</em> for more details.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Acting-under-imperfect-models">
+<a class="anchor" href="#Acting-under-imperfect-models" aria-hidden="true"><span class="octicon octicon-link"></span></a>Acting under imperfect models<a class="anchor-link" href="#Acting-under-imperfect-models"> </a>
+</h3>
+<p>The question is that "Can we still act with imperfect models?" the answer is yes!</p>
+<h4 id="Replan-via-model-predictive-control">
+<a class="anchor" href="#Replan-via-model-predictive-control" aria-hidden="true"><span class="octicon octicon-link"></span></a>Replan via model-predictive control<a class="anchor-link" href="#Replan-via-model-predictive-control"> </a>
+</h4>
+<p>The first approach is to not commit to just one single plan (open loop control), but continually re-plan as you go along (closed-loop control).</p>
+<p>Let's see one example.</p>
+<p>you might start at some initial state and create an imaginary plan using the trajectory optimization methods like CEM or other methods. Then apply just the first action of this plan. That might take you to some state that might not in practice match with your model imagined you would end up with. But it's ok! you can just re-plan from this new state again and again take the first action and ... and by doing this there is a good chance to end up near the goal.</p>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc39.png" alt="">
+    
+    
+</figure>
+
+<figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc40.png" alt="">
+    
+    
+</figure>
+
+<figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc41.png" alt="">
+    
+    
+</figure>
+
+<figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc42.png" alt="">
+    
+    
+</figure>
+
+<figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc43.png" alt="">
+    
+    
+</figure>
+</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>By doing this, the errors don't accumulate. So you don’t need a perfect model, just one pointing in the right direction is enough. This re-planning might be expensive but one solution is to reuse solutions from previous steps as initial guesses for next plan.</p>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc44.png" alt="">
+    
+    
+</figure>
+</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Plan-conservatively">
+<a class="anchor" href="#Plan-conservatively" aria-hidden="true"><span class="octicon octicon-link"></span></a>Plan conservatively<a class="anchor-link" href="#Plan-conservatively"> </a>
+</h4>
+<p>We have'seen that longer rollouts become more unreliable. One soulution would be to just keep the rollouts short. So we don't deviate too far from where we have real data. And as we saw in Dyna, just one single rollout can be also very helpful to improve learning.</p>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc45.png" alt="">
+    
+    
+</figure>
+</p>
+<p>The other option to plan conservatively is to consider a distribution over your models and plan for either the average or worst case wrt distribution over your model or model uncertainty.</p>
+$$
+\max_{\theta} E_{f \sim F} [\sum_t \gamma^t r_t], \quad a_t=\pi_{\theta}(s_t), \quad s_{t+1}=f_s(s_t, a_t), \quad r_t=f_r(s_t, a_t)
+$$<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc46.png" alt="" style="max-width: 400px">
+    
+    
+</figure>
+</p>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc47.png" alt="">
+    
+    
+</figure>
+</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Another option for conservative planning is to try to stay close to states where the model is certain. There are a couple of ways to do this:</p>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc48.png" alt="" style="max-width: 150px">
+    
+    
+</figure>
+</p>
+<ul>
+<li>
+<p>Implicitly: stay close to past policy that generated the real data</p>
+<ul>
+<li>Peters et al (2012). Relative Entropy Policy Search</li>
+<li>Levine et al (2014). Guided Policy Search under Unknown Dynamics.</li>
+</ul>
+</li>
+<li>
+<p>Explicitly: add penalty to reward or cost function for going into unknown region</p>
+<ul>
+<li>Kidambi et al (2020). MOReL: Model-Based Offline Reinforcement Learning.</li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>In the last two options for conservative planning, we need the uncertainty. So how do we get this model uncertainty?</p>
+<h3 id="Estimating-model-uncertainty">
+<a class="anchor" href="#Estimating-model-uncertainty" aria-hidden="true"><span class="octicon octicon-link"></span></a>Estimating model uncertainty<a class="anchor-link" href="#Estimating-model-uncertainty"> </a>
+</h3>
+<p>Model uncertainty if necessary for conservative planning, but it has other applications too that we will see later.</p>
+<p>We consider two sources of uncertainty:</p>
+<ol>
+<li>Epistemic uncertainty<ul>
+<li>Model's lack of knowledge about the world</li>
+<li>Distribution over beliefs</li>
+<li>Reducible by gathering more experience about the world</li>
+<li>Changes with learning</li>
+</ul>
+</li>
+<li>Aleatoric uncertainty/Risk<ul>
+<li>World's inherent stochasticity</li>
+<li>Distribution over outcomes</li>
+<li>Irreducible</li>
+<li>Static as we keep learning</li>
+</ul>
+</li>
+</ol>
+<p>There are multiple approaches to estimate these uncertainties which are listed as follows:</p>
+<ol>
+<li>
+<p>Probabilistic neural networks that try to model distributions over the outputs of your model.</p>
+<ul>
+<li>
+<p>Model explicitly outputs means and variances (typically Gaussian)</p>
+<p>$$ p(s_{t+1}|s_t, a_t) = N(\mu_{\theta}(s_t, a_t), \sigma_{\theta}(s_t, a_t))$$</p>
+</li>
+<li>
+<p>Simple and reliable (supervised learning)</p>
+</li>
+<li>Only captures aleatoric uncertainty / risk</li>
+<li>No guarantees for reasonable outputs outside of training data</li>
+</ul>
+</li>
+</ol>
+<ol>
+<li>
+<p>Bayesian neural network</p>
+<ul>
+<li>
+<p>Model has distribution over neural network weights</p>
+<p>$$ p(s_{t+1}|s_t, a_t) = E_{\theta}[p(s_{t+1}|s_t, a_t, \theta)]$$</p>
+</li>
+</ul>
+<p><img src="images/mbc49.png" width="500"></p>
+<ul>
+<li>Captures epistemic and aleatoric uncertainty</li>
+<li>Factorized approximations can underestimate uncertainty</li>
+<li>Can be hard to train (but an active research area)</li>
+</ul>
+</li>
+<li>
+<p>Gaussian processes</p>
+<ul>
+<li>Captures epistemic uncertainty</li>
+<li>Explicitly control state distance metric</li>
+<li>Can be hard to scale (but an active research area)</li>
+</ul>
+</li>
+<li>
+<p>Pseudo-counts</p>
+<ul>
+<li>Count or hash states you already visited
+<img src="images/mbc50.png" width="500">
+</li>
+<li>Captures epistemic uncertainty</li>
+<li>Can be sensitive to state space in which you count</li>
+</ul>
+</li>
+<li>
+<p>Ensembles</p>
+<ul>
+<li>Train multiple models independently and combine predictions across models</li>
+<li>Captures epistemic uncertainty</li>
+<li>Simple to implement and applicable in many contexts</li>
+<li>Can be sensitive to state space and network architecture</li>
+</ul>
+</li>
+</ol>
+<p>For discussion in the context of reinforcement learning see <em>Osband et al (2018). Randomized Prior Functions for Deep Reinforcement Learning.</em></p>
+<p>Between the above options, Ensembles currently are popular due to simplicity and flexibility.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Combining-planning-and-learning">
+<a class="anchor" href="#Combining-planning-and-learning" aria-hidden="true"><span class="octicon octicon-link"></span></a>Combining planning and learning<a class="anchor-link" href="#Combining-planning-and-learning"> </a>
+</h3>
+<p>How to combine decision-time planning and background planning methods?</p>
 
 </div>
 </div>

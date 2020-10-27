@@ -157,26 +157,22 @@ window.onload = wrap_img;
 </li>
 <li class="toc-entry toc-h2"><a href="#Model-based-control-and-how-to-use-a-model?">Model-based control and how to use a model? </a>
 <ul>
-<li class="toc-entry toc-h3"><a href="#How-models-are-used-in-reinforcement-learning?">How models are used in reinforcement learning? </a>
+<li class="toc-entry toc-h3"><a href="#Simulating-the-environment">Simulating the environment </a></li>
+<li class="toc-entry toc-h3"><a href="#Assisting-the-learning-algorithm">Assisting the learning algorithm </a></li>
+<li class="toc-entry toc-h3"><a href="#Strengthening-the-policy">Strengthening the policy </a>
 <ul>
-<li class="toc-entry toc-h4"><a href="#Simulating-the-environment">Simulating the environment </a></li>
-<li class="toc-entry toc-h4"><a href="#Assisting-the-learning-algorithm">Assisting the learning algorithm </a></li>
-<li class="toc-entry toc-h4"><a href="#Strengthening-the-policy">Strengthening the policy </a>
+<li class="toc-entry toc-h4"><a href="#What-is-the-difference-between-background-and-decision-time-planning?">What is the difference between background and decision-time planning? </a></li>
+<li class="toc-entry toc-h4"><a href="#What-is-the-difference-between-discrete-and-continuous-planning?">What is the difference between discrete and continuous planning? </a>
 <ul>
-<li class="toc-entry toc-h5"><a href="#What-is-the-difference-between-background-and-decision-time-planning?">What is the difference between background and decision-time planning? </a></li>
-<li class="toc-entry toc-h5"><a href="#What-is-the-difference-between-discrete-and-continuous-planning?">What is the difference between discrete and continuous planning? </a>
-<ul>
-<li class="toc-entry toc-h6"><a href="#MCTS-(monte-carlo-tree-search)">MCTS (monte carlo tree search) </a></li>
-<li class="toc-entry toc-h6"><a href="#Trajectory-Optimization">Trajectory Optimization </a></li>
+<li class="toc-entry toc-h5"><a href="#MCTS-(monte-carlo-tree-search)">MCTS (monte carlo tree search) </a></li>
+<li class="toc-entry toc-h5"><a href="#Trajectory-Optimization">Trajectory Optimization </a></li>
 </ul>
 </li>
-<li class="toc-entry toc-h5"><a href="#Variety-and-motivations-of-continuous-planning-methods">Variety and motivations of continuous planning methods </a>
+<li class="toc-entry toc-h4"><a href="#Variety-and-motivations-of-continuous-planning-methods">Variety and motivations of continuous planning methods </a>
 <ul>
-<li class="toc-entry toc-h6"><a href="#Sensitivity-and-poor-conditioning">Sensitivity and poor conditioning </a></li>
-<li class="toc-entry toc-h6"><a href="#Only-reaches-local-optimum">Only reaches local optimum </a></li>
-<li class="toc-entry toc-h6"><a href="#Slow-convergence">Slow convergence </a></li>
-</ul>
-</li>
+<li class="toc-entry toc-h5"><a href="#Sensitivity-and-poor-conditioning">Sensitivity and poor conditioning </a></li>
+<li class="toc-entry toc-h5"><a href="#Only-reaches-local-optimum">Only reaches local optimum </a></li>
+<li class="toc-entry toc-h5"><a href="#Slow-convergence">Slow convergence </a></li>
 </ul>
 </li>
 </ul>
@@ -604,9 +600,6 @@ $$</p>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="How-models-are-used-in-reinforcement-learning?">
-<a class="anchor" href="#How-models-are-used-in-reinforcement-learning?" aria-hidden="true"><span class="octicon octicon-link"></span></a>How models are used in reinforcement learning?<a class="anchor-link" href="#How-models-are-used-in-reinforcement-learning?"> </a>
-</h3>
 <p>As we saw earlier, we can use the model in three different ways. In continue, we will see some examples of each case.</p>
 <p><figure>
   
@@ -622,9 +615,9 @@ $$</p>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Simulating-the-environment">
+<h3 id="Simulating-the-environment">
 <a class="anchor" href="#Simulating-the-environment" aria-hidden="true"><span class="octicon octicon-link"></span></a>Simulating the environment<a class="anchor-link" href="#Simulating-the-environment"> </a>
-</h4>
+</h3>
 <p><figure>
   
     <img class="docimage" src="/blog/images/copied_from_nb/images/mbc2.png" alt="" style="max-width: 150px">
@@ -656,9 +649,9 @@ $$</p>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Assisting-the-learning-algorithm">
+<h3 id="Assisting-the-learning-algorithm">
 <a class="anchor" href="#Assisting-the-learning-algorithm" aria-hidden="true"><span class="octicon octicon-link"></span></a>Assisting the learning algorithm<a class="anchor-link" href="#Assisting-the-learning-algorithm"> </a>
-</h4>
+</h3>
 <p><figure>
   
     <img class="docimage" src="/blog/images/copied_from_nb/images/mbc5.png" alt="" style="max-width: 150px">
@@ -751,14 +744,14 @@ $$<p>So how we can use this derivatives to calculate $\nabla_{\theta}J$ ?</p>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Strengthening-the-policy">
+<h3 id="Strengthening-the-policy">
 <a class="anchor" href="#Strengthening-the-policy" aria-hidden="true"><span class="octicon octicon-link"></span></a>Strengthening the policy<a class="anchor-link" href="#Strengthening-the-policy"> </a>
-</h4>
+</h3>
 <p>So far we talked about the first two ways of using a model in RL. These two ways are in category of <strong>Background Planning</strong>.</p>
 <p>There is another category based on the <em>Sutton and Barto (2018)- Reinforcement Learning: An Introduction</em> categorization, called <strong>Decision-Time Planning</strong>, which is a unique option we have available in model-based settings.</p>
-<h5 id="What-is-the-difference-between-background-and-decision-time-planning?">
+<h4 id="What-is-the-difference-between-background-and-decision-time-planning?">
 <a class="anchor" href="#What-is-the-difference-between-background-and-decision-time-planning?" aria-hidden="true"><span class="octicon octicon-link"></span></a>What is the difference between background and decision-time planning?<a class="anchor-link" href="#What-is-the-difference-between-background-and-decision-time-planning?"> </a>
-</h5>
+</h4>
 <p>In background planning, we can think of it as answering the question "how do I learn how to act in any possible situation to succeed and reach the goal?"</p>
 <p><figure>
   
@@ -843,9 +836,9 @@ $$<p>So how we can use this derivatives to calculate $\nabla_{\theta}J$ ?</p>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h5 id="What-is-the-difference-between-discrete-and-continuous-planning?">
+<h4 id="What-is-the-difference-between-discrete-and-continuous-planning?">
 <a class="anchor" href="#What-is-the-difference-between-discrete-and-continuous-planning?" aria-hidden="true"><span class="octicon octicon-link"></span></a>What is the difference between discrete and continuous planning?<a class="anchor-link" href="#What-is-the-difference-between-discrete-and-continuous-planning?"> </a>
-</h5>
+</h4>
 <p>It depends on the problem which you want to solve. So it is not a choice that you can make. For example in controlling a robot, the actions might be the torques for the motors (continuous), or in biomechanical settings it might be muscle excitations (continuous), or in medical problems the treatment that should be applied (discrete).</p>
 <p>The distinction between discrete and continuous actions is not significant for background planning methods.</p>
 <ul>
@@ -882,9 +875,9 @@ $$<p>But for decision-time planning, this distinction leads to specialized metho
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h6 id="MCTS-(monte-carlo-tree-search)">
+<h5 id="MCTS-(monte-carlo-tree-search)">
 <a class="anchor" href="#MCTS-(monte-carlo-tree-search)" aria-hidden="true"><span class="octicon octicon-link"></span></a>MCTS (monte carlo tree search)<a class="anchor-link" href="#MCTS-(monte-carlo-tree-search)"> </a>
-</h6>
+</h5>
 <p>This algorithm is in discrete actions group and is used in alpha-go and alpha-zero. You keep track of Q-value, which is long term reward, for all states and actions ideally that you want to consider. And also the number of times that the state and action has been previously visited.</p>
 <ol>
 <li>Initialize $Q_0(s, a) = 0, N_0(s, a)=0, k=0$</li>
@@ -953,9 +946,9 @@ $$</li>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h6 id="Trajectory-Optimization">
+<h5 id="Trajectory-Optimization">
 <a class="anchor" href="#Trajectory-Optimization" aria-hidden="true"><span class="octicon octicon-link"></span></a>Trajectory Optimization<a class="anchor-link" href="#Trajectory-Optimization"> </a>
-</h6>
+</h5>
 <p>Instead of keeping track of a tree of many possibilities, you just keep track of one possible action sequence.</p>
 <ol>
 <li>Initialize $a_0, ..., a_H$ from guess</li>
@@ -1020,9 +1013,9 @@ $$<ol>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>The continuous example we saw above can be categorize in <strong>shooting methods</strong>.</p>
-<h5 id="Variety-and-motivations-of-continuous-planning-methods">
+<h4 id="Variety-and-motivations-of-continuous-planning-methods">
 <a class="anchor" href="#Variety-and-motivations-of-continuous-planning-methods" aria-hidden="true"><span class="octicon octicon-link"></span></a>Variety and motivations of continuous planning methods<a class="anchor-link" href="#Variety-and-motivations-of-continuous-planning-methods"> </a>
-</h5>
+</h4>
 <p>Why so many variations? They all try to mitigate the issues we looked at like:</p>
 <ul>
 <li>Sensitivity and poor conditioning</li>
@@ -1044,9 +1037,9 @@ $$<ol>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h6 id="Sensitivity-and-poor-conditioning">
+<h5 id="Sensitivity-and-poor-conditioning">
 <a class="anchor" href="#Sensitivity-and-poor-conditioning" aria-hidden="true"><span class="octicon octicon-link"></span></a>Sensitivity and poor conditioning<a class="anchor-link" href="#Sensitivity-and-poor-conditioning"> </a>
-</h6>
+</h5>
 <p><figure>
   
     <img class="docimage" src="/blog/images/copied_from_nb/images/mbc24-2.png" alt="" style="max-width: 200px">
@@ -1106,9 +1099,9 @@ $$<p>It is an explicit contrained optimization problem, rather than just beeng s
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h6 id="Only-reaches-local-optimum">
+<h5 id="Only-reaches-local-optimum">
 <a class="anchor" href="#Only-reaches-local-optimum" aria-hidden="true"><span class="octicon octicon-link"></span></a>Only reaches local optimum<a class="anchor-link" href="#Only-reaches-local-optimum"> </a>
-</h6>
+</h5>
 <p><figure>
   
     <img class="docimage" src="/blog/images/copied_from_nb/images/mbc28.png" alt="" style="max-width: 200px">
@@ -1152,9 +1145,9 @@ $$<p>It is an explicit contrained optimization problem, rather than just beeng s
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h6 id="Slow-convergence">
+<h5 id="Slow-convergence">
 <a class="anchor" href="#Slow-convergence" aria-hidden="true"><span class="octicon octicon-link"></span></a>Slow convergence<a class="anchor-link" href="#Slow-convergence"> </a>
-</h6>
+</h5>
 <p><figure>
   
     <img class="docimage" src="/blog/images/copied_from_nb/images/mbc32.png" alt="" style="max-width: 200px">
@@ -1170,7 +1163,8 @@ $$
 $$$$
 f_s(s_t, a_t) \approx As_t + Ba_t, \quad f_r(s_t, a_t) \approx s_t^TQs_t + a_t^TRa_t
 $$<p>Then it becomes Linear-Quadratic Regulator (LQR) problem and can be solved exactly.</p>
-<p>For Locally approximate the model around current solution, solve LQR problem to update solution, and repeat</p>
+<p>For iLQR, locally approximate the model around current solution, solve LQR problem to update solution, and repeat.</p>
+<p>For Differential dynamic programming (DDP) is similar, but with higher-order expansion of $f_s$.</p>
 
 </div>
 </div>

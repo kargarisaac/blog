@@ -1561,17 +1561,22 @@ $$<p><figure>
 <p>Some issues that can arrise:</p>
 <ul>
 <li>
-<p><strong>What is the learned policies have compounding errors?</strong> If we rollout the policy from one of the states, it does something different than what we intended to do.</p>
-<ul>
+<strong>What is the learned policies have compounding errors?</strong> If we rollout the policy from one of the states, it does something different than what we intended to do.</li>
+</ul>
+<ol>
 <li>Create new decision-time plans from these statse that have been visited by policy.</li>
 <li>Add these trajectories (new decision-time plans) to the distillation dataset (expand dataset where policy makes errors)</li>
-</ul>
-<p><img src="images/comb3.png" width="300"></p>
-<ul>
+</ol>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/comb3.png" alt="" style="max-width: 300px">
+    
+    
+</figure>
+</p>
+<ol>
 <li>This is the idea of Dagger algorithm:</li>
-</ul>
-</li>
-</ul>
+</ol>
 <p><figure>
   
     <img class="docimage" src="/blog/images/copied_from_nb/images/comb4.png" alt="" style="max-width: 300px">
@@ -1590,11 +1595,10 @@ $$<p><figure>
     
 </figure>
 </p>
-
-<pre><code>- we can make it so that the policy function that we are learning actually feeds back and influences our planner. 
-- To do this, we can add an additional term in our cost that says stay close to the policy. $D$ in the below cost function is the distance between actions of the planner, $a_t$, and the policy outputs, $\pi(s_t)$. 
-
-</code></pre>
+<ol>
+<li>we can make it so that the policy function that we are learning actually feeds back and influences our planner. </li>
+<li>To do this, we can add an additional term in our cost that says stay close to the policy. $D$ in the below cost function is the distance between actions of the planner, $a_t$, and the policy outputs, $\pi(s_t)$. </li>
+</ol>
 <p><figure>
   
     <img class="docimage" src="/blog/images/copied_from_nb/images/comb6.png" alt="">

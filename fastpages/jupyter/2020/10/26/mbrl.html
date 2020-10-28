@@ -109,7 +109,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      25 min read
+      29 min read
     
 </span></p>
 
@@ -194,7 +194,14 @@ window.onload = wrap_img;
 </ul>
 </li>
 <li class="toc-entry toc-h3"><a href="#Estimating-model-uncertainty">Estimating model uncertainty </a></li>
-<li class="toc-entry toc-h3"><a href="#Combining-planning-and-learning">Combining planning and learning </a></li>
+<li class="toc-entry toc-h3"><a href="#Combining-planning-and-learning">Combining planning and learning </a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#Distillation">Distillation </a></li>
+<li class="toc-entry toc-h4"><a href="#Terminal-value-functions-(value-of-the-terminal-state)">Terminal value functions (value of the terminal state) </a></li>
+<li class="toc-entry toc-h4"><a href="#Planning-as-policy-improvement">Planning as policy improvement </a></li>
+<li class="toc-entry toc-h4"><a href="#Implicit-planning">Implicit planning </a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul><!--
@@ -1515,7 +1522,176 @@ $$<p><figure>
 <h3 id="Combining-planning-and-learning">
 <a class="anchor" href="#Combining-planning-and-learning" aria-hidden="true"><span class="octicon octicon-link"></span></a>Combining planning and learning<a class="anchor-link" href="#Combining-planning-and-learning"> </a>
 </h3>
-<p>How to combine decision-time planning and background planning methods?</p>
+<p>We compared these two methods in previous sections and saw that background and decision-time planning have complementary strengths and weaknesses.</p>
+<p>How to combine decision-time planning and background planning methods and get the benefits of both?</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Distillation">
+<a class="anchor" href="#Distillation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Distillation<a class="anchor-link" href="#Distillation"> </a>
+</h4>
+<p>In this approach we gather a collection of initial states and run our decision-time planner for each initial state and get a collection of trajectories that succeed at reaching the goal. Once we collected these collection of optimal trajectories, we can use a supervised learning algorithm to train either policy function or any other function to map states to actions. This is similar to Behavioral Cloning (BC).</p>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/comb1.png" alt="">
+    
+    
+</figure>
+
+<figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/comb2.png" alt="">
+    
+    
+</figure>
+</p>
+<p>Some issues that can arrise:</p>
+<ul>
+<li>
+<p><strong>What is the learned policies have compounding errors?</strong> If we rollout the policy from one of the states, it does something different than what we intended to do.</p>
+<ul>
+<li>Create new decision-time plans from these statse that have been visited by policy.</li>
+<li>
+<p>Add these trajectories (new decision-time plans) to the distillation dataset (expand dataset where policy makes errors)</p>
+<p><img src="images/comb3.png" width="300"></p>
+</li>
+<li>
+<p>This is the idea of Dagger algorithm:</p>
+<p><img src="images/comb4.png" width="300"></p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>What if the plans are not consistent?</strong> There are sevaral ways to achieving a goal and we've seen that by changing the initial condition only a little bit, the decision-time planner can give us pretty different solutions to reach a single goal. This chaotic behavior might be hard to distill into the policy</p>
+<p><img src="images/comb5.png"></p>
+<ul>
+<li>we can make it so that the policy function that we are learning actually feeds back and influences our planner. </li>
+<li>
+<p>To do this, we can add an additional term in our cost that says stay close to the policy. $D$ in the below cost function is the distance between actions of the planner, $a_t$, and the policy outputs, $\pi(s_t)$.</p>
+<p><img src="images/comb6.png">
+<img src="images/comb7.png" width="300">
+<img src="images/comb8.png" width="400"></p>
+</li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Terminal-value-functions-(value-of-the-terminal-state)">
+<a class="anchor" href="#Terminal-value-functions-(value-of-the-terminal-state)" aria-hidden="true"><span class="octicon octicon-link"></span></a>Terminal value functions (value of the terminal state)<a class="anchor-link" href="#Terminal-value-functions-(value-of-the-terminal-state)"> </a>
+</h4>
+<p>One of the issues with many trajectory optimization or discrete search approaches is that the planning horizon is typically finite. This may lead to myopic or greedy behavior.</p>
+$$
+J^H = \sum_{t=0}^H \gamma^t r_t
+$$<p>To solve this problem, we can use the value function at terminal state and add it to the objective function. This learned value fuinction guides plans to long-term good states. So the objective function would be infinite horizon:</p>
+$$
+J^{\infty} = \sum_{t=0}^{\infty} \gamma^t r_t = \sum_{t=0}^H \gamma^t r_t + \gamma^H V(s_H)
+$$<p>This is another kind of combining decision-time planning (optimization problem) with background planning (learned value function).</p>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/comb9.png" alt="" style="max-width: 200px">
+    
+    
+</figure>
+</p>
+<p>This can be used in both discrete and continuous action spaces:</p>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/comb10.png" alt="" style="max-width: 300px">
+    
+    
+</figure>
+</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Planning-as-policy-improvement">
+<a class="anchor" href="#Planning-as-policy-improvement" aria-hidden="true"><span class="octicon octicon-link"></span></a>Planning as policy improvement<a class="anchor-link" href="#Planning-as-policy-improvement"> </a>
+</h4>
+<p>So far we used policy (background) or decision-time planner to make decision and generate trajectory and actions.</p>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/comb11.png" alt="" style="max-width: 300px">
+    
+    
+</figure>
+</p>
+<p>But we can combine them and use planner as policy improvement. We can use the policy to provide some information for the planner. For example policy can output its set of trajectories and the planner can use it as a warm start or initialization to improve upon. We would like to train the policy such that the improvement proposed by the planner has no effect. So the policy trajectory be the best that we can do. I think we can see the planner as a teacher for the policy.</p>
+<p>Some related papers are listed here:</p>
+<ul>
+<li><em>Silver et al (2017). Mastering the game of Go without human knowledge.</em></li>
+<li><em>Levine et al (2014). Guided Policy Search under Unknown Dynamics.</em></li>
+<li><em>Anthony et al (2017). Thinking Fast and Slow with Deep Learning and Tree Search.</em></li>
+</ul>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/comb12.png" alt="" style="max-width: 400px">
+    
+    
+</figure>
+</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Implicit-planning">
+<a class="anchor" href="#Implicit-planning" aria-hidden="true"><span class="octicon octicon-link"></span></a>Implicit planning<a class="anchor-link" href="#Implicit-planning"> </a>
+</h4>
+<p>In addition to use planner to improve policy trajectory, we can put the planner as a component <em>inside</em> the policy network and train end-to-end.</p>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/comb13.png" alt="" style="max-width: 300px">
+    
+    
+</figure>
+</p>
+<p>The advantage of doing this is that the policy network dictates abstract state/action spaces to plan in. But the downside of this is that it requires differentiating through the planning algorithm. But the good news is that multiple algorithms we've seen have been made differentiable and amenable to integrating in such a planner.</p>
+<p>some examples are as follows:</p>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/comb14.png" alt="">
+    
+    
+</figure>
+
+<figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/comb15.png" alt="">
+    
+    
+</figure>
+
+<figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/comb16.png" alt="">
+    
+    
+</figure>
+</p>
+<p>There are also some works that show the planning could <em>emerge</em> in generic black-box policy network and model-free RL training.</p>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/comb17.png" alt="">
+    
+    
+</figure>
+</p>
 
 </div>
 </div>

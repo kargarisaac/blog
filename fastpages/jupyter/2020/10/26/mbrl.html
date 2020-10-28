@@ -1474,6 +1474,11 @@ $$<p><figure>
 <p>Model has distribution over neural network weights</p>
 <p>$$ p(s_{t+1}|s_t, a_t) = E_{\theta}[p(s_{t+1}|s_t, a_t, \theta)]$$</p>
 </li>
+<li>
+<p>Captures epistemic and aleatoric uncertainty</p>
+</li>
+<li>Factorized approximations can underestimate uncertainty</li>
+<li>Can be hard to train (but an active research area)</li>
 </ul>
 </li>
 </ol>
@@ -1484,12 +1489,6 @@ $$<p><figure>
     
 </figure>
 </p>
-
-<pre><code>- Captures epistemic and aleatoric uncertainty
-- Factorized approximations can underestimate uncertainty
-- Can be hard to train (but an active research area)
-
-</code></pre>
 <ol>
 <li>Gaussian processes <ul>
 <li>Captures epistemic uncertainty</li>
@@ -1499,6 +1498,8 @@ $$<p><figure>
 </li>
 <li>Pseudo-counts<ul>
 <li>Count or hash states you already visited</li>
+<li>Captures epistemic uncertainty</li>
+<li>Can be sensitive to state space in which you count</li>
 </ul>
 </li>
 </ol>
@@ -1509,11 +1510,6 @@ $$<p><figure>
     
 </figure>
 </p>
-
-<pre><code>- Captures epistemic uncertainty
-- Can be sensitive to state space in which you count
-
-</code></pre>
 <ol>
 <li>Ensembles<ul>
 <li>Train multiple models independently and combine predictions across models</li>
@@ -1570,19 +1566,12 @@ $$<p><figure>
 <li>Create new decision-time plans from these statse that have been visited by policy.</li>
 <li>Add these trajectories (new decision-time plans) to the distillation dataset (expand dataset where policy makes errors)</li>
 </ul>
+<p><img src="images/comb3.png" width="300"></p>
+<ul>
+<li>This is the idea of Dagger algorithm:</li>
+</ul>
 </li>
 </ul>
-<p><figure>
-  
-    <img class="docimage" src="/blog/images/copied_from_nb/images/comb3.png" alt="" style="max-width: 300px">
-    
-    
-</figure>
-</p>
-
-<pre><code>- This is the idea of Dagger algorithm:
-
-</code></pre>
 <p><figure>
   
     <img class="docimage" src="/blog/images/copied_from_nb/images/comb4.png" alt="" style="max-width: 300px">
@@ -1592,19 +1581,41 @@ $$<p><figure>
 </p>
 <ul>
 <li>
-<p><strong>What if the plans are not consistent?</strong> There are sevaral ways to achieving a goal and we've seen that by changing the initial condition only a little bit, the decision-time planner can give us pretty different solutions to reach a single goal. This chaotic behavior might be hard to distill into the policy</p>
-<p><img src="images/comb5.png"></p>
-<ul>
-<li>we can make it so that the policy function that we are learning actually feeds back and influences our planner. </li>
-<li>
-<p>To do this, we can add an additional term in our cost that says stay close to the policy. $D$ in the below cost function is the distance between actions of the planner, $a_t$, and the policy outputs, $\pi(s_t)$.</p>
-<p><img src="images/comb6.png">
-<img src="images/comb7.png" width="300">
-<img src="images/comb8.png" width="400"></p>
-</li>
+<strong>What if the plans are not consistent?</strong> There are sevaral ways to achieving a goal and we've seen that by changing the initial condition only a little bit, the decision-time planner can give us pretty different solutions to reach a single goal. This chaotic behavior might be hard to distill into the policy</li>
 </ul>
-</li>
-</ul>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/comb5.png" alt="">
+    
+    
+</figure>
+</p>
+
+<pre><code>- we can make it so that the policy function that we are learning actually feeds back and influences our planner. 
+- To do this, we can add an additional term in our cost that says stay close to the policy. $D$ in the below cost function is the distance between actions of the planner, $a_t$, and the policy outputs, $\pi(s_t)$. 
+
+</code></pre>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/comb6.png" alt="">
+    
+    
+</figure>
+
+<figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/comb7.png" alt="" style="max-width: 300px">
+    
+    
+</figure>
+
+<figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/comb8.png" alt="" style="max-width: 400px">
+    
+    
+</figure>
+</p>
 
 </div>
 </div>

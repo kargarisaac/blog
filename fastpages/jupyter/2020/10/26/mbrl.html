@@ -1473,36 +1473,49 @@ $$<p><figure>
 <li>
 <p>Model has distribution over neural network weights</p>
 <p>$$ p(s_{t+1}|s_t, a_t) = E_{\theta}[p(s_{t+1}|s_t, a_t, \theta)]$$</p>
-<p><img src="images/mbc49.png" width="500"></p>
 </li>
-<li>
-<p>Captures epistemic and aleatoric uncertainty</p>
-</li>
-<li>Factorized approximations can underestimate uncertainty</li>
-<li>Can be hard to train (but an active research area)</li>
 </ul>
 </li>
-<li>
-<p>Gaussian processes</p>
-<ul>
+</ol>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc49.png" alt="" style="max-width: 500px">
+    
+    
+</figure>
+</p>
+
+<pre><code>- Captures epistemic and aleatoric uncertainty
+- Factorized approximations can underestimate uncertainty
+- Can be hard to train (but an active research area)
+
+</code></pre>
+<ol>
+<li>Gaussian processes <ul>
 <li>Captures epistemic uncertainty</li>
 <li>Explicitly control state distance metric</li>
 <li>Can be hard to scale (but an active research area)</li>
 </ul>
 </li>
-<li>
-<p>Pseudo-counts</p>
-<ul>
-<li>Count or hash states you already visited
-<img src="images/mbc50.png" width="500">
-</li>
-<li>Captures epistemic uncertainty</li>
-<li>Can be sensitive to state space in which you count</li>
+<li>Pseudo-counts<ul>
+<li>Count or hash states you already visited</li>
 </ul>
 </li>
-<li>
-<p>Ensembles</p>
-<ul>
+</ol>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/mbc50.png" alt="" style="max-width: 500px">
+    
+    
+</figure>
+</p>
+
+<pre><code>- Captures epistemic uncertainty
+- Can be sensitive to state space in which you count
+
+</code></pre>
+<ol>
+<li>Ensembles<ul>
 <li>Train multiple models independently and combine predictions across models</li>
 <li>Captures epistemic uncertainty</li>
 <li>Simple to implement and applicable in many contexts</li>
@@ -1555,16 +1568,29 @@ $$<p><figure>
 <p><strong>What is the learned policies have compounding errors?</strong> If we rollout the policy from one of the states, it does something different than what we intended to do.</p>
 <ul>
 <li>Create new decision-time plans from these statse that have been visited by policy.</li>
-<li>
-<p>Add these trajectories (new decision-time plans) to the distillation dataset (expand dataset where policy makes errors)</p>
-<p><img src="images/comb3.png" width="300"></p>
-</li>
-<li>
-<p>This is the idea of Dagger algorithm:</p>
-<p><img src="images/comb4.png" width="300"></p>
-</li>
+<li>Add these trajectories (new decision-time plans) to the distillation dataset (expand dataset where policy makes errors)</li>
 </ul>
 </li>
+</ul>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/comb3.png" alt="" style="max-width: 300px">
+    
+    
+</figure>
+</p>
+
+<pre><code>- This is the idea of Dagger algorithm:
+
+</code></pre>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/comb4.png" alt="" style="max-width: 300px">
+    
+    
+</figure>
+</p>
+<ul>
 <li>
 <p><strong>What if the plans are not consistent?</strong> There are sevaral ways to achieving a goal and we've seen that by changing the initial condition only a little bit, the decision-time planner can give us pretty different solutions to reach a single goal. This chaotic behavior might be hard to distill into the policy</p>
 <p><img src="images/comb5.png"></p>

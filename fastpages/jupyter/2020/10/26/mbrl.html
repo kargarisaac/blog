@@ -1450,7 +1450,7 @@ $$<p><figure>
 </li>
 </ol>
 <p>There are multiple approaches to estimate these uncertainties which are listed as follows:</p>
-<ol>
+<ul>
 <li>
 <p>Probabilistic neural networks that try to model distributions over the outputs of your model.</p>
 <ul>
@@ -1465,8 +1465,8 @@ $$<p><figure>
 <li>No guarantees for reasonable outputs outside of training data</li>
 </ul>
 </li>
-</ol>
-<ol>
+</ul>
+<ul>
 <li>
 <p>Bayesian neural network</p>
 <ul>
@@ -1481,7 +1481,7 @@ $$<p><figure>
 <li>Can be hard to train (but an active research area)</li>
 </ul>
 </li>
-</ol>
+</ul>
 <p><figure>
   
     <img class="docimage" src="/blog/images/copied_from_nb/images/mbc49.png" alt="" style="max-width: 500px">
@@ -1489,7 +1489,7 @@ $$<p><figure>
     
 </figure>
 </p>
-<ol>
+<ul>
 <li>Gaussian processes <ul>
 <li>Captures epistemic uncertainty</li>
 <li>Explicitly control state distance metric</li>
@@ -1502,7 +1502,7 @@ $$<p><figure>
 <li>Can be sensitive to state space in which you count</li>
 </ul>
 </li>
-</ol>
+</ul>
 <p><figure>
   
     <img class="docimage" src="/blog/images/copied_from_nb/images/mbc50.png" alt="" style="max-width: 500px">
@@ -1510,7 +1510,7 @@ $$<p><figure>
     
 </figure>
 </p>
-<ol>
+<ul>
 <li>Ensembles<ul>
 <li>Train multiple models independently and combine predictions across models</li>
 <li>Captures epistemic uncertainty</li>
@@ -1518,7 +1518,7 @@ $$<p><figure>
 <li>Can be sensitive to state space and network architecture</li>
 </ul>
 </li>
-</ol>
+</ul>
 <p>For discussion in the context of reinforcement learning see <em>Osband et al (2018). Randomized Prior Functions for Deep Reinforcement Learning.</em></p>
 <p>Between the above options, Ensembles currently are popular due to simplicity and flexibility.</p>
 

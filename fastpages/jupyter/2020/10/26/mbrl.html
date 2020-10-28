@@ -109,7 +109,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      34 min read
+      37 min read
     
 </span></p>
 
@@ -207,7 +207,12 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h2"><a href="#What-else-can-models-be-used-for?">What else can models be used for? </a>
 <ul>
 <li class="toc-entry toc-h3"><a href="#Exploration">Exploration </a></li>
-<li class="toc-entry toc-h3"><a href="#Hierarchical-reasoning">Hierarchical reasoning </a></li>
+<li class="toc-entry toc-h3"><a href="#Hierarchical-reasoning">Hierarchical reasoning </a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#Subgoal-based-approaches">Subgoal-based approaches </a></li>
+<li class="toc-entry toc-h4"><a href="#Skill-based-approaches">Skill-based approaches </a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul><!--
@@ -1669,7 +1674,7 @@ $$<p>This is another kind of combining decision-time planning (optimization prob
 <p>So far we used policy (background) or decision-time planner to make decision and generate trajectory and actions.</p>
 <p><figure>
   
-    <img class="docimage" src="/blog/images/copied_from_nb/images/comb11.png" alt="" style="max-width: 300px">
+    <img class="docimage" src="/blog/images/copied_from_nb/images/comb11.png" alt="" style="max-width: 400px">
     
     
 </figure>
@@ -1683,7 +1688,7 @@ $$<p>This is another kind of combining decision-time planning (optimization prob
 </ul>
 <p><figure>
   
-    <img class="docimage" src="/blog/images/copied_from_nb/images/comb12.png" alt="" style="max-width: 400px">
+    <img class="docimage" src="/blog/images/copied_from_nb/images/comb12.png" alt="" style="max-width: 500px">
     
     
 </figure>
@@ -1701,7 +1706,7 @@ $$<p>This is another kind of combining decision-time planning (optimization prob
 <p>In addition to use planner to improve policy trajectory, we can put the planner as a component <em>inside</em> the policy network and train end-to-end.</p>
 <p><figure>
   
-    <img class="docimage" src="/blog/images/copied_from_nb/images/comb13.png" alt="" style="max-width: 300px">
+    <img class="docimage" src="/blog/images/copied_from_nb/images/comb13.png" alt="" style="max-width: 400px">
     
     
 </figure>
@@ -1796,13 +1801,21 @@ $$<p>This is another kind of combining decision-time planning (optimization prob
 </figure>
 </p>
 <p>In addition to the above approach, we can also <em>plan to explore</em>. In <em>POLO</em> paper, rather than using the error from your prediction model, they use the error across an ensemble of value functions and use it as intrinsic reward. Actually, at each state we compute a bunch of different values from our ensembleof value functions, then take softmax over them to give us an optimistic estimate of what the value is going to be. We can use this optimistic value estimate as intrinsic reward. We plan to maximize this optimistic value estimate, and then this allows us to basically during planning, identify places that we should direct our behavior towards are more surprising or more interesting.</p>
-<p><figure>
-  
-    <img class="docimage" src="/blog/images/copied_from_nb/images/mu4.png" alt="">
-    
-    
-</figure>
+<ul>
+<li>Compute intrinsic reward during (decision-time) planning to direct the agent into new regions of state space</li>
+<li>Intrinsic reward = softmax across an ensemble of value functions</li>
+</ul>
+$$
+\hat{V}(s) = log(\sum_{k=1}^K exp(k\hat{V}_{\theta_k}(s)))
+$$<p>
 </p>
+<center>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/003rQ5vUcek?t=3" frameborder="0" allowfullscreen=""></iframe>
+</center>
+
+<ul>
+<li><em>Lowrey et al. (2019). Plan Online, Learn Offline: Efficient Learning and Exploration via Model-Based Control. ICLR 2019.</em></li>
+</ul>
 <p>We can also use the same idea but instead of using a set of disagreement across on ensemble of value functions, we can compute disagreement across transition functions. Now because we just using state transitions, this turns into a task agnostic exploration problem. We can then plan where there is disagreement between our transition functions and direct behavior towards those regions of space in order to learn a really robust model of the world. And then use this model of the world to learn new task either using zero-shot or few-shot (examples of experience).</p>
 <p><figure>
   
@@ -1846,6 +1859,61 @@ $$<p>This is another kind of combining decision-time planning (optimization prob
 
 <ul>
 <li><em>OpenAI et al. (2019). Solving Rubik's Cube with a Robot Hand. arXiv.</em></li>
+</ul>
+<p>The question that might arise is that where does this high-level state space come from?</p>
+<p>We don't want to hand code symbolically on these high-level roles that we want to achieve. There are some modle-free works that try to answer this but we focus on some MBRL approaches here for this problem.</p>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/mu8.png" alt="">
+    
+    
+</figure>
+</p>
+<h4 id="Subgoal-based-approaches">
+<a class="anchor" href="#Subgoal-based-approaches" aria-hidden="true"><span class="octicon octicon-link"></span></a>Subgoal-based approaches<a class="anchor-link" href="#Subgoal-based-approaches"> </a>
+</h4>
+<p>We can consider that any state you might find yourself in in the world as a subgoal. We don't want to construct a super long sequence of states to go through, but a small sequence. So the idea would be which states do we pick as a subgoal. Rather than learning a forward state transition model, we can learn a universal value function approximator, $V(s, g)$, that tells us what is the value of being able to go from state $s$ to goal state $g$. We can train these value functions between our subgoals, to basically give an estimate of how good a particular plan of length $k$ is. A plan of length $k$ is then given by maximizing:</p>
+$$
+\text{arg}\max_{\{s_i\}_{i=1}^k} (V(s_0, s_1) + V(s_k, s_g) + \sum_{i=1}^{k-1} V(s_i, s_{i+1}))
+$$<p>The figure below shows the idea. If you start from state $s_0$ and you want to go to $s_{\infty}$, you can break up this long plan of length one into a plan of length two by inserting a subgoal. You can do this recursively for multiple times to end up with a plan of length $k$ or in this case a plan of length three.</p>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/mu9.png" alt="" style="max-width: 300px">
+    
+    
+</figure>
+</p>
+<p>When we use a planner to identify which of these subgoals we should choose in order to maximize the above equation. In the figure below you see which white subgoal it is considering as subgoal in order to find path between the green and the blue points.</p>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/maze.gif" alt="" style="max-width: 200px">
+    
+    
+</figure>
+</p>
+<ul>
+<li><em>Nasiriany et al. (2019). Planning with Goal-Conditioned Policies. NeurIPS.</em></li>
+<li><em>Jurgenson et al. (2019). Sub-Goal Trees -- A Framework for Goal-Directed Trajectory Prediction and Optimization. arXiv.</em></li>
+<li><em>Parascandolo, Buesing, et al. (2020). Divide-and-Conquer Monte Carlo Tree Search For Goal-Directed Planning. arXiv.</em></li>
+</ul>
+<h4 id="Skill-based-approaches">
+<a class="anchor" href="#Skill-based-approaches" aria-hidden="true"><span class="octicon octicon-link"></span></a>Skill-based approaches<a class="anchor-link" href="#Skill-based-approaches"> </a>
+</h4>
+<p>Here, rather than identifying discrete states as subgoals that we want to try to achieve, what we want to do is to learn a set of skills that sort of fully parametrize the space of possible trajectories that we might want to execute. So for example, in the Ant environment a nice parametrization of skills would be to say a particular direction that you want to get to move in. So the approach taken by this paper is to learn a set of skills those outcomes are both (1) easy to predict, so if you train a dynamics model to predict the outcome of executing the skill, and (2) the skills are diverse from one another. That's why you get this nice diversity of the ant moving in different directions. This works very well for zero-shot adaptation to new sequences of goals. As you can see on the bottom, this is an ant going to a few different locations in space and it is doing this by just pure planning using this set of skills that it is learned during the unsupervised training phase.</p>
+<ul>
+<li>Learn set of skills whose outcomes are (1) easy to predict and (2) diverse</li>
+<li>Learn dynamics model over skills, and plan with MPC</li>
+<li>Can solve long-horizon sequences of high-level goals with no additional learning</li>
+</ul>
+<p><figure>
+  
+    <img class="docimage" src="/blog/images/copied_from_nb/images/ant.gif" alt="" style="max-width: 500px">
+    
+    
+</figure>
+</p>
+<ul>
+<li><em>Sharma et al. (2020). Dynamics-Aware Unsupervised Discovery of Skills. ICLR.</em></li>
 </ul>
 
 </div>

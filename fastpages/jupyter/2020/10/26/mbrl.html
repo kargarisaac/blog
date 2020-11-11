@@ -606,7 +606,7 @@ $$ D \rightarrow f \rightarrow \pi$$
     
 </figure>
 </p>
-<p>Why is this useful? Because some types of planners only need you to predict values rather than predicting states lime MCTS (Monte Carlo tree search).</p>
+<p>Why is this useful? Because some types of planners only need you to predict values rather than predicting states like MCTS (Monte Carlo tree search).</p>
 
 </div>
 </div>
@@ -741,7 +741,7 @@ $$
  J(\theta) = \sum_{t=0}^{\infty} \gamma^t R(s_t, a_t)  , \quad a_t = \pi_{\theta}(s_t) , \quad s_{t+1} = T(s_t, a_t)
 $$<p>Now we need to apply gradient ascent (for maximization) on policy gradient with respect to policy parameters $\theta  \rightarrow  \nabla_{\theta}J$.</p>
 <p>So how can we calculate this $\nabla_{\theta}J$ ?</p>
-<p>Sampling-based methods have been proposed, like REINFORCE, to estimate this gradient. But the problem with them is that they cannot have very high variance and often require the policy to have some randomness to make decisions. This can be unfavorable.</p>
+<p>Sampling-based methods have been proposed, like REINFORCE, to estimate this gradient. But the problem with them is that they can have very high variance and often require the policy to have some randomness to make decisions. This can be unfavorable.</p>
 <p><figure>
   
     <img class="docimage" src="/blog/images/copied_from_nb/images/mbc6.png" alt="">

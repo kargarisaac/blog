@@ -180,7 +180,7 @@ window.onload = wrap_img;
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Warning</strong>: This blog post is very long. Here is the table of content if you want to jump to a specific part:</p>
+<p><strong>Warning</strong>: This blog post is very long. Use the table of content if you want to jump to a specific part:</p>
 
 </div>
 </div>
@@ -204,18 +204,13 @@ window.onload = wrap_img;
 </h1>
 <p>Assume that you have an unlabeled dataset and have a budget(money or time) to spend on the labeling task. How can we select and label the most interesting and informative examples from that dataset in which if we train a model on those, it will give us the best possible performance? 
 The data selection procedure is called Active Learning and the idea is as the following diagram:</p>
-<p><figure>
-  
-    <img class="docimage" src="/blog/images/copied_from_nb/images/activelearning/al.png" alt="" style="max-width: 400px">
-    
-    
-</figure>
-</p>
+<p><img src="/blog/images/copied_from_nb/images/activelearning/al.png" alt="">
+<em><a href="https://www.youtube.com/watch?v=oYUkAvhBNsg&amp;list=PLog3nOPCjKBl8s3Ia4ZtmOEniuYM3pVGQ">source</a></em></p>
 <p>We start with a labeled dataset and use it to train a model. The model is then applied to new unlabeled data points, producing scores based on various metrics for each sample. The data points can then be selected based on the associated scores. After that, a human annotator will annotate these selected samples and add them to the labeled dataset. The model will then be trained on that dataset once more, and the procedure will be repeated until the results are satisfactory. </p>
 <p>Some resources consider the following main categories for active learning techniques: diversity-based sampling, and uncertainty-based sampling:</p>
 <p><figure>
   
-    <img class="docimage" src="/blog/images/copied_from_nb/images/activelearning/al2.png" alt="" style="max-width: 400px">
+    <img class="docimage" src="/blog/images/copied_from_nb/images/activelearning/al2.png" alt="">
     
     
 </figure>
@@ -228,7 +223,7 @@ Here I list some of the techniques I found which can fall into one or multiple m
 <p><strong>Ensemble of models</strong>: Using an ensemble of trained models and then feeding the data point into all of them and voting on their outputs is one technique to choose a data point. If the models agree on the outcome, it means the data point is similar to the data used to train the model and is hence uninformative. If models disagree on the data, it implies that the models lack sufficient information about the sample, and there is something to be learned from this data point.</p>
 <p><figure>
   
-    <img class="docimage" src="/blog/images/copied_from_nb/images/activelearning/al3.png" alt="" style="max-width: 400px">
+    <img class="docimage" src="/blog/images/copied_from_nb/images/activelearning/al3.png" alt="">
     
     
 </figure>
@@ -239,7 +234,7 @@ Here I list some of the techniques I found which can fall into one or multiple m
 <p><strong>Geometric Approach or Core-Set</strong>: The idea is to pick a small set of points (blue points) whose neighbors (red points) are within a certain distance of these blue points so that if we train a model on these blue points (selected points), the model's performance will be as close to that of a model trained on the entire dataset as possible (all blue and red data points). They define a loss function to select these data points that you can check the paper for more detail. It is also possible to use clustering algorithms to find clusters and select the centroid of the cluster as the blue point.</p>
 <p><figure>
   
-    <img class="docimage" src="/blog/images/copied_from_nb/images/activelearning/al4.png" alt="" style="max-width: 400px">
+    <img class="docimage" src="/blog/images/copied_from_nb/images/activelearning/al4.png" alt="">
     
     
 </figure>
@@ -247,7 +242,7 @@ Here I list some of the techniques I found which can fall into one or multiple m
 <p><strong>Learning the Loss</strong>: the idea is to train the model to predict the cross-entropy loss as an output. So during the training phase, we can teach the model to do the loss prediction and use it on unlabeled data points. Then, the predicted loss can be used as a score for each data point to be selected for labeling or not.</p>
 <p><figure>
   
-    <img class="docimage" src="/blog/images/copied_from_nb/images/activelearning/al5.png" alt="" style="max-width: 400px">
+    <img class="docimage" src="/blog/images/copied_from_nb/images/activelearning/al5.png" alt="">
     
     
 </figure>
@@ -255,7 +250,7 @@ Here I list some of the techniques I found which can fall into one or multiple m
 <p><strong>Consistency-based sampling</strong>: Entropy-based and consistency-based methods are complementary. Entropy-based methods perform well on samples coming from easy classes (classes that the model performs well in general but not for some cases) and not very well on hard classes (classes that the model does not perform well in general). As a result, active learning using uncertainty improves the performance over the classes that the model works already well. But for hard classes, the scores by the uncertainty methods are not reliable. Here is an example from a paper called "Not All Labels Are Equal":</p>
 <p><figure>
   
-    <img class="docimage" src="/blog/images/copied_from_nb/images/activelearning/al6.png" alt="" style="max-width: 400px">
+    <img class="docimage" src="/blog/images/copied_from_nb/images/activelearning/al6.png" alt="">
     
     
 </figure>
@@ -264,7 +259,7 @@ Here I list some of the techniques I found which can fall into one or multiple m
 <p>On the other hand, consistency-based methods perform well on samples coming from hard classes. The idea in consistency-based methods is that during training, both labeled and unlabeled data are used for model optimization, with cross-entropy loss encouraging correct predictions for labeled samples and consistency-based loss encouraging consistent outputs between unlabeled samples and their augmentations. During sample selection, the unlabeled samples and their augmentations are evaluated by the model developed during the training stage. The consistency-based metric is used to evaluate their outputs. Samples with low consistency scores are chosen for labeling and sent to the labeled pool. Here is an illustration of the proposed framework at t_th active learning cycle in a paper called "Consistency-based Semi-supervised Active Learning":</p>
 <p><figure>
   
-    <img class="docimage" src="/blog/images/copied_from_nb/images/activelearning/al7.png" alt="" style="max-width: 400px">
+    <img class="docimage" src="/blog/images/copied_from_nb/images/activelearning/al7.png" alt="">
     
     
 </figure>
@@ -272,7 +267,7 @@ Here I list some of the techniques I found which can fall into one or multiple m
 <p>Combining uncertainty and consistency methods (e.g. multiplying the scores) can improve the performance over both. The paper called "Not All Labels Are Equal" proposes a unified strategy to choose which samples to manually label and which samples can be automatically labeled. They consider the object detection task in their paper and try to build a more general acquisition function to score data points which is not only based on entropy but also based on consistency. The idea is to use again both labeled and unlabeled data and pass them through the detector. There are two losses in their method: one is the supervised loss for labeled data and the other one is the consistency loss which is for both labeled and unlabeled data. Then they have the scoring function, which will select which samples go to the human annotators, and also which samples are easy samples and need to go for the pseudo labeling. So the valuable time of the annotator will not be spent on easy samples. Here is the diagram of their proposed method:</p>
 <p><figure>
   
-    <img class="docimage" src="/blog/images/copied_from_nb/images/activelearning/al8.png" alt="" style="max-width: 400px">
+    <img class="docimage" src="/blog/images/copied_from_nb/images/activelearning/al8.png" alt="">
     
     
 </figure>
@@ -280,7 +275,7 @@ Here I list some of the techniques I found which can fall into one or multiple m
 <p>For the consistency loss, they have two terms: one for class inconsistency and one for bounding box inconsistency.</p>
 <p><figure>
   
-    <img class="docimage" src="/blog/images/copied_from_nb/images/activelearning/al9.png" alt="" style="max-width: 400px">
+    <img class="docimage" src="/blog/images/copied_from_nb/images/activelearning/al9.png" alt="">
     
     
 </figure>
@@ -296,7 +291,7 @@ Here I list some of the techniques I found which can fall into one or multiple m
 <h1 id="NVIDIA">
 <a class="anchor" href="#NVIDIA" aria-hidden="true"><span class="octicon octicon-link"></span></a>NVIDIA<a class="anchor-link" href="#NVIDIA"> </a>
 </h1>
-<p>NVIDIA proposes to use pool-based active learning and an acquisition function based on a disagreement between several trained models (the core of their system is an ensemble of object detectors providing potential bounding boxes and probabilities for each class of interest) to select the frames which are most informative to the model. Here are the steps in their proposed approach:
+<p>NVIDIA proposes to use <a href="https://burrsettles.com/pub/settles.activelearning.pdf">pool-based active learning</a> and an acquisition function based on a disagreement between several trained models (the core of their system is an ensemble of object detectors providing potential bounding boxes and probabilities for each class of interest) to select the frames which are most informative to the model. Here are the steps in their proposed approach:
 Train: Train N models initialized with different random parameters on all currently labeled training data.
 Query: Select examples from the unlabeled pool using the acquisition function.
 Annotate: Annotate selected data by a human annotator.

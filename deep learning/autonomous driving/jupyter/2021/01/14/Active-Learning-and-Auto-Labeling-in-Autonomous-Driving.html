@@ -207,79 +207,38 @@ The data selection procedure is called Active Learning and the idea is as the fo
 <p><img src="/blog/images/copied_from_nb/images/activelearning/al.png" alt="">
 <em><a href="https://www.youtube.com/watch?v=oYUkAvhBNsg&amp;list=PLog3nOPCjKBl8s3Ia4ZtmOEniuYM3pVGQ">source</a></em></p>
 <p>We start with a labeled dataset and use it to train a model. The model is then applied to new unlabeled data points, producing scores based on various metrics for each sample. The data points can then be selected based on the associated scores. After that, a human annotator will annotate these selected samples and add them to the labeled dataset. The model will then be trained on that dataset once more, and the procedure will be repeated until the results are satisfactory. </p>
-<p>Some resources consider the following main categories for active learning techniques: diversity-based sampling, and uncertainty-based sampling:</p>
-<p><figure>
-  
-    <img class="docimage" src="/blog/images/copied_from_nb/images/activelearning/al2.png" alt="">
-    
-    
-</figure>
-</p>
-<p>The right column above represents Active Learning: the Known Unknowns that can be addressed with Uncertainty Sampling and the Unknown Unknowns that can be addressed with Diversity Sampling. Some examples of the two mentioned categories can be found here and here.
-Here I list some of the techniques I found which can fall into one or multiple mentioned categories. Let's check some of them (mostly from this lecture):</p>
+<p>Some resources consider the following main categories for active learning techniques: <strong>diversity-based sampling, and uncertainty-based sampling</strong>:</p>
+<p><img src="/blog/images/copied_from_nb/images/activelearning/al2.png" alt="">
+<em><a href="https://medium.com/pytorch/https-medium-com-robert-munro-active-learning-with-pytorch-2f3ee8ebec">source</a></em></p>
+<p>The right column above represents Active Learning: the Known Unknowns that can be addressed with Uncertainty Sampling and the Unknown Unknowns that can be addressed with Diversity Sampling. Some examples of the two mentioned categories can be found <a href="https://towardsdatascience.com/https-towardsdatascience-com-diversity-sampling-cheatsheet-32619693c304">here</a> and <a href="https://towardsdatascience.com/uncertainty-sampling-cheatsheet-ec57bc067c0b">here</a>.</p>
+<p>Here I list some of the techniques I found which can fall into one or multiple mentioned categories. Let's check some of them (mostly from <a href="https://www.youtube.com/watch?v=oYUkAvhBNsg&amp;list=PLog3nOPCjKBl8s3Ia4ZtmOEniuYM3pVGQ">this lecture</a>):</p>
 <p><strong>Random Sampling</strong>: One way to select some samples from the dataset is to do random sampling. But there is no guarantee that selected samples are informative enough or maybe they are similar to each other.</p>
-<p><strong>Metadata-based Sampling</strong>: The metadata distribution of the dataset refers to parameters that describe the image's content (such as luminance and color channels) or the conditions in which the image was captured (time, temperature, and location). The primary task is to determine what the dataset should ideally represent in these proportions. One sampling technique for data selection is data querying based on metadata information.</p>
-<p><strong>Diversity-based sampling</strong>: Diversity-based sampling, which is based on the distance between samples in embedding space, is a more comprehensive and efficient method of data selection. Its goal is to select a diverse dataset that covers all possible scenarios, ensuring that the model is trained even on edge or corner cases. By using a diverse training subset, redundant samples and over-represented data that can lead to overfitting are removed, improving model accuracy. It should be noted that some of the other approaches mentioned here may also fall into this or other categories. For example, the following method, which employs an ensemble of models, can be used to assess the diversity of a new data point.</p>
-<p><strong>Ensemble of models</strong>: Using an ensemble of trained models and then feeding the data point into all of them and voting on their outputs is one technique to choose a data point. If the models agree on the outcome, it means the data point is similar to the data used to train the model and is hence uninformative. If models disagree on the data, it implies that the models lack sufficient information about the sample, and there is something to be learned from this data point.</p>
-<p><figure>
-  
-    <img class="docimage" src="/blog/images/copied_from_nb/images/activelearning/al3.png" alt="">
-    
-    
-</figure>
-</p>
-<p><strong>Entropy</strong>: The other approach is to use Entropy, which shows the uncertainty, as a score for selecting samples. For example, for a classification task, the entropy for the distribution over different classes can be calculated. If the probability for one class is much higher than others, the calculated entropy would be low which means the model is certain about that sample. And if the probabilities for all classes or several classes are almost the same, the calculated entropy would be high and this shows the model is uncertain about the data point and it will be selected to be labeled. To summarize, the idea behind uncertainty-based sampling is that algorithms ensure that data, where the model is uncertain, is added to the training set.</p>
+<p><strong><a href="https://www.lightly.ai/post/data-selection-for-computer-vision-in-5-steps">Metadata-based Sampling</a></strong>: The metadata distribution of the dataset refers to parameters that describe the image's content (such as luminance and color channels) or the conditions in which the image was captured (time, temperature, and location). The primary task is to determine what the dataset should ideally represent in these proportions. One sampling technique for data selection is data querying based on metadata information.</p>
+<p><strong><a href="https://www.lightly.ai/post/data-selection-for-computer-vision-in-5-steps">Diversity-based sampling</a></strong>: Diversity-based sampling, which is based on the distance between samples in embedding space, is a more comprehensive and efficient method of data selection. Its goal is to select a diverse dataset that covers all possible scenarios, ensuring that the model is trained even on edge or corner cases. By using a diverse training subset, redundant samples and over-represented data that can lead to overfitting are removed, improving model accuracy. It should be noted that some of the other approaches mentioned here may also fall into this or other categories. For example, the following method, which employs an ensemble of models, can be used to assess the diversity of a new data point.</p>
+<p><strong><a href="https://openaccess.thecvf.com/content_cvpr_2018/papers/Beluch_The_Power_of_CVPR_2018_paper.pdf">Ensemble of models</a></strong>: Using an ensemble of trained models and then feeding the data point into all of them and voting on their outputs is one technique to choose a data point. If the models agree on the outcome, it means the data point is similar to the data used to train the model and is hence uninformative. If models disagree on the data, it implies that the models lack sufficient information about the sample, and there is something to be learned from this data point.</p>
+<p><img src="/blog/images/copied_from_nb/images/activelearning/al3.png" alt="">
+<em><a href="https://www.amazon.com/Hands-Machine-Learning-Scikit-Learn-TensorFlow/dp/1491962291">source</a></em></p>
+<p><strong><a href="https://ieeexplore.ieee.org/document/4563068">Entropy</a></strong>: The other approach is to use Entropy, which shows the uncertainty, as a score for selecting samples. For example, for a classification task, the entropy for the distribution over different classes can be calculated. If the probability for one class is much higher than others, the calculated entropy would be low which means the model is certain about that sample. And if the probabilities for all classes or several classes are almost the same, the calculated entropy would be high and this shows the model is uncertain about the data point and it will be selected to be labeled. To summarize, the idea behind uncertainty-based sampling is that algorithms ensure that data, where the model is uncertain, is added to the training set.</p>
 <p><strong>Ensemble + Entropy</strong>: It is also possible to combine the two mentioned approaches. First, use an ensemble of models to get outputs (distribution over different classes for classification task for example) and then combine the outputs (take the mean of those distributions for example) and then calculate the entropy for the resulting distribution.</p>
-<p><strong>Monte Carlo Dropout</strong>: The other technique is to use Monte Carlo Dropout. The idea is to train a model with dropout but does not turn the dropout off in the inference phase. Then feeding the data point into the model with dropout several times. It would be somehow similar to the ensemble idea but just needs to train one neural network. The entropy idea can be used here too similar to the previous case.</p>
-<p><strong>Geometric Approach or Core-Set</strong>: The idea is to pick a small set of points (blue points) whose neighbors (red points) are within a certain distance of these blue points so that if we train a model on these blue points (selected points), the model's performance will be as close to that of a model trained on the entire dataset as possible (all blue and red data points). They define a loss function to select these data points that you can check the paper for more detail. It is also possible to use clustering algorithms to find clusters and select the centroid of the cluster as the blue point.</p>
-<p><figure>
-  
-    <img class="docimage" src="/blog/images/copied_from_nb/images/activelearning/al4.png" alt="">
-    
-    
-</figure>
-</p>
-<p><strong>Learning the Loss</strong>: the idea is to train the model to predict the cross-entropy loss as an output. So during the training phase, we can teach the model to do the loss prediction and use it on unlabeled data points. Then, the predicted loss can be used as a score for each data point to be selected for labeling or not.</p>
-<p><figure>
-  
-    <img class="docimage" src="/blog/images/copied_from_nb/images/activelearning/al5.png" alt="">
-    
-    
-</figure>
-</p>
-<p><strong>Consistency-based sampling</strong>: Entropy-based and consistency-based methods are complementary. Entropy-based methods perform well on samples coming from easy classes (classes that the model performs well in general but not for some cases) and not very well on hard classes (classes that the model does not perform well in general). As a result, active learning using uncertainty improves the performance over the classes that the model works already well. But for hard classes, the scores by the uncertainty methods are not reliable. Here is an example from a paper called "Not All Labels Are Equal":</p>
-<p><figure>
-  
-    <img class="docimage" src="/blog/images/copied_from_nb/images/activelearning/al6.png" alt="">
-    
-    
-</figure>
-</p>
+<p><strong><a href="https://openaccess.thecvf.com/content_cvpr_2018/papers/Beluch_The_Power_of_CVPR_2018_paper.pdf">Monte Carlo Dropout</a></strong>: The other technique is to use Monte Carlo Dropout. The idea is to train a model with dropout but does not turn the dropout off in the inference phase. Then feeding the data point into the model with dropout several times. It would be somehow similar to the ensemble idea but just needs to train one neural network. The entropy idea can be used here too similar to the previous case.</p>
+<p><strong><a href="https://arxiv.org/pdf/1708.00489.pdf">Geometric Approach or Core-Set</a></strong>: The idea is to pick a small set of points (blue points) whose neighbors (red points) are within a certain distance of these blue points so that if we train a model on these blue points (selected points), the model's performance will be as close to that of a model trained on the entire dataset as possible (all blue and red data points). They define a loss function to select these data points that you can check the paper for more detail. It is also possible to use clustering algorithms to find clusters and select the centroid of the cluster as the blue point.</p>
+<p><img src="/blog/images/copied_from_nb/images/activelearning/al4.png" alt="">
+<em><a href="https://arxiv.org/pdf/1708.00489.pdf">source</a></em></p>
+<p><strong><a href="https://openaccess.thecvf.com/content_CVPR_2019/papers/Yoo_Learning_Loss_for_Active_Learning_CVPR_2019_paper.pdf">Learning the Loss</a></strong>: the idea is to train the model to predict the cross-entropy loss as an output. So during the training phase, we can teach the model to do the loss prediction and use it on unlabeled data points. Then, the predicted loss can be used as a score for each data point to be selected for labeling or not.</p>
+<p><img src="/blog/images/copied_from_nb/images/activelearning/al5.png" alt="">
+<em><a href="https://openaccess.thecvf.com/content_CVPR_2019/papers/Yoo_Learning_Loss_for_Active_Learning_CVPR_2019_paper.pdf">source</a></em></p>
+<p><strong><a href="https://www.youtube.com/watch?v=MANuneF0DMw">Consistency-based sampling</a></strong>: Entropy-based and consistency-based methods are complementary. Entropy-based methods perform well on samples coming from easy classes (classes that the model performs well in general but not for some cases) and not very well on hard classes (classes that the model does not perform well in general). As a result, active learning using uncertainty improves the performance over the classes that the model works already well. But for hard classes, the scores by the uncertainty methods are not reliable. Here is an example from a paper called "Not All Labels Are Equal":</p>
+<p><img src="/blog/images/copied_from_nb/images/activelearning/al6.png" alt="">
+<em><a href="http://128.84.4.18/pdf/2106.11921">source</a></em></p>
 <p>The other problem with uncertainty-based methods is that by focusing only on the samples that the model is uncertain about, the selected samples will be just the hard samples which will have a different distribution than the main data and the task we want the model to perform on.  </p>
 <p>On the other hand, consistency-based methods perform well on samples coming from hard classes. The idea in consistency-based methods is that during training, both labeled and unlabeled data are used for model optimization, with cross-entropy loss encouraging correct predictions for labeled samples and consistency-based loss encouraging consistent outputs between unlabeled samples and their augmentations. During sample selection, the unlabeled samples and their augmentations are evaluated by the model developed during the training stage. The consistency-based metric is used to evaluate their outputs. Samples with low consistency scores are chosen for labeling and sent to the labeled pool. Here is an illustration of the proposed framework at t_th active learning cycle in a paper called "Consistency-based Semi-supervised Active Learning":</p>
-<p><figure>
-  
-    <img class="docimage" src="/blog/images/copied_from_nb/images/activelearning/al7.png" alt="">
-    
-    
-</figure>
-</p>
+<p><img src="/blog/images/copied_from_nb/images/activelearning/al7.png" alt="">
+<em><a href="https://arxiv.org/pdf/1910.07153.pdf">source</a></em></p>
 <p>Combining uncertainty and consistency methods (e.g. multiplying the scores) can improve the performance over both. The paper called "Not All Labels Are Equal" proposes a unified strategy to choose which samples to manually label and which samples can be automatically labeled. They consider the object detection task in their paper and try to build a more general acquisition function to score data points which is not only based on entropy but also based on consistency. The idea is to use again both labeled and unlabeled data and pass them through the detector. There are two losses in their method: one is the supervised loss for labeled data and the other one is the consistency loss which is for both labeled and unlabeled data. Then they have the scoring function, which will select which samples go to the human annotators, and also which samples are easy samples and need to go for the pseudo labeling. So the valuable time of the annotator will not be spent on easy samples. Here is the diagram of their proposed method:</p>
-<p><figure>
-  
-    <img class="docimage" src="/blog/images/copied_from_nb/images/activelearning/al8.png" alt="">
-    
-    
-</figure>
-</p>
+<p><img src="/blog/images/copied_from_nb/images/activelearning/al8.png" alt=""></p>
 <p>For the consistency loss, they have two terms: one for class inconsistency and one for bounding box inconsistency.</p>
-<p><figure>
-  
-    <img class="docimage" src="/blog/images/copied_from_nb/images/activelearning/al9.png" alt="">
-    
-    
-</figure>
-</p>
+<p><img src="/blog/images/copied_from_nb/images/activelearning/al9.png" alt="">
+<em><a href="https://www.youtube.com/watch?v=MANuneF0DMw">source</a></em></p>
 <p>There is a lot more to say about active learning, but we'll stop here. Now, let's look at what big companies do in the real world.</p>
 
 </div>
@@ -291,27 +250,69 @@ Here I list some of the techniques I found which can fall into one or multiple m
 <h1 id="NVIDIA">
 <a class="anchor" href="#NVIDIA" aria-hidden="true"><span class="octicon octicon-link"></span></a>NVIDIA<a class="anchor-link" href="#NVIDIA"> </a>
 </h1>
-<p>NVIDIA proposes to use <a href="https://burrsettles.com/pub/settles.activelearning.pdf">pool-based active learning</a> and an acquisition function based on a disagreement between several trained models (the core of their system is an ensemble of object detectors providing potential bounding boxes and probabilities for each class of interest) to select the frames which are most informative to the model. Here are the steps in their proposed approach:
-Train: Train N models initialized with different random parameters on all currently labeled training data.
-Query: Select examples from the unlabeled pool using the acquisition function.
-Annotate: Annotate selected data by a human annotator.
-Append: Append newly labeled data to training data.
-Go back to 1.</p>
-<p>sourceThey assume the object detector generates a 2D probability map for each class (bicycle, person, car, etc.). Each position in this map relates to a pixel patch in the input image, and the probability indicates whether an object of that class has a bounding box centered there. This type of output map is commonly found in one-stage object detectors like SSD or YOLO. They use the following scoring functions:
-Entropy: They compute the entropy of the Bernoulli random variable at each position in the probability map of a specific class:</p>
-<p>where p_c represents probability at position p for class c.
-Mutual Information (MI): This method makes use of an ensemble E of models to measure disagreement. First, the average probability over all ensemble members for each position p and class c is computed as:</p>
-<p>where |E| is the cardinality of E. Then, the mutual information is computed as:
-MI encourages the selection of uncertain samples with high disagreement among ensemble models during the data acquisition process.
-Gradient of the output layer (Grad): This function computes the model's uncertainty based on the magnitude of "hallucinated" gradients. The predicted label is specifically assumed to be the ground-truth label. The gradient for this label can then be calculated, and its magnitude can be used as a proxy for uncertainty. Small gradients will be produced by samples with low uncertainty. Then a single score based on the maximum or mean variance of the gradient vectors is assigned to each image.
-Bounding boxes with confidence (Det-Ent): The predicted bounding boxes of the detector have an associated probability. This allows computing the uncertainty in the form of entropy for each bounding box.</p>
-<p>sourceTo aggregate the scores obtained via the mentioned techniques above, two approaches can be used: taking the maximum or the average. Taking the maximum can lead to outliers (because the probability at a single position determines the final score), whereas taking the average favors images with a high number of objects (since an image with a single high uncertainty object might get a lower score than an image with many low uncertainty objects). For the maximum, the score is defined as follows:
-Then the top N images with the highest scores can be selected to be annotated by human annotators. It is also possible to first calculate a feature vector for each image using for example a CNN network, and then using some techniques using k-means++, Core-set, or sparse-modeling (OMP), which combines diversity and uncertainty, to select samples.
-sourceHere is a short video of the performance of their approach:</p>
-<p>In addition to the mentioned active learning approach, NVIDIA has developed another solution to deal with the challenges of data collection and labeling. They discussed this challenge at CES2022, stating that the most interesting data that we are interested in labeling is also the most challenging. Here are some examples of dark, blurry, or hazy scenes.
-There are also scenes that are difficult to comprehend, such as occluded vehicles or pedestrians. Moreover, there are some scenes not often seen, like construction zones. Due to these issues, autonomous vehicle developers need a mix of real and synthetic data. NVIDIA built DRIVE Sim replicator to deal with all of these labeling challenges. DRIVE Sim is a simulation tool built on Omniverse that takes advantage of the platform's features. Engineers can generate hard-to-label ground truth data from this replicator and use them to train deep neural networks that make up autonomous vehicle perception systems. As a result of synthetic data, developers have more control over data development, allowing them to tailor it to their specific needs and collect the data they want even before any real-world data collection for those situations. 
-As collecting and labeling real-world data is difficult, taking synthetic data and augmenting it with real-world data removes this bottleneck, allowing engineers to take a data-driven approach to develop autonomous driving systems. This improves real-world results and significantly speeds up AV development.
-Another problem is the gap between the simulator world and the real world. The gap may be pixel-level or content-level. Omniverse Replicator is designed to narrow the appearance and content gaps. Read more about the capabilities of this amazing simulator here.</p>
+<p>NVIDIA proposes to use <a href="https://burrsettles.com/pub/settles.activelearning.pdf">pool-based active learning</a> and an acquisition function based on a disagreement between several trained models (the core of their system is an ensemble of object detectors providing potential bounding boxes and probabilities for each class of interest) to select the frames which are most informative to the model. Here are the steps in their proposed approach:</p>
+<ol>
+<li>
+<p>Train: Train N models initialized with different random parameters on all currently labeled training data.</p>
+</li>
+<li>
+<p>Query: Select examples from the unlabeled pool using the acquisition function.</p>
+</li>
+<li>
+<p>Annotate: Annotate selected data by a human annotator.</p>
+</li>
+<li>
+<p>Append: Append newly labeled data to training data.</p>
+</li>
+<li>
+<p>Go back to 1.</p>
+</li>
+</ol>
+<p><img src="/blog/images/copied_from_nb/images/activelearning/nvidia1.png" alt="">
+<em><a href="https://arxiv.org/pdf/2004.04699.pdf">source</a></em></p>
+<p>They assume the object detector generates a 2D probability map for each class (bicycle, person, car, etc.). Each position in this map relates to a pixel patch in the input image, and the probability indicates whether an object of that class has a bounding box centered there. This type of output map is commonly found in one-stage object detectors like SSD or YOLO. They use the following scoring functions:</p>
+<ul>
+<li>
+<strong>Entropy</strong>: They compute the entropy of the Bernoulli random variable at each position in the probability map of a specific class:</li>
+</ul>
+<p><img src="/blog/images/copied_from_nb/images/activelearning/nvidia22.png" alt=""></p>
+<p>where p_c represents probability at position p for class c.</p>
+<ul>
+<li>
+<strong>Mutual Information (MI)</strong>: This method makes use of an ensemble E of models to measure disagreement. First, the average probability over all ensemble members for each position p and class c is computed as:</li>
+</ul>
+<p><img src="/blog/images/copied_from_nb/images/activelearning/nvidia2.png" alt=""></p>
+<p>where |E| is the cardinality of E. Then, the mutual information is computed as:</p>
+<p><img src="/blog/images/copied_from_nb/images/activelearning/nvidia3.png" alt=""></p>
+<p>MI encourages the selection of uncertain samples with high disagreement among ensemble models during the data acquisition process.</p>
+<ul>
+<li>
+<p><strong>Gradient of the output layer (Grad)</strong>: This function computes the model's uncertainty based on the magnitude of "hallucinated" gradients. The predicted label is specifically assumed to be the ground-truth label. The gradient for this label can then be calculated, and its magnitude can be used as a proxy for uncertainty. Small gradients will be produced by samples with low uncertainty. Then a single score based on the maximum or mean variance of the gradient vectors is assigned to each image.</p>
+</li>
+<li>
+<p><strong>Bounding boxes with confidence (Det-Ent)</strong>: The predicted bounding boxes of the detector have an associated probability. This allows computing the uncertainty in the form of entropy for each bounding box.</p>
+</li>
+</ul>
+<p><img src="/blog/images/copied_from_nb/images/activelearning/nvidia4.png" alt="">
+<em><a href="https://arxiv.org/pdf/2004.04699.pdf">source</a></em></p>
+<p>To aggregate the scores obtained via the mentioned techniques above, two approaches can be used: taking the maximum or the average. Taking the maximum can lead to outliers (because the probability at a single position determines the final score), whereas taking the average favors images with a high number of objects (since an image with a single high uncertainty object might get a lower score than an image with many low uncertainty objects). For the maximum, the score is defined as follows:</p>
+<p><img src="/blog/images/copied_from_nb/images/activelearning/nvidia5.png" alt=""></p>
+<p>Then the top N images with the highest scores can be selected to be annotated by human annotators. It is also possible to first calculate a feature vector for each image using for example a CNN network, and then using some techniques using k-means++, Core-set, or sparse-modeling (OMP), which combines diversity and uncertainty, to select samples.</p>
+<p><img src="/blog/images/copied_from_nb/images/activelearning/nvidia6.png" alt="">
+<em><a href="https://arxiv.org/pdf/2004.04699.pdf">source</a></em></p>
+<p>Here is a short video of the performance of their approach:
+
+</p>
+<center>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/watch?v=4aq13pB9s7c" frameborder="0" allowfullscreen=""></iframe>
+</center>
+
+In addition to the mentioned active learning approach, NVIDIA has developed another solution to deal with the challenges of data collection and labeling. They discussed this challenge at <a href="https://www.youtube.com/watch?v=pFUEP5xaskc">CES2022</a>, stating that the most interesting data that we are interested in labeling is also the most challenging. Here are some examples of dark, blurry, or hazy scenes.
+<p><img src="/blog/images/copied_from_nb/images/activelearning/nvidia7.png" alt="">
+<em><a href="https://www.youtube.com/watch?v=pFUEP5xaskc">source</a></em></p>
+<p>There are also scenes that are difficult to comprehend, such as occluded vehicles or pedestrians. Moreover, there are some scenes not often seen, like construction zones. Due to these issues, autonomous vehicle developers need a mix of real and synthetic data. NVIDIA built <a href="https://blogs.nvidia.com/blog/2021/11/09/drive-sim-replicator-synthetic-data-generation/">DRIVE Sim replicator</a> to deal with all of these labeling challenges. DRIVE Sim is a simulation tool built on <a href="https://www.nvidia.com/en-us/omniverse/">Omniverse</a> that takes advantage of the platform's features. Engineers can generate hard-to-label ground truth data from this replicator and use them to train deep neural networks that make up autonomous vehicle perception systems. As a result of synthetic data, developers have more control over data development, allowing them to tailor it to their specific needs and collect the data they want even before any real-world data collection for those situations. </p>
+<p>As collecting and labeling real-world data is difficult, taking synthetic data and augmenting it with real-world data removes this bottleneck, allowing engineers to take a data-driven approach to develop autonomous driving systems. This improves real-world results and significantly speeds up AV development.</p>
+<p>Another problem is the gap between the simulator world and the real world. The gap may be pixel-level or content-level. Omniverse Replicator is designed to narrow the appearance and content gaps. Read more about the capabilities of this amazing simulator <a href="https://www.nvidia.com/en-us/omniverse/">here</a>.</p>
 
 </div>
 </div>

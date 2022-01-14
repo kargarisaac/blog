@@ -1,11 +1,22 @@
 {
   
     
+        "post0": {
+            "title": "Title",
+            "content": "",
+            "url": "https://kargarisaac.github.io/blog/2021/01/14/Active-Learning-and-Auto-Labeling-in-Autonomous-Driving.html",
+            "relUrl": "/2021/01/14/Active-Learning-and-Auto-Labeling-in-Autonomous-Driving.html",
+            "date": " • Jan 14, 2021"
+        }
+        
+    
+  
+    
   
     
   
     
-        "post2": {
+        ,"post3": {
             "title": "AlphaGo - Mastering the game of Go with deep neural networks and tree search",
             "content": ". . . . . . . . . That’s it for the first one. In the next post, I will review the AlphaGo Zero paper. .",
             "url": "https://kargarisaac.github.io/blog/jupyter/2020/04/12/AlphaGo.html",

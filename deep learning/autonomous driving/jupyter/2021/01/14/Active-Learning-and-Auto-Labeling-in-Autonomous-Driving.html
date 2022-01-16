@@ -121,7 +121,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      44 min read
+      48 min read
     
 </span></p>
 
@@ -391,10 +391,17 @@ The data selection procedure is called Active Learning and the idea is as the fo
 <p>Here are some of the triggers they use:</p>
 <p><img src="/blog/images/copied_from_nb/images/activelearning/tesla5.png" alt="">
 <em><a href="https://www.youtube.com/watch?v=NSDTZQdo6H8">source</a></em></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <p>On <a href="https://www.youtube.com/watch?v=j0z4FweCy4M&amp;t=5072s">Tesla AI day in 2021</a>, they discuss the Autopilot software stack in more detail. They also talk about data collection and auto-labeling. Andrej talks about collecting clean and diverse data for training neural networks. Instead of image space, they go for vector space, a 3D representation of everything you need for driving. It is the 3D position of lines, edges, curbs, traffic signs, traffic lights, cars, their positions, orientations, depth, velocity, etc. It gets raw image data and outputs the vector space for the scene. Part of the vector space is shown on the Tesla car screen in the following image:</p>
 <p><img src="/blog/images/copied_from_nb/images/activelearning/tesla6.png" alt="">
 <em><a href="https://www.youtube.com/watch?v=j0z4FweCy4M&amp;t=5288s">source</a></em></p>
-<p>Andrej also talks about data labeling in vector space instead of image space. The human annotator labels data in the 3D vector space, and it will be projected into image space automatically:</p>
+<p>Andrej also talks about data labeling in vector space instead of image space. The human annotator labels data in the 3D vector space, and it will be projected into image space automatically as shown in the GIF below:</p>
 <p><img src="/blog/images/copied_from_nb/images/activelearning/tesla1.gif" alt="">
 <em><a href="https://www.youtube.com/watch?v=j0z4FweCy4M&amp;t=5288s">source</a></em></p>
 <p>But even this improved labeling procedure is not scalable. Active learning and auto-labeling can help here. Here is an example of how they label a clip. It has data from different sensors, such as cameras, IMUs, GPS, etc., and can last from 45 seconds to 1 minute.</p>
@@ -404,15 +411,18 @@ The data selection procedure is called Active Learning and the idea is as the fo
 <p>Road surface labeling (segmentation) is one of the tasks they discuss. Typically, we can represent a road surface with splines or meshes, but due to topological restrictions, they are not differentiable and not appropriate for deep learning. Also, segmenting in each image space and for each camera view and then joining them together to represent the scene does not work very well. Instead, they use Neural Radiance Fields or NeRF and an implicit representation to represent the road surface (I LOVED this idea). You can check <a href="https://www.youtube.com/watch?v=CRlN-cYFxTk">this</a>, <a href="https://www.youtube.com/watch?v=Q5g3p9Zwjrk">this</a>, and <a href="https://www.youtube.com/watch?v=HfJpQCBTqZs">this</a> to learn more about NeRF.</p>
 <p><img src="/blog/images/copied_from_nb/images/activelearning/tesla8.png" alt="">
 <em><a href="https://www.youtube.com/watch?v=j0z4FweCy4M&amp;t=5288s">source</a></em></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <p>Then they can query an (x, y) point on the ground, and the network can predict the height of the ground surface and the semantic class for that point, such as lane line, curb, asphalt, crosswalk, etc. By having the input (x, y) and the predicted height (z), we will have a 3D point that can be projected to all camera views. Making millions of these queries and projecting the resulting 3D point into all camera views can achieve semantic segmentation, such as the top-right picture in the above image. Then the resulting images from all camera views can be compared to the semantic segmentation results from image space and by a joint optimization for all camera views across space and time can produce an excellent reconstruction:</p>
 <p><img src="/blog/images/copied_from_nb/images/activelearning/tesla2.gif" alt="">
 <em><a href="https://www.youtube.com/watch?v=j0z4FweCy4M&amp;t=5288s">source</a></em></p>
 <p>Each car that drives on some roads does the labeling. By collecting this labeled data from one or many cars in the same area, they can bring them all together and align them using various features such as road edges, lane lines, etc., which all agree with each other and also with the image space observations and can generate the whole scene. This produces an effective way of labeling the road surface. After the labeling process, human annotators can check them and clean up any noise in the data, or maybe add metadata to that to make it even more prosperous.</p>
 <p><img src="/blog/images/copied_from_nb/images/activelearning/tesla3.gif" alt="">
-<em><a href="https://www.youtube.com/watch?v=j0z4FweCy4M&amp;t=5288s">source</a></em></p>
-<p><img src="/blog/images/copied_from_nb/images/activelearning/tesla4.gif" alt="">
-<em><a href="https://www.youtube.com/watch?v=j0z4FweCy4M&amp;t=5288s">source</a></em></p>
-<p><img src="/blog/images/copied_from_nb/images/activelearning/tesla5.gif" alt="">
 <em><a href="https://www.youtube.com/watch?v=j0z4FweCy4M&amp;t=5288s">source</a></em></p>
 <p>They also talk about more data collection such as static objects, walls, barriers, etc. We don't go into more details here but you got the idea.</p>
 <p>In addition to the auto-labeling procedure, explained above, Tesla has a simulator too and uses it for data generation and labeling. Here is their talk at Tesla AI Day 2021:
@@ -425,6 +435,13 @@ The data selection procedure is called Active Learning and the idea is as the fo
 <p>They mention that using their vector space, they can produce the scenes they want very quickly! The simulator can be used in different cases:</p>
 <p><img src="/blog/images/copied_from_nb/images/activelearning/tesla9.png" alt="">
 <em><a href="https://www.youtube.com/watch?v=j0z4FweCy4M&amp;t=5288s">source</a></em></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <p>To have such a good simulator, it needs accurate sensor simulation, photorealistic rendering, Diverse actors and locations, scalable scenario generation, real-world scenario reconstruction.</p>
 <p><img src="/blog/images/copied_from_nb/images/activelearning/tesla10.png" alt="">
 <em><a href="https://www.youtube.com/watch?v=j0z4FweCy4M&amp;t=5288s">source</a></em></p>
@@ -450,8 +467,8 @@ The data selection procedure is called Active Learning and the idea is as the fo
 <h1 id="Cruise">
 <a class="anchor" href="#Cruise" aria-hidden="true"><span class="octicon octicon-link"></span></a>Cruise<a class="anchor-link" href="#Cruise"> </a>
 </h1>
-<p>Cruise also makes use of active learning. They refer to it as the Continuous Learning Machine (CLM).
-Consider the task of prediction. The motion prediction model must be capable of handling both the nominal and longtail cases well. Here is the end-to-end motion prediction model whcih Cruise uses and announced it in the <em>Cruise Under the Hood</em> event recently:</p>
+<p>Cruise also makes use of active learning. They refer to it as the Continuous Learning Machine (CLM).</p>
+<p>Consider the task of prediction. The motion prediction model must be capable of handling both the nominal and longtail cases well. Here is the end-to-end motion prediction model whcih Cruise uses and announced it in the <em>Cruise Under the Hood</em> event recently:</p>
 <p><img src="/blog/images/copied_from_nb/images/activelearning/cruise4.png" alt="">
 <em><a href="https://www.youtube.com/watch?v=uJWN0K26NxQ">source</a></em></p>
 <p>It is critical to note that while these longtail events do occur in the data collected on the road, they are extremely rare and infrequent. As a result, we concentrate on identifying the needle in the haystack of daily driving and use upsampling to teach the models about these events.</p>
@@ -511,7 +528,7 @@ Consider the task of prediction. The motion prediction model must be capable of 
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>The other longtail scenario is K-turn. The K-turn is a three-point maneuver that requires the driver to maneuver both forward and backward in order to complete the turn in the opposite direction. These are uncommon and are most frequently used when the street is too narrow for a U-turn, which means we see about half as many examples.</p>
+<p>K-turn is the other longtail scenario. The K-turn is a three-point maneuver that requires the driver to move forward and backward in order to complete the turn in the opposite direction. These are uncommon and are most frequently used when the street is too narrow for a U-turn.</p>
 <p><img src="/blog/images/copied_from_nb/images/activelearning/cruise2.gif" alt="">
 <em><a href="https://medium.com/cruise/cruise-continuous-learning-machine-30d60f4c691b">source</a></em></p>
 <p>Cut-in is another rare scenario which we need to be able to predict in order to handle the situation and yield for the car if needed.</p>
@@ -527,8 +544,8 @@ Consider the task of prediction. The motion prediction model must be capable of 
 <p>Another kind of interesting scenarios are the ones with interaction between agents. For example:</p>
 <p><img src="/blog/images/copied_from_nb/images/activelearning/cruise4.gif" alt="">
 <em><a href="https://www.youtube.com/watch?v=uJWN0K26NxQ&amp;t=4660s">source</a></em></p>
-<p>Cruise uses an interaction centric architecture with agent to agent graph with attention mechanism that helps us to detect the interaction between agents. For example, in the above scenario, the ego car and a bicycle are driving next to each other and the parked car wants to slightly come back up. With understanding the interaction, the car knows that the cyclist would nudge to left to avoid it. As a result, the autonomous car brakes and yields for the cyclist.</p>
-<p>In addition, they have an interaction auto-labeler that can tell whether a pair of agents have interaction or not. And if so, who wins the interaction? Then this interaction auto-labeler to mine scenarios and define auxiliary tasks about interaction detection and resolution as extra self-supervision.</p>
+<p>Cruise employs an interaction-centric architecture with an agent-to-agent graph and an attention mechanism for detecting agent interaction. For instance, in the previous scenario, the ego car and a bicycle are driving alongside one another, and the parked car wants to slightly come back. The car understands the interaction and anticipates that the cyclist will nudge to the left to avoid it. As a result, the self-driving car slows and yields to the cyclist.</p>
+<p>Additionally, they have an interaction auto-labeler that can determine whether or not a pair of agents interacts. And, if that is the case, who wins the interaction? Then, as additional self-supervision, this interaction auto-labeler can mine scenarios and define auxiliary tasks for interaction detection and resolution.</p>
 
 </div>
 </div>
@@ -539,34 +556,94 @@ Consider the task of prediction. The motion prediction model must be capable of 
 <p>Not only the future is uncertain, but also the world behind occlusions. Therefore, they designed their AI system to understand which part of the world is occluded and proactively anticipate other agents before even seeing them. For example, when a door pops open, their system can anticipate a pedestrian coming out of the door. So the car slows down immediately and steer further away from it.</p>
 <p><img src="/blog/images/copied_from_nb/images/activelearning/cruise5.gif" alt="">
 <em><a href="https://www.youtube.com/watch?v=uJWN0K26NxQ&amp;t=4660s">source</a></em></p>
-<p>The other example is when a big garbage truck blocked the view of the car, even though their car cannot see anything behind it, the system still imagine a pedestrian behind the truck wanting to cross the street.</p>
+<p>The other example is when a large garbage truck obscures the driver's view; even though the driver cannot see anything behind the truck, the system imagines a pedestrian attempting to cross the street.</p>
 <p><img src="/blog/images/copied_from_nb/images/activelearning/cruise6.gif" alt="">
 <em><a href="https://www.youtube.com/watch?v=uJWN0K26NxQ&amp;t=4660s">source</a></em></p>
-<p>The other example is that before driving through an intersection, even though the system doesn't see any cross traffic due to occlusion, the system imagines a car crossing from the right and slows down and if it sees a car coming through, the autonomous car would be able to stop in time.</p>
+<p>The other example is that prior to driving through an intersection, even if the system does not see any cross traffic due to occlusion, the system imagines a car crossing from the right and slows down; if it does see a car approaching, the autonomous car can stop in time.</p>
 <p><img src="/blog/images/copied_from_nb/images/activelearning/cruise7.gif" alt="">
 <em><a href="https://www.youtube.com/watch?v=uJWN0K26NxQ&amp;t=4660s">source</a></em></p>
-<p>In this way, regardless of what will happen in the future, the car will be always prepared to make safe decisions. All of these are because the high quality data used for training the model.</p>
+<p>Thus, regardless of what occurs in the future, the car will always be prepared to make prudent choices. All of this is due to the high-quality data that was used to train the model.</p>
 
 </div>
 </div>
 </div>
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
+<div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">In</span> <span class="n">addition</span> <span class="n">to</span> <span class="n">the</span> <span class="n">logs</span> <span class="kn">from</span> <span class="nn">real</span> <span class="n">world</span><span class="p">,</span> <span class="n">Cruise</span> <span class="n">uses</span> <span class="n">simulation</span> <span class="n">too</span><span class="o">.</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Additionally, they developed a few-shot active learned classifier for the purpose of mining specific behaviors. For instance, if we want to train a model to predict when bikes will make a u-turn and want to find similar trajectories, a naive similarity search using embedding features would return left-turn scenarios. Because the two behaviors are somewhat similar and left-turning is a much more common occurrence than u-turning. However, with the assistance of human supervision, we can train a classifier with a much less data and higher degree of accuracy and return a variety of true positive u-turn examples.</p>
+<p><img src="/blog/images/copied_from_nb/images/activelearning/cruise8.gif" alt="">
+<em><a href="https://www.youtube.com/watch?v=uJWN0K26NxQ&amp;t=4660s">source</a></em></p>
 
 </div>
-    
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Cruise also employs Reinforcement Learning (RL) to develop a safe policy. This application of RL was one of the aspects of the <em>Cruise Under the Hood</em> event that I enjoyed the most. Take the following example:</p>
+<p><img src="/blog/images/copied_from_nb/images/activelearning/cruise5.png" alt="">
+<em><a href="https://www.youtube.com/watch?v=uJWN0K26NxQ&amp;t=4660s">source</a></em></p>
+<p>This scenario is possible on a regular basis, but we may not have it in the dataset. To deal with these situations, they use reinforcement learning to train an offline policy to understand what happens when pedestrians are extremely close to the ego car. They simulate decades of data in order to develop a cautious policy. As illustrated in the image, there are two representations of how a policy appears. Let us begin with the left one. If the pedestrian is in the yellow zone, they are in a very dangerous stage; they can run towards the vehicle or to the side, but if the vehicle is traveling at a high initial velocity, a collision is possible. Thus, the learned and safe policy would be to exercise caution if the pedestrian enters the yellow zone, as we have no idea what they will do.</p>
+<p>Now, let us discuss the right one. They can train policy offline using a simulated latency, in this case 400 milliseconds, and as can be seen in the image, the yellow area is significantly larger and extends to the vehicle's sides. Because of the system's latency, we must exercise more cautiously.</p>
+<p>Additionally, they use simulation to learn policies offline for complex interactions involving multiple actors. For instance, the following video demonstrates two vehicles attempting to park. The same technique can be applied to the learning of a wide variety of behaviors both offline and in a simulator. Additionally, it can be used to generate data that they do not have or that is difficult to obtain.</p>
+<p><img src="/blog/images/copied_from_nb/images/activelearning/cruise9.gif" alt="">
+<em><a href="https://www.youtube.com/watch?v=uJWN0K26NxQ&amp;t=4660s">source</a></em></p>
 
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The other reason for using simulation in Cruise, which they refer to as <em>Morpheus</em>, is for safety. Simulation can be used to practice handling longtails and gradually reduce the reliance on real-world testing. Because longtails occur only once every thousands of road miles, testing the model in those scenarios will take a long time and is not scalable. Cruise has developed a system for exploring large-scale parameter spaces in order to generate test scenarios on a scalable basis. They can begin their simulation by searching for a specific location on the map. The following video demonstrates how they can generate a large and diverse test suit specific to a given situation. Beginning 15 meters before a left turn and then adding a straight road intersection with the turn and maybe adding an unlimited number of other parameters. It's astounding!</p>
+<p><img src="/blog/images/copied_from_nb/images/activelearning/cruise10.gif" alt="">
+<em><a href="https://www.youtube.com/watch?v=uJWN0K26NxQ&amp;t=4660s">source</a></em></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The next step is to introduce additional agents into the scene. They accomplish this through the process of converting real-world events into editable simulation scenarios dubbed <em>road to sim</em>. It combines perception data with heuristics developed over millions of real-world miles to recreate a complete simulation environment from road data. The following video depicts a simulation of a recreated scenario (bottom one) from the real world (top one). Then, while the scenario is running in simulation, we can experiment with various parameters and attributes.</p>
+<p><img src="/blog/images/copied_from_nb/images/activelearning/cruise11.gif" alt="">
+<em><a href="https://www.youtube.com/watch?v=uJWN0K26NxQ&amp;t=4660s">source</a></em></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>To increase the realism of the simulation, they use an artificial intelligence system called NPC (non-player character - a term borrowed from video games) AI to simulate the complex multi-agent behaviors of all agents in the scene except the autonomous car. The following are two variations on a single simulated environment in which an NPC is used to provide life to other agents:</p>
+<p><img src="/blog/images/copied_from_nb/images/activelearning/cruise12.gif" alt="">
+<em><a href="https://www.youtube.com/watch?v=uJWN0K26NxQ&amp;t=4660s">source</a></em></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Along with the previously mentioned technologies, Cruise employs another called World-Gen to expand their business into new cities. It is capable of procedurally generating an entire city, with roads, curbs, sidewalks, lane markings, street lights, traffic signs, buildings, automobiles, and pedestrians. Here is the automatically generated <em>Alamo Square Park in San Francisco</em>:</p>
+<p><img src="/blog/images/copied_from_nb/images/activelearning/cruise13.gif" alt="">
+<em><a href="https://www.youtube.com/watch?v=uJWN0K26NxQ&amp;t=4660s">source</a></em></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Additionally, they create high-quality simulations of various sensors and use them to generate synthetic data for the perception module and also collecting data for instances such as emergency vehicles, which are uncommon and difficult to collect in the real world, and we need to detect them extremely precisely:</p>
+<p><img src="/blog/images/copied_from_nb/images/activelearning/cruise6.png" alt="">
+<em><a href="https://www.youtube.com/watch?v=uJWN0K26NxQ&amp;t=4660s">source</a></em></p>
+<p>The simulation can be also used for testing the algorithms in terms of comfort and safety.</p>
+<p>There are a lot of cool stuff they announced in the event. I highly encourage you to watch the event <a href="https://www.youtube.com/watch?v=uJWN0K26NxQ">here</a>.</p>
+
+</div>
+</div>
+</div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -581,6 +658,13 @@ Consider the task of prediction. The motion prediction model must be capable of 
 <p>In order to select samples in data to label, there are several techniques. </p>
 <p><img src="/blog/images/copied_from_nb/images/activelearning/waabi2.png" alt="">
 <em><a href="https://youtu.be/MANuneF0DMw?t=6945">source</a></em></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Interesting">
 <a class="anchor" href="#Interesting" aria-hidden="true"><span class="octicon octicon-link"></span></a>Interesting<a class="anchor-link" href="#Interesting"> </a>
 </h2>
@@ -599,6 +683,13 @@ Consider the task of prediction. The motion prediction model must be capable of 
 <p><img src="/blog/images/copied_from_nb/images/activelearning/waabi6.png" alt="">
 <em><a href="https://youtu.be/MANuneF0DMw?t=6945">source</a></em></p>
 <p>So, how can we say a scenario is complex and interesting for us to be selected? It can be many things: <strong>map complexity measures, actor complexity measures</strong>, and <strong>Self-Driving Vehicle (SDV) complexity measures</strong>.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <p>For the map complexity case, scenarios can be selected based on the following items ( In the following images, left is more complex and right is less complex):</p>
 <ul>
 <li>
@@ -634,6 +725,13 @@ Consider the task of prediction. The motion prediction model must be capable of 
 <li>
 <strong>Map slope</strong>: scenarios with different slopes of the map and ground can be interesting and you need to make sure that your self-driving car can handle those too.</li>
 </ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <p>For actor complexity measures, the following cases can be considered:</p>
 <ul>
 <li>
@@ -665,6 +763,13 @@ Consider the task of prediction. The motion prediction model must be capable of 
 </ul>
 <p><img src="/blog/images/copied_from_nb/images/activelearning/waabi16.png" alt="">
 <em><a href="https://youtu.be/MANuneF0DMw?t=6945">source</a></em></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <p>The other case that can be considered for complexity measurement is the SDV complexity measure. The following items can be important in this case:</p>
 <ul>
 <li>
@@ -688,11 +793,25 @@ Consider the task of prediction. The motion prediction model must be capable of 
 </ul>
 <p><img src="/blog/images/copied_from_nb/images/activelearning/waabi19.png" alt="">
 <em><a href="https://youtu.be/MANuneF0DMw?t=6945">source</a></em></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <p>For more details on the mentioned measures, check the paper <a href="https://arxiv.org/pdf/2101.06554.pdf">"Diverse Complexity Measures for Dataset Curation in Self-driving"</a>.</p>
 <p>After selecting interesting and complex scenarios based on the mentioned measures, we can label them. What is important to note is that depending on what is your goal and what are you interested in, for example, object detection or motion forecasting, or motion planning, certain things would be more interesting than others. The way to handle this would be very simple. We can compute the weighted sum of these complexity measures in order to project this high-dimensional vector into a single number. </p>
 <p><img src="/blog/images/copied_from_nb/images/activelearning/waabi20.png" alt="">
 <em><a href="https://youtu.be/MANuneF0DMw?t=6945">source</a></em></p>
 <p>In summary, the complexity of each scenario based on each one of the above-mentioned items will be calculated, and based on the task, the weight vector will be selected and multiplied by these complexity measures to calculate a single number for that scenario.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Diversity/Coverage">
 <a class="anchor" href="#Diversity/Coverage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Diversity/Coverage<a class="anchor-link" href="#Diversity/Coverage"> </a>
 </h2>
@@ -700,6 +819,13 @@ Consider the task of prediction. The motion prediction model must be capable of 
 <p>One way to handle this is that as soon as you have decided which scenarios you want to label so far, you can look at what do they miss. What are areas in your space that your current selected scenarios do not cover and the new scenario is far from them? It is also important to add geographical diversity here. Then, we can iteratively select examples that are far away from our selected scenarios and label them. We repeat this procedure until the selected dataset has enough diversity and there is no new data point far enough from the selected points.</p>
 <p><img src="/blog/images/copied_from_nb/images/activelearning/waabi21.png" alt="">
 <em><a href="https://youtu.be/MANuneF0DMw?t=6945">source</a></em></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Model-Improvement">
 <a class="anchor" href="#Model-Improvement" aria-hidden="true"><span class="octicon octicon-link"></span></a>Model Improvement<a class="anchor-link" href="#Model-Improvement"> </a>
 </h2>
@@ -716,6 +842,13 @@ Consider the task of prediction. The motion prediction model must be capable of 
 <p>After selecting scenarios based on their interestingness, diversity/coverage, and model improvement we need to label them. </p>
 <p><img src="/blog/images/copied_from_nb/images/activelearning/waabi25.png" alt="">
 <em><a href="https://youtu.be/MANuneF0DMw?t=6945">source</a></em></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <p>The good news is that we don't need to do this auto-labeling in online mode. So we can use more sophisticated models in offline mode without worrying about latency and other online inference bottlenecks. We also have access to past and future timesteps which can help in the annotation. </p>
 <p>For example, for the task of labeling a trajectory of an object with its bounding boxes, first, we can run the offline model to give us the first estimate of where are all actors in the scene as well as how they are moving, and then we are going to have sophisticated ways of correcting these results to have better trajectories. Here is the method they propose in the paper called <a href="https://arxiv.org/pdf/2101.06586.pdf">"Auto4D: Learning to Label 4D Objects from Sequential Point Clouds"</a>:</p>
 <p><img src="/blog/images/copied_from_nb/images/activelearning/waabi26.png" alt="">

@@ -208,8 +208,8 @@ window.onload = wrap_img;
 <h1 id="Active-Learning">
 <a class="anchor" href="#Active-Learning" aria-hidden="true"><span class="octicon octicon-link"></span></a>Active Learning<a class="anchor-link" href="#Active-Learning"> </a>
 </h1>
-<p>Assume that you have an unlabeled dataset and have a budget (money or time) to spend on the labeling task. How can we select and label the most interesting and informative examples from that dataset in which if we train a model on those, it will give us the best possible performance? 
-The data selection procedure is called Active Learning and the idea is as the following diagram:</p>
+<p>Assume that you have an unlabeled dataset and have a budget (money or time) to spend on the labeling task. How can we select and label the most interesting and informative examples from that dataset in which if we train a model on those, it will give us the best possible performance? </p>
+<p>The data selection procedure is called Active Learning and the idea is as the following diagram:</p>
 <p><img src="/blog/images/copied_from_nb/images/activelearning/al.png" alt="">
 <em><a href="https://www.youtube.com/watch?v=oYUkAvhBNsg&amp;list=PLog3nOPCjKBl8s3Ia4ZtmOEniuYM3pVGQ">source</a></em></p>
 <p>We start with a labeled dataset and use it to train a model. The model is then applied to new unlabeled data points, producing scores based on various metrics for each sample. The data points can then be selected based on the associated scores. After that, a human annotator will annotate these selected samples and add them to the labeled dataset. The model will then be trained on that dataset once more, and the procedure will be repeated until the results are satisfactory. </p>
@@ -492,7 +492,7 @@ The data selection procedure is called Active Learning and the idea is as the fo
 <a class="anchor" href="#Cruise" aria-hidden="true"><span class="octicon octicon-link"></span></a>Cruise<a class="anchor-link" href="#Cruise"> </a>
 </h1>
 <p>Cruise also makes use of active learning. They refer to it as the Continuous Learning Machine (CLM).</p>
-<p>Consider the task of prediction. The motion prediction model must be capable of handling both the nominal and longtail cases well. Here is the end-to-end motion prediction model whcih Cruise uses and announced it in the <em>Cruise Under the Hood</em> event recently:</p>
+<p>Consider the task of prediction. The motion prediction model must be capable of handling both the nominal and longtail cases well. Here is the end-to-end motion prediction model which Cruise uses and announced in the <em>Cruise Under the Hood</em> event recently:</p>
 <p><img src="/blog/images/copied_from_nb/images/activelearning/cruise4.png" alt="">
 <em><a href="https://www.youtube.com/watch?v=uJWN0K26NxQ">source</a></em></p>
 <p>It is critical to note that while these longtail events do occur in the data collected on the road, they are extremely rare and infrequent. As a result, we concentrate on identifying the needle in the haystack of daily driving and use upsampling to teach the models about these events.</p>
@@ -509,7 +509,7 @@ The data selection procedure is called Active Learning and the idea is as the fo
 <div class="text_cell_render border-box-sizing rendered_html">
 <ul>
 <li>
-<p><strong>Drives</strong>: The CLM starts with the fleet navigating in city.</p>
+<p><strong>Drives</strong>: The CLM starts with the fleet navigating in the city.</p>
 </li>
 <li>
 <p><strong>Error Mining</strong>: Active learning is used to automatically identify error cases, and only scenarios with a significant difference between prediction and reality are added to the dataset. This enables highly targeted data mining, ensuring that we add only valuable data and avoid bloating the datasets with easy and uninformative scenarios.</p>
@@ -529,7 +529,7 @@ The data selection procedure is called Active Learning and the idea is as the fo
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Let's review some examples.</p>
-<p>U-turn is one of the longtail scenarios which happens very rarely. The following image shows different trajectories (red ones) in an intersection started from the black point.</p>
+<p>U-turn is one of the longtail scenarios which happens very rarely. The following image shows different trajectories (red ones) in an intersection starting from the black point.</p>
 <p><img src="/blog/images/copied_from_nb/images/activelearning/cruise2.png" alt="">
 <em><a href="https://medium.com/cruise/cruise-continuous-learning-machine-30d60f4c691b">source</a></em></p>
 <p>As demonstrated in the image, the majority of the dataset consists of drivers traveling straight with few left turns, even fewer lane changes, and only two U-turn trajectories. Another example of the uncommon mid-block u-turn can be seen below:</p>
@@ -542,7 +542,7 @@ The data selection procedure is called Active Learning and the idea is as the fo
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>When CLM principles are applied, an initial deployment of the model may underpredict U-turn situations. As a result, when we sample data, we frequently encounter error situations involving U-turns. Over time, the dataset gradually increases its representation of U-turns until the model is capable of sufficiently predicting them and the AV is capable of accurately navigating these scenarios.</p>
+<p>When CLM principles are applied, the initial deployment of the model may underpredict U-turn situations. As a result, when we sample data, we frequently encounter error situations involving U-turns. Over time, the dataset gradually increases its representation of U-turns until the model is capable of sufficiently predicting them and the AV is capable of accurately navigating these scenarios.</p>
 <p><img src="/blog/images/copied_from_nb/images/activelearning/cruise1.gif" alt="">
 <em><a href="https://medium.com/cruise/cruise-continuous-learning-machine-30d60f4c691b">source</a></em></p>
 
@@ -555,7 +555,7 @@ The data selection procedure is called Active Learning and the idea is as the fo
 <p>K-turn is the other longtail scenario. The K-turn is a three-point maneuver that requires the driver to move forward and backward in order to complete the turn in the opposite direction. These are uncommon and are most frequently used when the street is too narrow for a U-turn.</p>
 <p><img src="/blog/images/copied_from_nb/images/activelearning/cruise2.gif" alt="">
 <em><a href="https://medium.com/cruise/cruise-continuous-learning-machine-30d60f4c691b">source</a></em></p>
-<p>Cut-in is another rare scenario which we need to be able to predict in order to handle the situation and yield for the car if needed.</p>
+<p>Cut-in is another rare scenario that we need to be able to predict in order to handle the situation and yield for the car if needed.</p>
 <p><img src="/blog/images/copied_from_nb/images/activelearning/cruise3.gif" alt="">
 <em><a href="https://medium.com/cruise/cruise-continuous-learning-machine-30d60f4c691b">source</a></em></p>
 
@@ -565,7 +565,7 @@ The data selection procedure is called Active Learning and the idea is as the fo
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Another kind of interesting scenarios are the ones with interaction between agents. For example:</p>
+<p>Another kind of interesting scenario is the one with the interaction between agents. For example:</p>
 <p><img src="/blog/images/copied_from_nb/images/activelearning/cruise4.gif" alt="">
 <em><a href="https://www.youtube.com/watch?v=uJWN0K26NxQ&amp;t=4660s">source</a></em></p>
 <p>Cruise employs an interaction-centric architecture with an agent-to-agent graph and an attention mechanism for detecting agent interaction. For instance, in the previous scenario, the ego car and a bicycle are driving alongside one another, and the parked car wants to slightly come back. The car understands the interaction and anticipates that the cyclist will nudge to the left to avoid it. As a result, the self-driving car slows and yields to the cyclist.</p>
@@ -577,13 +577,13 @@ The data selection procedure is called Active Learning and the idea is as the fo
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Not only the future is uncertain, but also the world behind occlusions. Therefore, they designed their AI system to understand which part of the world is occluded and proactively anticipate other agents before even seeing them. For example, when a door pops open, their system can anticipate a pedestrian coming out of the door. So the car slows down immediately and steer further away from it.</p>
+<p>Not only the future is uncertain, but also the world behind occlusions. Therefore, they designed their AI system to understand which part of the world is occluded and proactively anticipate other agents before even seeing them. For example, when a door pops open, their system can anticipate a pedestrian coming out of the door. So the car slows down immediately and steers further away from it.</p>
 <p><img src="/blog/images/copied_from_nb/images/activelearning/cruise5.gif" alt="">
 <em><a href="https://www.youtube.com/watch?v=uJWN0K26NxQ&amp;t=4660s">source</a></em></p>
 <p>The other example is when a large garbage truck obscures the driver's view; even though the driver cannot see anything behind the truck, the system imagines a pedestrian attempting to cross the street.</p>
 <p><img src="/blog/images/copied_from_nb/images/activelearning/cruise6.gif" alt="">
 <em><a href="https://www.youtube.com/watch?v=uJWN0K26NxQ&amp;t=4660s">source</a></em></p>
-<p>The other example is that prior to driving through an intersection, even if the system does not see any cross traffic due to occlusion, the system imagines a car crossing from the right and slows down; if it does see a car approaching, the autonomous car can stop in time.</p>
+<p>The other example is that prior to driving through an intersection, even if the system does not see any cross-traffic due to occlusion, the system imagines a car crossing from the right and slowing down; if it does see a car approaching, the autonomous car can stop in time.</p>
 <p><img src="/blog/images/copied_from_nb/images/activelearning/cruise7.gif" alt="">
 <em><a href="https://www.youtube.com/watch?v=uJWN0K26NxQ&amp;t=4660s">source</a></em></p>
 <p>Thus, regardless of what occurs in the future, the car will always be prepared to make prudent choices. All of this is due to the high-quality data that was used to train the model.</p>
@@ -594,7 +594,7 @@ The data selection procedure is called Active Learning and the idea is as the fo
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Additionally, they developed a few-shot active learned classifier for the purpose of mining specific behaviors. For instance, if we want to train a model to predict when bikes will make a u-turn and want to find similar trajectories, a naive similarity search using embedding features would return left-turn scenarios. Because the two behaviors are somewhat similar and left-turning is a much more common occurrence than u-turning. However, with the assistance of human supervision, we can train a classifier with a much less data and higher degree of accuracy and return a variety of true positive u-turn examples.</p>
+<p>Additionally, they developed a few-shot active learned classifier for the purpose of mining-specific behaviors. For instance, if we want to train a model to predict when bikes will make a u-turn and want to find similar trajectories, a naive similarity search using embedding features would return left-turn scenarios. Because the two behaviors are somewhat similar and left-turning is a much more common occurrence than u-turning. However, with the assistance of human supervision, we can train a classifier with much fewer data and a higher degree of accuracy and return a variety of true positive u-turn examples.</p>
 <p><img src="/blog/images/copied_from_nb/images/activelearning/cruise8.gif" alt="">
 <em><a href="https://www.youtube.com/watch?v=uJWN0K26NxQ&amp;t=4660s">source</a></em></p>
 
@@ -659,11 +659,11 @@ The data selection procedure is called Active Learning and the idea is as the fo
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Additionally, they create high-quality simulations of various sensors and use them to generate synthetic data for the perception module and also collecting data for instances such as emergency vehicles, which are uncommon and difficult to collect in the real world, and we need to detect them extremely precisely:</p>
+<p>Additionally, they create high-quality simulations of various sensors and use them to generate synthetic data for the perception module and also collect data for instances such as emergency vehicles, which are uncommon and difficult to collect in the real world, and we need to detect them extremely precisely:</p>
 <p><img src="/blog/images/copied_from_nb/images/activelearning/cruise6.png" alt="">
 <em><a href="https://www.youtube.com/watch?v=uJWN0K26NxQ&amp;t=4660s">source</a></em></p>
 <p>Furthermore, the simulation can be used to evaluate the algorithms' comfort and safety.</p>
-<p>There are a lot of cool stuff they announced in the event. I highly encourage you to watch the event below: 
+<p>There is a lot of cool stuff they announced at the event. I highly encourage you to watch the event below:
 
 </p>
 <center>
@@ -898,8 +898,8 @@ The data selection procedure is called Active Learning and the idea is as the fo
 <em><a href="https://www.youtube.com/watch?v=PSZ2Px9PrHg">source</a></em></p>
 <p>Training is conducted using a 3D, real-world, high-fidelity simulation, which enables training on uncommon scenarios and eliminates the need for field data collection. In other words, there is no reason to drive "millions of miles" and create potentially dangerous situations or even collisions.</p>
 <p>Furthermore, having a fleet of hundreds of vehicles on the road is prohibitively expensive, and it can be dangerous. Rather than that, Waabi employs an AI approach that is capable of learning from fewer examples and scaling.</p>
-<p>Rather than requiring humans to design 3D assets by hand and engineers to implement rule-based simulation behavior, Waabi generates virtual worlds and multi-agent systems automatically based on observed human driving behavior.
-Here are the components of their closed-loop simulation system:</p>
+<p>Rather than requiring humans to design 3D assets by hand and engineers to implement rule-based simulation behavior, Waabi generates virtual worlds and multi-agent systems automatically based on observed human driving behavior.</p>
+<p>Here are the components of their closed-loop simulation system:</p>
 <p><img src="/blog/images/copied_from_nb/images/activelearning/waabi28.png" alt="">
 <em><a href="https://www.youtube.com/watch?v=PSZ2Px9PrHg">source</a></em></p>
 
@@ -919,8 +919,8 @@ Here are the components of their closed-loop simulation system:</p>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>The next component is <em>Scenario Generation</em> to automatically generate realistic and diverse scenarios:
-<img src="/blog/images/copied_from_nb/images/activelearning/waabi3.gif" alt="">
+<p>The next component is <em>Scenario Generation</em> to automatically generate realistic and diverse scenarios:</p>
+<p><img src="/blog/images/copied_from_nb/images/activelearning/waabi3.gif" alt="">
 <em><a href="https://www.youtube.com/watch?v=PSZ2Px9PrHg">source</a></em></p>
 <p>Here are some generated super realistic scenarios in simulation:</p>
 <p><img src="/blog/images/copied_from_nb/images/activelearning/waabi4.gif" alt="">

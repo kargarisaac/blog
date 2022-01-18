@@ -121,7 +121,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      3 min read
+      5 min read
     
 </span></p>
 
@@ -325,6 +325,7 @@ github repo: <a href="https://github.com/DataTalksClub/data-engineering-zoomcamp
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<p>PostgreSQL, also known as Postgres, is a free and open-source relational database management system emphasizing extensibility and SQL compliance.</p>
 <p>Now let's see how we can run a PostgreSQL database with docker and push some data into that.</p>
 <p>Run <em>postgres:13</em> image database with some environment commands (specified by -e), mapping local folder from host machine to a path in docker container (using -v flag), and on port 5432 which will be used for connecting to the database from outside (our python code for example).</p>
 
@@ -339,12 +340,12 @@ github repo: <a href="https://github.com/DataTalksClub/data-engineering-zoomcamp
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">-</span><span class="n">it</span> \
-<span class="o">&gt;</span> <span class="o">-</span><span class="n">e</span> <span class="n">POSTGRES_USER</span><span class="o">=</span><span class="s2">"root"</span> \
-<span class="o">&gt;</span> <span class="o">-</span><span class="n">e</span> <span class="n">POSTGRES_PASSWORD</span><span class="o">=</span><span class="s2">"root"</span> \
-<span class="o">&gt;</span> <span class="o">-</span><span class="n">e</span> <span class="n">POSTGRES_DB</span><span class="o">=</span><span class="s2">"ny_taxi"</span> \
-<span class="o">&gt;</span> <span class="o">-</span><span class="n">v</span> <span class="err">$</span><span class="p">(</span><span class="n">pwd</span><span class="p">)</span><span class="o">/</span><span class="n">ny_taxi_postgres_data</span><span class="p">:</span><span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">postgresql</span><span class="o">/</span><span class="n">data</span> \
-<span class="o">&gt;</span> <span class="o">-</span><span class="n">p</span> <span class="mi">5432</span><span class="p">:</span><span class="mi">5432</span> \
-<span class="o">&gt;</span> <span class="n">postgres</span><span class="p">:</span><span class="mi">13</span>
+ <span class="o">-</span><span class="n">e</span> <span class="n">POSTGRES_USER</span><span class="o">=</span><span class="s2">"root"</span> \
+ <span class="o">-</span><span class="n">e</span> <span class="n">POSTGRES_PASSWORD</span><span class="o">=</span><span class="s2">"root"</span> \
+ <span class="o">-</span><span class="n">e</span> <span class="n">POSTGRES_DB</span><span class="o">=</span><span class="s2">"ny_taxi"</span> \
+ <span class="o">-</span><span class="n">v</span> <span class="err">$</span><span class="p">(</span><span class="n">pwd</span><span class="p">)</span><span class="o">/</span><span class="n">ny_taxi_postgres_data</span><span class="p">:</span><span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">postgresql</span><span class="o">/</span><span class="n">data</span> \
+ <span class="o">-</span><span class="n">p</span> <span class="mi">5432</span><span class="p">:</span><span class="mi">5432</span> \
+ <span class="n">postgres</span><span class="p">:</span><span class="mi">13</span>
 </pre></div>
 
     </div>
@@ -518,19 +519,87 @@ github repo: <a href="https://github.com/DataTalksClub/data-engineering-zoomcamp
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>We can then write the whole pipeline to read data, process it, and push it into postgres.</p>
-<p>We will have one docker container for data pipeline and one for postgres.</p>
+<h1 id="PgAdmin">
+<a class="anchor" href="#PgAdmin" aria-hidden="true"><span class="octicon octicon-link"></span></a>PgAdmin<a class="anchor-link" href="#PgAdmin"> </a>
+</h1>
+<p>pgAdmin is the leading Open Source management tool and a web GUI for Postgres, the world’s most advanced Open Source database. pgAdmin 4 is designed to meet the needs of both novice and experienced Postgres users alike, providing a powerful graphical interface that simplifies the creation, maintenance and use of database objects. <a href="https://www.pgadmin.org/docs/pgadmin4/latest/index.html">Here</a> is the documentation.</p>
+<p>We can use a docker image that contains both postgres and pgadmin.</p>
 
 </div>
 </div>
 </div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">-</span><span class="n">it</span> \
+<span class="o">-</span><span class="n">e</span> <span class="n">PGADMIN_DEFAULT_EMAIL</span><span class="o">=</span><span class="n">admin</span><span class="nd">@admin</span><span class="o">.</span><span class="n">com</span> \
+<span class="o">-</span><span class="n">e</span> <span class="n">PGADMIN_DEFAULT_PASSWORD</span><span class="o">=</span><span class="n">root</span> \
+<span class="o">-</span><span class="n">p</span> <span class="mi">8080</span><span class="p">:</span><span class="mi">80</span> \
+<span class="n">dpage</span><span class="o">/</span><span class="n">pgadmin4</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="PgAdmin">
-<a class="anchor" href="#PgAdmin" aria-hidden="true"><span class="octicon octicon-link"></span></a>PgAdmin<a class="anchor-link" href="#PgAdmin"> </a>
-</h1>
-<p>It is a tool that can help to connect to the database.</p>
+<p>And then go to this address in your browser: <code>http://localhost:8080/</code> and use the email and password you used above to log in.</p>
+<p>Then right click on <code>Servers</code> in the left side of the page and then <code>create &gt; server...</code>. Then in the <code>General</code> tab set a name and in the <code>connection</code> tab use <code>localhost</code> and <code>root</code> and <code>root</code> for host, user, and password. But it doesn't work and it cannot find postgres in its localhost (it cannot see it because there is no connection between these two containers).</p>
+<p>If we want to connect two containers of postgres and pgAdmin to see each other, we need to put them in one network. Then pgAdmin will be able to connect to postgress. We can create a nettwork using <code>docker network create &lt;some-name  for example pg-network&gt;</code> and then when we want to run each container, we need to tell it that this container needs to be run on this network using <code>--network=pg-network</code> flag. Also we need to set the <code>--name=&lt;some-name for example pg-database/pgadmin&gt;</code> for the postgres/pgadmin container so that the pgAdmin/postgres can find it by name.</p>
+<p>Then again log in to pgadmin and use <code>pg-database</code> name in the <code>Host name/address</code> in the connection tab of creating server.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="err">$</span> <span class="n">docker</span> <span class="n">network</span> <span class="n">create</span> <span class="n">pg</span><span class="o">-</span><span class="n">network</span>
+
+<span class="n">terminal1</span><span class="err">$</span> <span class="n">docker</span> <span class="n">run</span> <span class="o">-</span><span class="n">it</span> \
+  <span class="o">-</span><span class="n">e</span> <span class="n">POSTGRES_USER</span><span class="o">=</span><span class="s2">"root"</span> \
+  <span class="o">-</span><span class="n">e</span> <span class="n">POSTGRES_PASSWORD</span><span class="o">=</span><span class="s2">"root"</span> \
+  <span class="o">-</span><span class="n">e</span> <span class="n">POSTGRES_DB</span><span class="o">=</span><span class="s2">"ny_taxi"</span> \
+  <span class="o">-</span><span class="n">v</span> <span class="err">$</span><span class="p">(</span><span class="n">pwd</span><span class="p">)</span><span class="o">/</span><span class="n">ny_taxi_postgres_data</span><span class="p">:</span><span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">postgresql</span><span class="o">/</span><span class="n">data</span> \
+  <span class="o">-</span><span class="n">p</span> <span class="mi">5432</span><span class="p">:</span><span class="mi">5432</span> \
+  <span class="o">--</span><span class="n">network</span><span class="o">=</span><span class="n">pg</span><span class="o">-</span><span class="n">network</span> \
+  <span class="o">--</span><span class="n">name</span> <span class="n">pg</span><span class="o">-</span><span class="n">database</span> \
+  <span class="n">postgres</span><span class="p">:</span><span class="mi">13</span>
+                      
+<span class="n">terminal2</span><span class="err">$</span> <span class="n">docker</span> <span class="n">run</span> <span class="o">-</span><span class="n">it</span> \
+  <span class="o">-</span><span class="n">e</span> <span class="n">PGADMIN_DEFAULT_EMAIL</span><span class="o">=</span><span class="s2">"admin@admin.com"</span> \
+  <span class="o">-</span><span class="n">e</span> <span class="n">PGADMIN_DEFAULT_PASSWORD</span><span class="o">=</span><span class="s2">"root"</span> \
+  <span class="o">-</span><span class="n">p</span> <span class="mi">8080</span><span class="p">:</span><span class="mi">80</span> \
+  <span class="o">--</span><span class="n">network</span><span class="o">=</span><span class="n">pg</span><span class="o">-</span><span class="n">network</span> \
+  <span class="o">--</span><span class="n">name</span> <span class="n">pgadmin</span> \
+  <span class="n">dpage</span><span class="o">/</span><span class="n">pgadmin4</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We can then write the whole pipeline to read data, process it, and push it into postgres.</p>
+<p>We will have one docker container for data pipeline and one for postgres.</p>
 
 </div>
 </div>

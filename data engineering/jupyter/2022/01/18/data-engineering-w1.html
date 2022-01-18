@@ -356,48 +356,6 @@ github repo: <a href="https://github.com/DataTalksClub/data-engineering-zoomcamp
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>pgcli is a python package for connecting to the postgres database.</p>
-
-</div>
-</div>
-</div>
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">!</span> pip install pgcli
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    
-
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pgcli</span> <span class="o">-</span><span class="n">h</span> <span class="n">localhost</span> <span class="o">-</span><span class="n">p</span> <span class="mi">5432</span> <span class="o">-</span><span class="n">u</span> <span class="n">root</span> <span class="o">-</span><span class="n">d</span> <span class="n">ny_taxi</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    
-
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
 <p>Download data from <a href="https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page">here</a> and under <code>2021 &gt; January &gt; Yellow Taxi Trip Records</code>. The file name is <em>yellow_tripdata_2021-01.csv</em>.</p>
 <p>Using the following codes you can load and visualize and import data to postgres.</p>
 
@@ -437,7 +395,7 @@ github repo: <a href="https://github.com/DataTalksClub/data-engineering-zoomcamp
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Then we need to connect to the postgres database. <code>pgcli</code> is a python package for connecting to the postgres database. in the window that we ran pgcli, using <code>\dt</code> command, we can list tables of the database.</p>
+<p>Then we need to connect to the postgres database. <code>pgcli</code> is a python package that we can use it for connecting to the database.</p>
 
 </div>
 </div>
@@ -449,7 +407,7 @@ github repo: <a href="https://github.com/DataTalksClub/data-engineering-zoomcamp
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">!</span> pip install pgcli
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">!</span>pip install pgcli
 </pre></div>
 
     </div>
@@ -476,6 +434,14 @@ github repo: <a href="https://github.com/DataTalksClub/data-engineering-zoomcamp
 </div>
     
 
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Then using <code>\dt</code> command, we can list tables of the database.</p>
+
+</div>
+</div>
+</div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">

@@ -121,7 +121,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      1 min read
+      2 min read
     
 </span></p>
 
@@ -175,7 +175,7 @@ window.onload = wrap_img;
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Here is the video of this wee:
+<p>Here is the video of this week:
 
 </p>
 <center>
@@ -193,7 +193,7 @@ github repo: <a href="https://github.com/DataTalksClub/data-engineering-zoomcamp
 <h1 id="Google-Cloud-Platform">
 <a class="anchor" href="#Google-Cloud-Platform" aria-hidden="true"><span class="octicon octicon-link"></span></a>Google Cloud Platform<a class="anchor-link" href="#Google-Cloud-Platform"> </a>
 </h1>
-<p>Introduction of Google cloud services:
+<p>A very short introduction of Google cloud services:
 
 </p>
 <center>
@@ -222,6 +222,9 @@ github repo: <a href="https://github.com/DataTalksClub/data-engineering-zoomcamp
     <iframe width="560" height="315" src="https://www.youtube.com/embed/EYNwNlOrpr0" frameborder="0" allowfullscreen=""></iframe>
 </center>
 
+<p>The main goal is to get data (in csv format for example) and process it and then push it into postgres database:</p>
+<p><img src="/blog/images/copied_from_nb/images/data-engineering-w1/data-pipeline.png" alt=""></p>
+<p>Let's write a Dockerfile and build an image to run a simple python script:</p>
 
 </div>
 </div>
@@ -321,6 +324,7 @@ github repo: <a href="https://github.com/DataTalksClub/data-engineering-zoomcamp
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<p>Now let's see how we can run a PostgreSQL database with docker and push some data into that.</p>
 <p>Run <em>postgres:13</em> image database with some environment commands (specified by -e), mapping local folder from host machine to a path in docker container (using -v flag), and on port 5432 which will be used for connecting to the database from outside (our python code for example).</p>
 
 </div>
@@ -434,6 +438,14 @@ github repo: <a href="https://github.com/DataTalksClub/data-engineering-zoomcamp
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Then in the window that we ran pgcli, using <code>\dt</code> command, we can list tables of the database.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We can then write the whole pipeline to read data, process it, and push it into postgres. We will have one docker container for data pipeline and one for postgres.</p>
 
 </div>
 </div>

@@ -437,15 +437,50 @@ github repo: <a href="https://github.com/DataTalksClub/data-engineering-zoomcamp
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Then in the window that we ran pgcli, using <code>\dt</code> command, we can list tables of the database.</p>
+<p>Then we need to connect to the postgres database. <code>pgcli</code> is a python package for connecting to the postgres database. in the window that we ran pgcli, using <code>\dt</code> command, we can list tables of the database.</p>
 
 </div>
 </div>
 </div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">!</span> pip install pgcli
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pgcli</span> <span class="o">-</span><span class="n">h</span> <span class="n">localhost</span> <span class="o">-</span><span class="n">p</span> <span class="mi">5432</span> <span class="o">-</span><span class="n">u</span> <span class="n">root</span> <span class="o">-</span><span class="n">d</span> <span class="n">ny_taxi</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>We can then write the whole pipeline to read data, process it, and push it into postgres. We will have one docker container for data pipeline and one for postgres.</p>
+<p>We can then write the whole pipeline to read data, process it, and push it into postgres.</p>
+<p>We will have one docker container for data pipeline and one for postgres.</p>
 
 </div>
 </div>

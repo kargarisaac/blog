@@ -175,7 +175,8 @@ window.onload = wrap_img;
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>
+<p>Here is the video of this wee:
+
 </p>
 <center>
     <iframe width="560" height="315" src="https://www.youtube.com/embed/bkJZDmreIpA" frameborder="0" allowfullscreen=""></iframe>
@@ -192,7 +193,7 @@ github repo: <a href="https://github.com/DataTalksClub/data-engineering-zoomcamp
 <h1 id="Google-Cloud-Platform">
 <a class="anchor" href="#Google-Cloud-Platform" aria-hidden="true"><span class="octicon octicon-link"></span></a>Google Cloud Platform<a class="anchor-link" href="#Google-Cloud-Platform"> </a>
 </h1>
-<p>Google cloud provides cloud services.
+<p>Introduction of Google cloud services:
 
 </p>
 <center>
@@ -235,13 +236,9 @@ github repo: <a href="https://github.com/DataTalksClub/data-engineering-zoomcamp
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># pipeline.py</span>
 
 <span class="kn">import</span> <span class="nn">sys</span>
-
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-
 <span class="nb">print</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
-
 <span class="n">day</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-
 <span class="c1"># some fancy stuff with pandas</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'job finished successfully for day = </span><span class="si">{</span><span class="n">day</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
@@ -263,14 +260,14 @@ github repo: <a href="https://github.com/DataTalksClub/data-engineering-zoomcamp
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Dockerfile</span>
 
-<span class="n">FROM</span> <span class="n">python</span><span class="p">:</span><span class="mf">3.9</span><span class="o">.</span><span class="mi">1</span>
+<span class="n">FROM</span> <span class="n">python</span><span class="p">:</span><span class="mf">3.9</span><span class="o">.</span><span class="mi">1</span> <span class="c1">#the base image to start from</span>
 
-<span class="n">RUN</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">pandas</span>
+<span class="n">RUN</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">pandas</span> <span class="c1">#run a command to install python packages</span>
 
-<span class="n">WORKDIR</span> <span class="o">/</span><span class="n">app</span>
-<span class="n">COPY</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">py</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">py</span> 
+<span class="n">WORKDIR</span> <span class="o">/</span><span class="n">app</span> <span class="c1">#change the working directory - it's like cd command in linux </span>
+<span class="n">COPY</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">py</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">py</span> <span class="c1"># copy the file from current folder in the host machine to the working directory</span>
 
-<span class="n">ENTRYPOINT</span> <span class="p">[</span> <span class="s2">"python"</span><span class="p">,</span> <span class="s2">"pipeline.py"</span> <span class="p">]</span>
+<span class="n">ENTRYPOINT</span> <span class="p">[</span> <span class="s2">"python"</span><span class="p">,</span> <span class="s2">"pipeline.py"</span> <span class="p">]</span> <span class="c1"># run the python pipeline.py command when we use docker run command</span>
 </pre></div>
 
     </div>
@@ -280,6 +277,14 @@ github repo: <a href="https://github.com/DataTalksClub/data-engineering-zoomcamp
 </div>
     
 
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>use the following command to build the image from Dockerfile in the current directory</p>
+
+</div>
+</div>
+</div>
     
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -309,6 +314,14 @@ github repo: <a href="https://github.com/DataTalksClub/data-engineering-zoomcamp
     <iframe width="560" height="315" src="https://www.youtube.com/embed/2JM-ziJt0WI" frameborder="0" allowfullscreen=""></iframe>
 </center>
 
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Run <em>postgres:13</em> image database with some environment commands (specified by -e), mapping local folder from host machine to a path in docker container (using -v flag), and on port 5432 which will be used for connecting to the database from outside (our python code for example).</p>
 
 </div>
 </div>
@@ -381,11 +394,42 @@ github repo: <a href="https://github.com/DataTalksClub/data-engineering-zoomcamp
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>data: <a href="https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page">https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page</a></p>
+<p>Download data from <a href="https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page">here</a> and under <code>2021 &gt; January &gt; Yellow Taxi Trip Records</code>. The file name is <em>yellow_tripdata_2021-01.csv</em>.</p>
+<p>Using the following codes you can load and visualize and import data to postgres.</p>
 
 </div>
 </div>
 </div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># import libraries</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">create_engine</span>
+
+<span class="c1"># create engine and set the root as postgresql://user:password@host:port/database</span>
+<span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="s1">'postgresql://root:root@localhost:5432/ny_taxi'</span><span class="p">)</span>
+
+<span class="n">df_iter</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'yellow_tripdata_2021-01.csv'</span><span class="p">,</span> <span class="n">iterator</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">chunksize</span><span class="o">=</span><span class="mi">100000</span><span class="p">)</span>
+
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span> 
+    <span class="n">df</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">df_iter</span><span class="p">)</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">tpep_pickup_datetime</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">tpep_pickup_datetime</span><span class="p">)</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">tpep_dropoff_datetime</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">tpep_dropoff_datetime</span><span class="p">)</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">'yellow_taxi_data'</span><span class="p">,</span> <span class="n">con</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span> <span class="n">if_exists</span><span class="o">=</span><span class="s1">'append'</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
 </div>
 
 

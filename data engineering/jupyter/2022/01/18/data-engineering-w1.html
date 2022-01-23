@@ -121,7 +121,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      17 min read
+      18 min read
     
 </span></p>
 
@@ -181,6 +181,19 @@ window.onload = wrap_img;
 <p>Here is the architecture of what we want to do in this course:</p>
 <p><img src="/blog/images/copied_from_nb/images/data-engineering-w1/arch_1.png" alt=""></p>
 <p>We will take this data, process it, then upload it into Google cloud storage, and then from there we will upload it to Google BigQuery, and then we will use BigQuery to do Analytics engineering and building transformation using spark and so on. In the other part, we will pretend that this data is coming in real time and we will build a system around processing this data using kafka.</p>
+<p>HEre is the list of technologist will be used in this course:</p>
+<ul>
+<li>Google Cloud Platform (GCP): Cloud-based auto-scaling platform by Google</li>
+<li>Google Cloud Storage (GCS): Data Lake</li>
+<li>BigQuery: Data Warehouse</li>
+<li>Terraform: Infrastructure-as-Code (IaC)</li>
+<li>Docker: Containerization</li>
+<li>SQL: Data Analysis &amp; Exploration</li>
+<li>Airflow: Pipeline Orchestration</li>
+<li>DBT: Data Transformation</li>
+<li>Spark: Distributed Processing</li>
+<li>Kafka: Streaming</li>
+</ul>
 <p>The course will be around 10 weeks:</p>
 <p><img src="/blog/images/copied_from_nb/images/data-engineering-w1/3.png" alt=""></p>
 <p>Here is the video of this week which will introduce teachers of the course and overview what you can expect from the course in each week:
@@ -973,7 +986,17 @@ pgAdmin 4 is designed to meet the needs of both novice and experienced Postgres 
 <h1 id="Terraform">
 <a class="anchor" href="#Terraform" aria-hidden="true"><span class="octicon octicon-link"></span></a>Terraform<a class="anchor-link" href="#Terraform"> </a>
 </h1>
-<p>In this section we will go for an introduction to Terraform and how to setup GCP infrastructure using Terraform.</p>
+<p>
+</p>
+<center>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/Hajwnmj0xfQ" frameborder="0" allowfullscreen=""></iframe>
+</center>
+
+<center>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/dNkEgO-CExg" frameborder="0" allowfullscreen=""></iframe>
+</center>
+
+In this section we will go for an introduction to Terraform and how to setup GCP infrastructure using Terraform.
 <p>Terraform is an infrastructure as code (IaC) tool that allows you to build, change, and version infrastructure safely and efficiently. This includes low-level components such as compute instances, storage, and networking, as well as high-level components such as DNS entries, SaaS features, etc. Terraform can manage both existing service providers and custom in-house solutions [<a href="https://www.terraform.io/intro">terraform docs</a>].</p>
 <p><img src="/blog/images/copied_from_nb/images/data-engineering-w1/6.png" alt=""></p>
 <p>To deploy infrastructure with Terraform [<a href="https://learn.hashicorp.com/tutorials/terraform/infrastructure-as-code?in=terraform/gcp-get-started">terraform docs</a>]:</p>
@@ -1159,6 +1182,57 @@ The ideal case would be to create one service account for Terrafrom and assign i
   <span class="n">dataset_id</span> <span class="o">=</span> <span class="n">var</span><span class="o">.</span><span class="n">BQ_DATASET</span>
   <span class="n">project</span>    <span class="o">=</span> <span class="n">var</span><span class="o">.</span><span class="n">project</span>
   <span class="n">location</span>   <span class="o">=</span> <span class="n">var</span><span class="o">.</span><span class="n">region</span>
+<span class="p">}</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>And the <code>variables.tf</code> is as follows:</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">locals</span> <span class="p">{</span>
+  <span class="n">data_lake_bucket</span> <span class="o">=</span> <span class="s2">"dtc_data_lake"</span>
+<span class="p">}</span>
+
+<span class="n">variable</span> <span class="s2">"project"</span> <span class="p">{</span>
+  <span class="n">description</span> <span class="o">=</span> <span class="s2">"Your GCP Project ID"</span>
+  <span class="n">default</span> <span class="o">=</span> <span class="s2">"dtc-de-338805"</span>
+  <span class="nb">type</span> <span class="o">=</span> <span class="n">string</span>
+<span class="p">}</span>
+
+
+<span class="n">variable</span> <span class="s2">"region"</span> <span class="p">{</span>
+  <span class="n">description</span> <span class="o">=</span> <span class="s2">"Region for GCP resources. Choose as per your location: https://cloud.google.com/about/locations"</span>
+  <span class="n">default</span> <span class="o">=</span> <span class="s2">"europe-west6"</span>
+  <span class="nb">type</span> <span class="o">=</span> <span class="n">string</span>
+<span class="p">}</span>
+
+<span class="n">variable</span> <span class="s2">"storage_class"</span> <span class="p">{</span>
+  <span class="n">description</span> <span class="o">=</span> <span class="s2">"Storage class type for your bucket. Check official docs for more info."</span>
+  <span class="n">default</span> <span class="o">=</span> <span class="s2">"STANDARD"</span>
+<span class="p">}</span>
+
+<span class="n">variable</span> <span class="s2">"BQ_DATASET"</span> <span class="p">{</span>
+  <span class="n">description</span> <span class="o">=</span> <span class="s2">"BigQuery Dataset that raw data (from GCS) will be written to"</span>
+  <span class="nb">type</span> <span class="o">=</span> <span class="n">string</span>
+  <span class="n">default</span> <span class="o">=</span> <span class="s2">"trips_data_all"</span>
 <span class="p">}</span>
 </pre></div>
 

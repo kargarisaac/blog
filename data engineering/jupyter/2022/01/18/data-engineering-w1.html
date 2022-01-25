@@ -693,6 +693,20 @@ here is the <code>ingest_data.py</code> file:
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<p>You can check the following video to learn more about how to use jupyter and connect to pgcli:
+
+</p>
+<center>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/3IkfkTwqHx4" frameborder="0" allowfullscreen=""></iframe>
+</center>
+
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="PgAdmin">
 <a class="anchor" href="#PgAdmin" aria-hidden="true"><span class="octicon octicon-link"></span></a>PgAdmin<a class="anchor-link" href="#PgAdmin"> </a>
 </h1>
@@ -937,7 +951,21 @@ pgAdmin 4 is designed to meet the needs of both novice and experienced Postgres 
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>This will run two dockers on a network and we do not need to create a separate network. Note that the network created automatically by docker compose has changed (<code>2_docker_sql_default</code>) and also the host name (<code>pgdatabase</code>).</p>
+<p>Check the following video for more explaination on docker-compose, network, and ports:
+
+</p>
+<center>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/tOr4hTsHOzU" frameborder="0" allowfullscreen=""></iframe>
+</center>
+
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This will run two dockers on a network and we do not need to create a separate network. Note that the network created automatically by docker compose has changed (<code>2_docker_sql_default</code>) and also the host name (<code>pgdatabase</code>). You can find the network name by <code>docker network ls</code> command.</p>
 
 </div>
 </div>
@@ -996,7 +1024,14 @@ pgAdmin 4 is designed to meet the needs of both novice and experienced Postgres 
     <iframe width="560" height="315" src="https://www.youtube.com/embed/dNkEgO-CExg" frameborder="0" allowfullscreen=""></iframe>
 </center>
 
-In this section we will go for an introduction to Terraform and how to setup GCP infrastructure using Terraform.
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>In this section we will go for an introduction to Terraform and how to setup GCP infrastructure using Terraform.</p>
 <p>Terraform is an infrastructure as code (IaC) tool that allows you to build, change, and version infrastructure safely and efficiently. This includes low-level components such as compute instances, storage, and networking, as well as high-level components such as DNS entries, SaaS features, etc. Terraform can manage both existing service providers and custom in-house solutions [<a href="https://www.terraform.io/intro">terraform docs</a>].</p>
 <p><img src="/blog/images/copied_from_nb/images/data-engineering-w1/6.png" alt=""></p>
 <p>To deploy infrastructure with Terraform [<a href="https://learn.hashicorp.com/tutorials/terraform/infrastructure-as-code?in=terraform/gcp-get-started">terraform docs</a>]:</p>
@@ -1195,7 +1230,7 @@ The ideal case would be to create one service account for Terrafrom and assign i
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>And the <code>variables.tf</code> is as follows: (you need to set your own project ID instead of <code>dtc-de-XXXXX</code>)</p>
+<p>And the <code>variables.tf</code> is as follows:</p>
 
 </div>
 </div>
@@ -1213,7 +1248,6 @@ The ideal case would be to create one service account for Terrafrom and assign i
 
 <span class="n">variable</span> <span class="s2">"project"</span> <span class="p">{</span>
   <span class="n">description</span> <span class="o">=</span> <span class="s2">"Your GCP Project ID"</span>
-  <span class="n">default</span> <span class="o">=</span> <span class="s2">"dtc-de-XXXXX"</span>
   <span class="nb">type</span> <span class="o">=</span> <span class="n">string</span>
 <span class="p">}</span>
 

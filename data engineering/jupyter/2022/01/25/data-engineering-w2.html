@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Data Engineering - Week 2 | Isaac Kargar</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Data Engineering - Week 2" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Week 2 - Data Engineering Zoomcamp course." />
+<meta property="og:description" content="Week 2 - Data Engineering Zoomcamp course." />
+<link rel="canonical" href="https://kargarisaac.github.io/blog/data%20engineering/jupyter/2022/01/25/data-engineering-w2.html" />
+<meta property="og:url" content="https://kargarisaac.github.io/blog/data%20engineering/jupyter/2022/01/25/data-engineering-w2.html" />
+<meta property="og:site_name" content="Isaac Kargar" />
+<meta property="og:image" content="https://kargarisaac.github.io/blog/images/some_folder/your_image.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-01-25T00:00:00-06:00" />
+<script type="application/ld+json">
+{"mainEntityOfPage":{"@type":"WebPage","@id":"https://kargarisaac.github.io/blog/data%20engineering/jupyter/2022/01/25/data-engineering-w2.html"},"description":"Week 2 - Data Engineering Zoomcamp course.","@type":"BlogPosting","url":"https://kargarisaac.github.io/blog/data%20engineering/jupyter/2022/01/25/data-engineering-w2.html","headline":"Data Engineering - Week 2","dateModified":"2022-01-25T00:00:00-06:00","datePublished":"2022-01-25T00:00:00-06:00","image":"https://kargarisaac.github.io/blog/images/some_folder/your_image.png","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/blog/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://kargarisaac.github.io/blog/feed.xml" title="Isaac Kargar" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','G-7C8WW0BBJ4','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+<link rel="shortcut icon" type="image/x-icon" href="/blog/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Data Engineering - Week 2 | Isaac Kargar</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Data Engineering - Week 2" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Week 2 - Data Engineering Zoomcamp course." />
+<meta property="og:description" content="Week 2 - Data Engineering Zoomcamp course." />
+<link rel="canonical" href="https://kargarisaac.github.io/blog/data%20engineering/jupyter/2022/01/25/data-engineering-w2.html" />
+<meta property="og:url" content="https://kargarisaac.github.io/blog/data%20engineering/jupyter/2022/01/25/data-engineering-w2.html" />
+<meta property="og:site_name" content="Isaac Kargar" />
+<meta property="og:image" content="https://kargarisaac.github.io/blog/images/some_folder/your_image.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-01-25T00:00:00-06:00" />
+<script type="application/ld+json">
+{"mainEntityOfPage":{"@type":"WebPage","@id":"https://kargarisaac.github.io/blog/data%20engineering/jupyter/2022/01/25/data-engineering-w2.html"},"description":"Week 2 - Data Engineering Zoomcamp course.","@type":"BlogPosting","url":"https://kargarisaac.github.io/blog/data%20engineering/jupyter/2022/01/25/data-engineering-w2.html","headline":"Data Engineering - Week 2","dateModified":"2022-01-25T00:00:00-06:00","datePublished":"2022-01-25T00:00:00-06:00","image":"https://kargarisaac.github.io/blog/images/some_folder/your_image.png","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://kargarisaac.github.io/blog/feed.xml" title="Isaac Kargar" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','G-7C8WW0BBJ4','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+    <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/blog/">Isaac Kargar</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/blog/about/">About Me</a><a class="page-link" href="/blog/search/">Search</a><a class="page-link" href="/blog/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Data Engineering - Week 2</h1><p class="page-description">Week 2 - Data Engineering Zoomcamp course.</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2022-01-25T00:00:00-06:00" itemprop="datePublished">
+        Jan 25, 2022
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      4 min read
+    
+</span></p>
+
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-wrap flex-justify-end">
+          <div class="px-2">
+
+    <a href="https://github.com/kargarisaac/blog/tree/master/_notebooks/2022-01-25-data-engineering-w2.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/blog/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://mybinder.org/v2/gh/kargarisaac/blog/master?filepath=_notebooks%2F2022-01-25-data-engineering-w2.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/blog/assets/badges/binder.svg" alt="Open In Binder"/>
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://colab.research.google.com/github/kargarisaac/blog/blob/master/_notebooks/2022-01-25-data-engineering-w2.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/blog/assets/badges/colab.svg" alt="Open In Colab"/>
+    </a>
+</div>
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+<li class="toc-entry toc-h1"><a href="#Data-Lake">Data Lake </a></li>
+<li class="toc-entry toc-h1"><a href="#Data-Lake-vs-Data-Warehouse">Data Lake vs Data Warehouse </a></li>
+<li class="toc-entry toc-h1"><a href="#ETL-vs-ELT">ETL vs ELT </a></li>
+<li class="toc-entry toc-h1"><a href="#Workflow-Orchestration">Workflow Orchestration </a></li>
+</ul><!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2022-01-25-data-engineering-w2.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>In the first video of week 2, the following items will be reviewed:
+
+</p>
+<center>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/W3Zm6rjOq70" frameborder="0" allowfullscreen=""></iframe>
+</center>
+
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Data-Lake">
+<a class="anchor" href="#Data-Lake" aria-hidden="true"><span class="octicon octicon-link"></span></a>Data Lake<a class="anchor-link" href="#Data-Lake"> </a>
+</h1>
+<p><img src="/blog/images/copied_from_nb/images/data-engineering-w2/1.png" alt=""></p>
+<p>A data lake is a collection of technologies that enables querying of data contained in files or blob objects. When used effectively, they enable massive scale and cost-effective analysis of structured and unstructured data assets [<a href="https://lakefs.io/data-lakes/">source</a>].</p>
+<p>Data lakes are comprised of four primary components: storage, format, compute, and metadata layers [<a href="https://lakefs.io/data-lakes/">source</a>].</p>
+<p><img src="/blog/images/copied_from_nb/images/data-engineering-w2/2.png" alt=""></p>
+<p>A data lake is a centralized repository for large amounts of data from a variety of sources. Data can be structured, semi-structured, or unstructured in general.
+The goal is to rapidly ingest data and make it available to or accessible to other team members such as data scientists, analysts, and engineers.
+The data lake is widely used for machine learning and analytical solutions.
+Generally, when you store data in a data lake, you associate it with some form of metadata to facilitate access. Generally, a data lake solution must be secure and scalable.
+Additionally, the hardware should be affordable. The reason for this is that you want to store as much data as possible quickly.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Data-Lake-vs-Data-Warehouse">
+<a class="anchor" href="#Data-Lake-vs-Data-Warehouse" aria-hidden="true"><span class="octicon octicon-link"></span></a>Data Lake vs Data Warehouse<a class="anchor-link" href="#Data-Lake-vs-Data-Warehouse"> </a>
+</h1>
+<p><img src="/blog/images/copied_from_nb/images/data-engineering-w2/3.png" alt=""></p>
+<p>Generally a data lake is an unstructured data and the target users are data scientists or data analysts. It stores huge amount of data, sometimes in the size of petabytes and terabytes. The use cases which are covered by data lake are basically stream processing, machine learning, and real-time analytics.
+On the data warehouse side, the data is generally structured. The users are business analysts, the data size is generally small, and the use case consists of batch processing or BI reporting.</p>
+<p>To read more, please check <a href="https://lakefs.io/data-lakes/">here</a> and <a href="https://luminousmen.com/post/data-lake-vs-data-warehouse">here</a>.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="ETL-vs-ELT">
+<a class="anchor" href="#ETL-vs-ELT" aria-hidden="true"><span class="octicon octicon-link"></span></a>ETL vs ELT<a class="anchor-link" href="#ETL-vs-ELT"> </a>
+</h1>
+<ul>
+<li>Extract Transform and Load vs Extract Load and Transform</li>
+<li>ETL is mainly used for a small amount of data whereas ELT is used for large amounts of data</li>
+<li>ELT provides data lake support (Schema on read)</li>
+<li>ETL provides data warehouse solutions</li>
+</ul>
+<p><img src="/blog/images/copied_from_nb/images/data-engineering-w2/4.png" alt="">
+<em><a href="https://www.guru99.com/etl-vs-elt.html#:~:text=ETL%20stands%20for%20Extract%2C%20Transform,directly%20into%20the%20target%20system.&amp;text=ETL%2C%20ETL%20is%20mainly%20used,for%20large%20amounts%20of%20data.">source</a></em></p>
+<p><img src="/blog/images/copied_from_nb/images/data-engineering-w2/5.png" alt="">
+<em><a href="https://www.guru99.com/etl-vs-elt.html#:~:text=ETL%20stands%20for%20Extract%2C%20Transform,directly%20into%20the%20target%20system.&amp;text=ETL%2C%20ETL%20is%20mainly%20used,for%20large%20amounts%20of%20data.">source</a></em></p>
+<p>Data lake solutions provided by main cloud providers are as follows:</p>
+<ul>
+<li>GCP - cloud storage</li>
+<li>AWS - S3</li>
+<li>AZURE - AZURE BLOB</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Workflow-Orchestration">
+<a class="anchor" href="#Workflow-Orchestration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Workflow Orchestration<a class="anchor-link" href="#Workflow-Orchestration"> </a>
+</h1>
+<p>
+</p>
+<center>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/0yK7LXwYeD0" frameborder="0" allowfullscreen=""></iframe>
+</center>
+
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We saw a simple data pipeline in week 1. One of the problems in that data pipeline was that we did several important jobs in the same place: downloading data and doing small processing and putting it into postgres. What if after downloading data, some error happens in the code or with the internet? We will lose the downloaded data and should do everything from scratch. That's why we need to do those steps separately.</p>
+<p>A data pipeline is a series of steps for data processing. If the data has not yet been loaded into the data platform, it is ingested at the pipeline's start. Then there is a series of steps, each of which produces an output that serves as the input for the subsequent step. This procedure is repeated until the pipeline is completed. In some instances, independent steps may be performed concurrently. [<a href="https://hazelcast.com/glossary/data-pipeline/">source</a>].</p>
+<p>A data pipeline is composed of three critical components: a source, a processing step or series of processing steps, and a destination. The destination may be referred to as a sink in some data pipelines. Data pipelines, for example, enable the flow of data from an application to a data warehouse, from a data lake to an analytics database, or to a payment processing system. Additionally, data pipelines can share the same source and sink, allowing the pipeline to focus entirely on data modification. When data is processed between points A and B (or B, C, and D), there is a data pipeline between those points [<a href="https://hazelcast.com/glossary/data-pipeline/">source</a>].</p>
+<p><img src="/blog/images/copied_from_nb/images/data-engineering-w2/6.png" alt="">
+<em><a href="https://hazelcast.com/glossary/data-pipeline/">source</a></em></p>
+<p>In our example, the data pipeline we had in the previous week can be as follows:</p>
+<p><img src="/blog/images/copied_from_nb/images/data-engineering-w2/7.png" alt=""></p>
+<p>We separated downloading dataset using <code>wget</code> and then ingesting it into postgres. I think we can have even another more step for processing (changing the string to datetime in the downloaded dataset).</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>But this week, we will do something more complex. Let's have a look at the data workflow.</p>
+<p><img src="/blog/images/copied_from_nb/images/data-engineering-w2/8.png" alt=""></p>
+<p>The above figure is called a DAG (Directed Acyclic Graph). We need to be sure that all steps are done sequentially and we can retry some of the steps if some thing happens and then go to the next step. There are some tools called workflow engines tat allow us to define these DAGs and do the data workflow orchestration:</p>
+<ul>
+<li>LUIGI</li>
+<li>APACHE AIRFLOW (we will go for this)</li>
+<li>PREFECT</li>
+</ul>
+<p>Airflow is a platform to programmatically author, schedule and monitor workflows.
+Use Airflow to author workflows as Directed Acyclic Graphs (DAGs) of tasks. The Airflow scheduler executes your tasks on an array of workers while following the specified dependencies. Rich command line utilities make performing complex surgeries on DAGs a snap. The rich user interface makes it easy to visualize pipelines running in production, monitor progress, and troubleshoot issues when needed.
+When workflows are defined as code, they become more maintainable, versionable, testable, and collaborative [<a href="https://airflow.apache.org/docs/apache-airflow/stable/index.html">Airflow docs</a>].</p>
+
+</div>
+</div>
+</div>
+</div>
+
+
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="kargarisaac/blog"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/blog/data%20engineering/jupyter/2022/01/25/data-engineering-w2.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/blog/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/blog/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/blog/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>My posts about Machine Learning</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/kargarisaac" target="_blank" title="kargarisaac"><svg class="svg-icon grey"><use xlink:href="/blog/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://www.linkedin.com/in/eshagh-kargar" target="_blank" title="eshagh-kargar"><svg class="svg-icon grey"><use xlink:href="/blog/assets/minima-social-icons.svg#linkedin"></use></svg></a></li><li><a rel="me" href="https://twitter.com/kargarisaac" target="_blank" title="kargarisaac"><svg class="svg-icon grey"><use xlink:href="/blog/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

@@ -121,7 +121,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      23 min read
+      24 min read
     
 </span></p>
 
@@ -684,9 +684,9 @@ When workflows are defined as code, they become more maintainable, versionable, 
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">GOOGLE_APPLICATION_CREDENTIALS</span><span class="p">:</span> <span class="o">/.</span><span class="n">google</span><span class="o">/</span><span class="n">credentials</span><span class="o">/</span><span class="n">google_credentials</span><span class="o">.</span><span class="n">json</span>
-    <span class="n">AIRFLOW_CONN_GOOGLE_CLOUD_DEFAULT</span><span class="p">:</span> <span class="s1">'google-cloud-platform://?extra__google_cloud_platform__key_path=/.google/credentials/google_credentials.json'</span>
-    <span class="n">GCP_PROJECT_ID</span><span class="p">:</span> <span class="s1">'pivotal-surfer-336713'</span>
-    <span class="n">GCP_GCS_BUCKET</span><span class="p">:</span> <span class="s2">"dtc_data_lake_pivotal-surfer-336713"</span>
+<span class="n">AIRFLOW_CONN_GOOGLE_CLOUD_DEFAULT</span><span class="p">:</span> <span class="s1">'google-cloud-platform://?extra__google_cloud_platform__key_path=/.google/credentials/google_credentials.json'</span>
+<span class="n">GCP_PROJECT_ID</span><span class="p">:</span> <span class="s1">'pivotal-surfer-336713'</span>
+<span class="n">GCP_GCS_BUCKET</span><span class="p">:</span> <span class="s2">"dtc_data_lake_pivotal-surfer-336713"</span>
 </pre></div>
 
     </div>
@@ -996,24 +996,6 @@ The Dockerfile has the custom packages to be installed. The one we'll need the m
 </pre></div>
 
     </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_text output_error">
-<pre>
-<span class="ansi-cyan-fg">  File </span><span class="ansi-green-fg">"&lt;ipython-input-2-f59d00961e52&gt;"</span><span class="ansi-cyan-fg">, line </span><span class="ansi-green-fg">1</span>
-<span class="ansi-red-fg">    docker-compose build</span>
-                       ^
-<span class="ansi-red-fg">SyntaxError</span><span class="ansi-red-fg">:</span> invalid syntax
-</pre>
-</div>
-</div>
-
 </div>
 </div>
 
@@ -1382,7 +1364,7 @@ The Dockerfile has the custom packages to be installed. The one we'll need the m
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Then click on the play button on top-right part of the page and select <code>Trigger DAG</code>. Note that after running <code>docker-compose ps</code> everything should be in the <code>healthy</code> mode. You may also need to change the <code>AIRFLOW_UID</code> in the <code>docker-compose.yaml</code> file based on the value in <code>week_2_data_ingestion/airflow/.env</code> file.</p>
+<p>Then click on the play button on top-right part of the page and select <code>Trigger DAG</code>. Note that after running <code>docker-compose ps</code> everything should be in the <code>healthy</code> mode.</p>
 <p>In case any of the tasks fails, you can check the logs as follows:</p>
 <p><img src="/blog/images/copied_from_nb/images/data-engineering-w2/2.gif" alt=""></p>
 
@@ -1408,7 +1390,7 @@ The Dockerfile has the custom packages to be installed. The one we'll need the m
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Before, we uploaded data to GCS using the <code>upload_to_gcs</code> function. But here, a s we want to ingest data into postgres, we need to use another function. All the steps are the same (check the above video) and we just check the DAG file and ingestion script here which is a modified version of what we used in week 1.</p>
+<p>Before, we uploaded data to GCS using the <code>upload_to_gcs</code> function. But here, a s we want to ingest data into postgres (which we will run using another docker-compose), we need to use another function. All the steps are the same (check the above video) and we just check the DAG file and ingestion script here which is a modified version of what we used in week 1.</p>
 <p>Let's see the <code>week_2_data_ingestion/airflow/dags_local/data_ingestion_local.py</code> file first:</p>
 
 </div>
@@ -1488,7 +1470,7 @@ The Dockerfile has the custom packages to be installed. The one we'll need the m
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>And the ingestion script to postgres is as follows:</p>
+<p>And the ingestion function which is imported in the above script is as follows:</p>
 
 </div>
 </div>
@@ -1557,6 +1539,97 @@ The Dockerfile has the custom packages to be installed. The one we'll need the m
 </div>
     
 
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now we have two <code>docker-compose.yaml</code> files: one for this week which runs airflow stuff and one for week 1 for postgres and pgadmin. Let's see how we can connect them.</p>
+<p>When we run the <code>docker-compose.yaml</code> file for airflow, it creates a network called <code>airflow_default</code> which we will use as an external network to connect the docker-compose for postgres and pgadmin to [<a href="https://stackoverflow.com/questions/38088279/communication-between-multiple-docker-compose-projects">ref</a>].</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># docker-compose.yaml of week 1</span>
+<span class="n">services</span><span class="p">:</span>
+    <span class="n">pgdatabase</span><span class="p">:</span>
+        <span class="n">image</span><span class="p">:</span> <span class="n">postgres</span><span class="p">:</span><span class="mi">13</span>
+        <span class="n">environment</span><span class="p">:</span>
+            <span class="o">-</span> <span class="n">POSTGRES_USER</span><span class="o">=</span><span class="n">root</span>
+            <span class="o">-</span> <span class="n">POSTGRES_PASSWORD</span><span class="o">=</span><span class="n">root</span>
+            <span class="o">-</span> <span class="n">POSTGRES_DB</span><span class="o">=</span><span class="n">ny_taxi</span>
+        <span class="n">volumes</span><span class="p">:</span>
+            <span class="o">-</span> <span class="s2">"./ny_taxi_postgres_data:/var/lib/postgresql/data:rw"</span>
+        <span class="n">ports</span><span class="p">:</span>
+            <span class="o">-</span> <span class="s2">"5432:5432"</span>
+        <span class="n">networks</span><span class="p">:</span>
+            <span class="o">-</span> <span class="n">airflow</span>
+    <span class="n">pgadmin</span><span class="p">:</span>
+        <span class="n">image</span><span class="p">:</span> <span class="n">dpage</span><span class="o">/</span><span class="n">pgadmin4</span>
+        <span class="n">environment</span><span class="p">:</span>
+            <span class="o">-</span> <span class="n">PGADMIN_DEFAULT_EMAIL</span><span class="o">=</span><span class="n">admin</span><span class="nd">@admin</span><span class="o">.</span><span class="n">com</span>
+            <span class="o">-</span> <span class="n">PGADMIN_DEFAULT_PASSWORD</span><span class="o">=</span><span class="n">root</span>
+        <span class="n">ports</span><span class="p">:</span>
+            <span class="o">-</span> <span class="s2">"8080:80"</span>
+
+<span class="n">networks</span><span class="p">:</span>
+  <span class="n">airflow</span><span class="p">:</span>
+    <span class="n">external</span><span class="p">:</span>
+      <span class="n">name</span><span class="p">:</span> <span class="n">airflow_default</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We will have two postgres databases, one for airflow  that stores its own metadata and one for uplading our dataset into.</p>
+<p>First run <code>docker-compose up</code> in week 1 folder, and then test if you can connect using <code>pgcli -h localhost -p 5432 -U root -d ny_taxi</code> command.</p>
+<p>Then we can go to the airflow worker container and see if we can connect to the postgres database that we ran above:</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">docker</span> <span class="n">exec</span> <span class="o">-</span><span class="n">it</span> <span class="o">&lt;</span><span class="n">container</span> <span class="nb">id</span><span class="o">&gt;</span> <span class="n">bash</span>
+<span class="c1"># then type python to open python </span>
+<span class="o">&gt;&gt;</span> <span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">create_engine</span>
+<span class="o">&gt;&gt;</span> <span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="s1">'postgresql://root:root@pgdatabase:5432/ny_taxi'</span><span class="p">)</span>
+<span class="o">&gt;&gt;</span> <span class="n">engine</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="c1"># no error here</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>If you don't see any error by following the above procedure, it shows that you can connect to the postgres from airflow worker container. So calling the ingestion script from the <code>PythonOperator</code> in the DAG file should work.</p>
+
+</div>
+</div>
+</div>
 </div>
 
 

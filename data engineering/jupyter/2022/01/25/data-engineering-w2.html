@@ -121,7 +121,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      20 min read
+      21 min read
     
 </span></p>
 
@@ -1224,6 +1224,7 @@ The Dockerfile has the custom packages to be installed. The one we'll need the m
 </ul>
 </li>
 <li>Some python functions which will be attached to <code>PythonOperator</code>s like <code>format_to_parquet()</code> and <code>upload_to_gcs()</code>. Their names describe their functionality.</li>
+<li>Default arguments which will be used in DAG definition. </li>
 <li>Then the DAG declaration with tasks and their dependencies<ul>
 <li>
 <code>download_dataset_task</code>to download the dataset using a bash command.</li>
@@ -1384,6 +1385,21 @@ The Dockerfile has the custom packages to be installed. The one we'll need the m
 <p>Then click on the play button on top-right part of the page and select <code>Trigger DAG</code>. Note that after running <code>docker-compose ps</code> everything should be in the <code>healthy</code> mode. You may also need to change the <code>AIRFLOW_UID</code> in the <code>docker-compose.yaml</code> file based on the value in <code>week_2_data_ingestion/airflow/.env</code> file.</p>
 <p>In case any of the tasks fails, you can check the logs as follows:</p>
 <p><img src="/blog/images/copied_from_nb/images/data-engineering-w2/2.gif" alt=""></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>If the tasks are completed successfully, then you will see the uploaded <code>parquet</code> file in GCS bucket and also the table in BigQuery.</p>
+<p>In order to see another step-by-step tutorial on ingesting data to local postgres using airflow, you can check the following video.
+
+</p>
+<center>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/s2U8MWJH5xA" frameborder="0" allowfullscreen=""></iframe>
+</center>
+
 
 </div>
 </div>

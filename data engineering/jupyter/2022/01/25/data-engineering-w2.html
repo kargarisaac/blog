@@ -121,7 +121,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      21 min read
+      23 min read
     
 </span></p>
 
@@ -1206,7 +1206,7 @@ The Dockerfile has the custom packages to be installed. The one we'll need the m
 <p>Now let's see out own DAG file for ingesting <code>yellow_tripdata_2021-01.csv</code> dataset into GCP which is place in <code>week_2_data_ingestion/airflow/dags/data_ingestion_gcs_dag.py</code>. First let's check the structure:</p>
 <ul>
 <li>importing python libraries <ul>
-<li>in-built airflow like <code>BashOperator</code> and <code>PythonOperator</code>.</li>
+<li>in-built airflow like <code>BashOperator</code> and <code>PythonOperator</code>. There is also <code>DockerOperator</code> to run docker in docker!</li>
 <li>
 <code>storage</code> from google cloud library to interact with GCS.</li>
 <li>BigQuery from google airflow provider to interact with BigQuery and create an external table.</li>
@@ -1393,6 +1393,7 @@ The Dockerfile has the custom packages to be installed. The one we'll need the m
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>If the tasks are completed successfully, then you will see the uploaded <code>parquet</code> file in GCS bucket and also the table in BigQuery.</p>
+<p><strong>Note</strong>: All the <code>PythonOperator</code> codes (functions called by that) are executed in airflow-workers (which is a container) and files (datasets) are saved there and not in your local machine. If you use <code>DockerOperator</code>, you are actually running a docker inside another docker (airflow-worker).</p>
 <p>In order to see another step-by-step tutorial on ingesting data to local postgres using airflow, you can check the following video.
 
 </p>
@@ -1404,6 +1405,158 @@ The Dockerfile has the custom packages to be installed. The one we'll need the m
 </div>
 </div>
 </div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Before, we uploaded data to GCS using the <code>upload_to_gcs</code> function. But here, a s we want to ingest data into postgres, we need to use another function. All the steps are the same (check the above video) and we just check the DAG file and ingestion script here which is a modified version of what we used in week 1.</p>
+<p>Let's see the <code>week_2_data_ingestion/airflow/dags_local/data_ingestion_local.py</code> file first:</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="kn">from</span> <span class="nn">airflow</span> <span class="kn">import</span> <span class="n">DAG</span>
+
+<span class="kn">from</span> <span class="nn">airflow.operators.bash</span> <span class="kn">import</span> <span class="n">BashOperator</span>
+<span class="kn">from</span> <span class="nn">airflow.operators.python</span> <span class="kn">import</span> <span class="n">PythonOperator</span>
+
+<span class="kn">from</span> <span class="nn">ingest_script</span> <span class="kn">import</span> <span class="n">ingest_callable</span>
+
+
+<span class="n">AIRFLOW_HOME</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"AIRFLOW_HOME"</span><span class="p">,</span> <span class="s2">"/opt/airflow/"</span><span class="p">)</span>
+
+
+<span class="n">PG_HOST</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">'PG_HOST'</span><span class="p">)</span>
+<span class="n">PG_USER</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">'PG_USER'</span><span class="p">)</span>
+<span class="n">PG_PASSWORD</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">'PG_PASSWORD'</span><span class="p">)</span>
+<span class="n">PG_PORT</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">'PG_PORT'</span><span class="p">)</span>
+<span class="n">PG_DATABASE</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">'PG_DATABASE'</span><span class="p">)</span>
+
+
+<span class="n">local_workflow</span> <span class="o">=</span> <span class="n">DAG</span><span class="p">(</span>
+    <span class="s2">"LocalIngestionDag"</span><span class="p">,</span>
+    <span class="n">schedule_interval</span><span class="o">=</span><span class="s2">"0 6 2 * *"</span><span class="p">,</span>
+    <span class="n">start_date</span><span class="o">=</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">)</span>
+
+
+<span class="n">URL_PREFIX</span> <span class="o">=</span> <span class="s1">'https://s3.amazonaws.com/nyc-tlc/trip+data'</span> 
+<span class="n">URL_TEMPLATE</span> <span class="o">=</span> <span class="n">URL_PREFIX</span> <span class="o">+</span> <span class="s1">'/yellow_tripdata_{{ execution_date.strftime(</span><span class="se">\'</span><span class="s1">%Y-%m</span><span class="se">\'</span><span class="s1">) }}.csv'</span>
+<span class="n">OUTPUT_FILE_TEMPLATE</span> <span class="o">=</span> <span class="n">AIRFLOW_HOME</span> <span class="o">+</span> <span class="s1">'/output_{{ execution_date.strftime(</span><span class="se">\'</span><span class="s1">%Y-%m</span><span class="se">\'</span><span class="s1">) }}.csv'</span>
+<span class="n">TABLE_NAME_TEMPLATE</span> <span class="o">=</span> <span class="s1">'yellow_taxi_{{ execution_date.strftime(</span><span class="se">\'</span><span class="s1">%Y_%m</span><span class="se">\'</span><span class="s1">) }}'</span>
+
+<span class="k">with</span> <span class="n">local_workflow</span><span class="p">:</span>
+    <span class="n">wget_task</span> <span class="o">=</span> <span class="n">BashOperator</span><span class="p">(</span>
+        <span class="n">task_id</span><span class="o">=</span><span class="s1">'wget'</span><span class="p">,</span>
+        <span class="n">bash_command</span><span class="o">=</span><span class="sa">f</span><span class="s1">'curl -sSL </span><span class="si">{</span><span class="n">URL_TEMPLATE</span><span class="si">}</span><span class="s1"> &gt; </span><span class="si">{</span><span class="n">OUTPUT_FILE_TEMPLATE</span><span class="si">}</span><span class="s1">'</span>
+    <span class="p">)</span>
+
+    <span class="n">ingest_task</span> <span class="o">=</span> <span class="n">PythonOperator</span><span class="p">(</span>
+        <span class="n">task_id</span><span class="o">=</span><span class="s2">"ingest"</span><span class="p">,</span>
+        <span class="n">python_callable</span><span class="o">=</span><span class="n">ingest_callable</span><span class="p">,</span>
+        <span class="n">op_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+            <span class="n">user</span><span class="o">=</span><span class="n">PG_USER</span><span class="p">,</span>
+            <span class="n">password</span><span class="o">=</span><span class="n">PG_PASSWORD</span><span class="p">,</span>
+            <span class="n">host</span><span class="o">=</span><span class="n">PG_HOST</span><span class="p">,</span>
+            <span class="n">port</span><span class="o">=</span><span class="n">PG_PORT</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">=</span><span class="n">PG_DATABASE</span><span class="p">,</span>
+            <span class="n">table_name</span><span class="o">=</span><span class="n">TABLE_NAME_TEMPLATE</span><span class="p">,</span>
+            <span class="n">csv_file</span><span class="o">=</span><span class="n">OUTPUT_FILE_TEMPLATE</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+
+    <span class="n">wget_task</span> <span class="o">&gt;&gt;</span> <span class="n">ingest_task</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>And the ingestion script to postgres is as follows:</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">create_engine</span>
+
+
+<span class="k">def</span> <span class="nf">ingest_callable</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">csv_file</span><span class="p">,</span> <span class="n">execution_date</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span> <span class="n">csv_file</span><span class="p">,</span> <span class="n">execution_date</span><span class="p">)</span>
+
+    <span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="sa">f</span><span class="s1">'postgresql://</span><span class="si">{</span><span class="n">user</span><span class="si">}</span><span class="s1">:</span><span class="si">{</span><span class="n">password</span><span class="si">}</span><span class="s1">@</span><span class="si">{</span><span class="n">host</span><span class="si">}</span><span class="s1">:</span><span class="si">{</span><span class="n">port</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">db</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+    <span class="n">engine</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">'connection established successfully, instering data...'</span><span class="p">)</span>
+
+    <span class="n">t_start</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
+    <span class="n">df_iter</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">csv_file</span><span class="p">,</span> <span class="n">iterator</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">chunksize</span><span class="o">=</span><span class="mi">100000</span><span class="p">)</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">df_iter</span><span class="p">)</span>
+
+    <span class="n">df</span><span class="o">.</span><span class="n">tpep_pickup_datetime</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">tpep_pickup_datetime</span><span class="p">)</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">tpep_dropoff_datetime</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">tpep_dropoff_datetime</span><span class="p">)</span>
+
+    <span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">table_name</span><span class="p">,</span> <span class="n">con</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span> <span class="n">if_exists</span><span class="o">=</span><span class="s1">'replace'</span><span class="p">)</span>
+
+    <span class="n">df</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">table_name</span><span class="p">,</span> <span class="n">con</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span> <span class="n">if_exists</span><span class="o">=</span><span class="s1">'append'</span><span class="p">)</span>
+
+    <span class="n">t_end</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">'inserted the first chunk, took </span><span class="si">%.3f</span><span class="s1"> second'</span> <span class="o">%</span> <span class="p">(</span><span class="n">t_end</span> <span class="o">-</span> <span class="n">t_start</span><span class="p">))</span>
+
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span> 
+        <span class="n">t_start</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">df_iter</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"completed"</span><span class="p">)</span>
+            <span class="k">break</span>
+
+        <span class="n">df</span><span class="o">.</span><span class="n">tpep_pickup_datetime</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">tpep_pickup_datetime</span><span class="p">)</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">tpep_dropoff_datetime</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">tpep_dropoff_datetime</span><span class="p">)</span>
+
+        <span class="n">df</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">table_name</span><span class="p">,</span> <span class="n">con</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span> <span class="n">if_exists</span><span class="o">=</span><span class="s1">'append'</span><span class="p">)</span>
+
+        <span class="n">t_end</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">'inserted another chunk, took </span><span class="si">%.3f</span><span class="s1"> second'</span> <span class="o">%</span> <span class="p">(</span><span class="n">t_end</span> <span class="o">-</span> <span class="n">t_start</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
 </div>
 
 

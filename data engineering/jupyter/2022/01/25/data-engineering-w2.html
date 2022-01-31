@@ -121,7 +121,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      25 min read
+      26 min read
     
 </span></p>
 
@@ -935,6 +935,20 @@ The Dockerfile has the custom packages to be installed. The one we'll need the m
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<p>There is also another lightweight and less memory-intensive docker-compose file in the <a href="https://github.com/DataTalksClub/data-engineering-zoomcamp/tree/main/week_2_data_ingestion/airflow">github repo</a> which can be used.</p>
+<p>The setup includes the following changes:</p>
+<ul>
+<li>Removal of the <code>redis</code> queue, <code>worker</code>, <code>triggerer</code>, <code>flower</code> &amp; <code>airflow-init</code> services,  and changing the Core Executor mode from <code>CeleryExecutor</code>  to <code>LocalExecutor</code> </li>
+<li>Inclusion of <code>.env</code> file for better parametrization &amp; flexibility</li>
+<li>Inclusion of simple <code>entrypoint.sh</code> script to the <code>webserver</code> container, responsible to initialize the database and create login-user (admin).</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <p>Before starting Airflow for the first time, You need to prepare your environment, i.e. create the necessary files, directories and initialize the database.</p>
 <p>On Linux, the quick-start needs to know your host user id and needs to have group id set to <code>0</code>. Otherwise the files created in <code>dags</code>, <code>logs</code> and <code>plugins</code> will be created with <code>root</code> user. You have to make sure to configure them for the docker-compose: (run it inside the <code>airflow</code> folder where the <code>docker-compose.yaml</code> file is placed) [<a href="https://airflow.apache.org/docs/apache-airflow/stable/tutorial.html">Airflow docs</a>]</p>
 
@@ -987,7 +1001,7 @@ The Dockerfile has the custom packages to be installed. The one we'll need the m
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Read more about environment variables for compose <a href="">here</a></p>
+<p>Read more about environment variables for compose <a href="https://docs.docker.com/compose/environment-variables/">here</a>. It seems that when we run <code>docker-compose up</code>, it looks for <code>.env</code> file in the same directory and uses the variables in that file.</p>
 
 </div>
 </div>
@@ -1393,10 +1407,57 @@ The Dockerfile has the custom packages to be installed. The one we'll need the m
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>If the tasks are completed successfully, then you will see the uploaded <code>parquet</code> file in GCS bucket and also the table in BigQuery.</p>
 <p><strong>Note</strong>: All the <code>PythonOperator</code> codes (functions called by that) are executed in airflow-workers (which is a container) and files (datasets) are saved there and not in your local machine. If you use <code>DockerOperator</code>, you are actually running a docker inside another docker (airflow-worker).</p>
+<p>On finishing your run or to shut down the container/s:</p>
 
 </div>
 </div>
 </div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">down</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>To stop and delete containers, delete volumes with database data, and download images, run:</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">down</span> <span class="o">--</span><span class="n">volumes</span> <span class="o">--</span><span class="n">rmi</span> <span class="nb">all</span>
+
+<span class="ow">or</span>
+
+<span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">down</span> <span class="o">--</span><span class="n">volumes</span> <span class="o">--</span><span class="n">remove</span><span class="o">-</span><span class="n">orphans</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -1653,10 +1714,57 @@ The Dockerfile has the custom packages to be installed. The one we'll need the m
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>If you don't see any error by following the above procedure, it shows that you can connect to the postgres from airflow worker container. So calling the ingestion script from the <code>PythonOperator</code> in the DAG file should work. Now you can run both docker-compose files and go to airflow web interface to see the DAGs running.</p>
+<p>On finishing your run or to shut down the container/s:</p>
 
 </div>
 </div>
 </div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">down</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>To stop and delete containers, delete volumes with database data, and download images, run:</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">down</span> <span class="o">--</span><span class="n">volumes</span> <span class="o">--</span><span class="n">rmi</span> <span class="nb">all</span>
+
+<span class="ow">or</span>
+
+<span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">down</span> <span class="o">--</span><span class="n">volumes</span> <span class="o">--</span><span class="n">remove</span><span class="o">-</span><span class="n">orphans</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -1683,6 +1791,28 @@ The Dockerfile has the custom packages to be installed. The one we'll need the m
 </p>
 <center>
     <iframe width="560" height="315" src="https://www.youtube.com/embed/VhmmbqpIzeI" frameborder="0" allowfullscreen=""></iframe>
+</center>
+
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The reviewed procedure in this post for Airflow is not really suitable for production. Usually a combination of Airflow &amp; Kubernetes &amp; Git can be used. You can check the following videos to learn more. Maybe I write a blog post on that in future.
+
+</p>
+<center>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/rSkIa0lREUc" frameborder="0" allowfullscreen=""></iframe>
+</center>
+
+<center>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/3VDeKmxHWYA" frameborder="0" allowfullscreen=""></iframe>
+</center>
+
+<center>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/QgzkB1hcq5s" frameborder="0" allowfullscreen=""></iframe>
 </center>
 
 

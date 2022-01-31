@@ -936,12 +936,6 @@ The Dockerfile has the custom packages to be installed. The one we'll need the m
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>There is also another lightweight and less memory-intensive docker-compose file in the <a href="https://github.com/DataTalksClub/data-engineering-zoomcamp/tree/main/week_2_data_ingestion/airflow">github repo</a> which can be used.</p>
-<p>The setup includes the following changes:</p>
-<ul>
-<li>Removal of the <code>redis</code> queue, <code>worker</code>, <code>triggerer</code>, <code>flower</code> &amp; <code>airflow-init</code> services,  and changing the Core Executor mode from <code>CeleryExecutor</code>  to <code>LocalExecutor</code> </li>
-<li>Inclusion of <code>.env</code> file for better parametrization &amp; flexibility</li>
-<li>Inclusion of simple <code>entrypoint.sh</code> script to the <code>webserver</code> container, responsible to initialize the database and create login-user (admin).</li>
-</ul>
 
 </div>
 </div>

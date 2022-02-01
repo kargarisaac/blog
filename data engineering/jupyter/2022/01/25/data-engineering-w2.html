@@ -405,23 +405,15 @@ When workflows are defined as code, they become more maintainable, versionable, 
 </div>
 </div>
 </div>
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
+<div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">--</span><span class="n">rm</span> <span class="s2">"debian:buster-slim"</span> <span class="n">bash</span> <span class="o">-</span><span class="n">c</span> <span class="s1">'numfmt --to iec $(echo $(($(getconf _PHYS_PAGES) * $(getconf PAGE_SIZE))))'</span>
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="highlight"><pre><span></span>docker run --rm <span class="s2">"debian:buster-slim"</span> bash -c <span class="s1">'numfmt --to iec $(echo $(($(getconf _PHYS_PAGES) * $(getconf PAGE_SIZE))))'</span>
 </pre></div>
 
-    </div>
 </div>
 </div>
-
 </div>
-    
-
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -503,83 +495,75 @@ When workflows are defined as code, they become more maintainable, versionable, 
 </div>
 </div>
 </div>
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
+<div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">version</span><span class="p">:</span> <span class="s1">'3'</span>
-<span class="n">x</span><span class="o">-</span><span class="n">airflow</span><span class="o">-</span><span class="n">common</span><span class="p">:</span>
-  <span class="o">&amp;</span><span class="n">airflow</span><span class="o">-</span><span class="n">common</span>
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="highlight"><pre><span></span>version: <span class="s1">'3'</span>
+x-airflow-common:
+  <span class="p">&amp;</span>airflow-common
   <span class="c1"># In order to add custom dependencies or upgrade provider packages you can use your extended image.</span>
   <span class="c1"># Comment the image line, place your Dockerfile in the directory where you placed the docker-compose.yaml</span>
   <span class="c1"># and uncomment the "build" line below, Then run `docker-compose build` to build the images.</span>
-  <span class="n">image</span><span class="p">:</span> <span class="err">$</span><span class="p">{</span><span class="n">AIRFLOW_IMAGE_NAME</span><span class="p">:</span><span class="o">-</span><span class="n">apache</span><span class="o">/</span><span class="n">airflow</span><span class="p">:</span><span class="mf">2.2</span><span class="o">.</span><span class="mi">3</span><span class="p">}</span>
+  image: <span class="si">${</span><span class="nv">AIRFLOW_IMAGE_NAME</span><span class="k">:-</span><span class="nv">apache</span><span class="p">/airflow:</span><span class="nv">2</span><span class="p">.2.3</span><span class="si">}</span>
   <span class="c1"># build: .</span>
-  <span class="n">environment</span><span class="p">:</span>
-    <span class="o">&amp;</span><span class="n">airflow</span><span class="o">-</span><span class="n">common</span><span class="o">-</span><span class="n">env</span>
-    <span class="n">AIRFLOW__CORE__EXECUTOR</span><span class="p">:</span> <span class="n">CeleryExecutor</span>
-    <span class="n">AIRFLOW__CORE__SQL_ALCHEMY_CONN</span><span class="p">:</span> <span class="n">postgresql</span><span class="o">+</span><span class="n">psycopg2</span><span class="p">:</span><span class="o">//</span><span class="n">airflow</span><span class="p">:</span><span class="n">airflow</span><span class="nd">@postgres</span><span class="o">/</span><span class="n">airflow</span>
-    <span class="n">AIRFLOW__CELERY__RESULT_BACKEND</span><span class="p">:</span> <span class="n">db</span><span class="o">+</span><span class="n">postgresql</span><span class="p">:</span><span class="o">//</span><span class="n">airflow</span><span class="p">:</span><span class="n">airflow</span><span class="nd">@postgres</span><span class="o">/</span><span class="n">airflow</span>
-    <span class="n">AIRFLOW__CELERY__BROKER_URL</span><span class="p">:</span> <span class="n">redis</span><span class="p">:</span><span class="o">//</span><span class="p">:</span><span class="nd">@redis</span><span class="p">:</span><span class="mi">6379</span><span class="o">/</span><span class="mi">0</span>
-    <span class="n">AIRFLOW__CORE__FERNET_KEY</span><span class="p">:</span> <span class="s1">''</span>
-    <span class="n">AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION</span><span class="p">:</span> <span class="s1">'true'</span>
-    <span class="n">AIRFLOW__CORE__LOAD_EXAMPLES</span><span class="p">:</span> <span class="s1">'true'</span>
-    <span class="n">AIRFLOW__API__AUTH_BACKEND</span><span class="p">:</span> <span class="s1">'airflow.api.auth.backend.basic_auth'</span>
-    <span class="n">_PIP_ADDITIONAL_REQUIREMENTS</span><span class="p">:</span> <span class="err">$</span><span class="p">{</span><span class="n">_PIP_ADDITIONAL_REQUIREMENTS</span><span class="p">:</span><span class="o">-</span><span class="p">}</span>
-  <span class="n">volumes</span><span class="p">:</span>
-    <span class="o">-</span> <span class="o">./</span><span class="n">dags</span><span class="p">:</span><span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">airflow</span><span class="o">/</span><span class="n">dags</span>
-    <span class="o">-</span> <span class="o">./</span><span class="n">logs</span><span class="p">:</span><span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">airflow</span><span class="o">/</span><span class="n">logs</span>
-    <span class="o">-</span> <span class="o">./</span><span class="n">plugins</span><span class="p">:</span><span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">airflow</span><span class="o">/</span><span class="n">plugins</span>
-  <span class="n">user</span><span class="p">:</span> <span class="s2">"$</span><span class="si">{AIRFLOW_UID:-50000}</span><span class="s2">:0"</span>
-  <span class="n">depends_on</span><span class="p">:</span>
-    <span class="o">&amp;</span><span class="n">airflow</span><span class="o">-</span><span class="n">common</span><span class="o">-</span><span class="n">depends</span><span class="o">-</span><span class="n">on</span>
-    <span class="n">redis</span><span class="p">:</span>
-      <span class="n">condition</span><span class="p">:</span> <span class="n">service_healthy</span>
-    <span class="n">postgres</span><span class="p">:</span>
-      <span class="n">condition</span><span class="p">:</span> <span class="n">service_healthy</span>
+  environment:
+    <span class="p">&amp;</span>airflow-common-env
+    AIRFLOW__CORE__EXECUTOR: CeleryExecutor
+    AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+    AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://airflow:airflow@postgres/airflow
+    AIRFLOW__CELERY__BROKER_URL: redis://:@redis:6379/0
+    AIRFLOW__CORE__FERNET_KEY: <span class="s1">''</span>
+    AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: <span class="s1">'true'</span>
+    AIRFLOW__CORE__LOAD_EXAMPLES: <span class="s1">'true'</span>
+    AIRFLOW__API__AUTH_BACKEND: <span class="s1">'airflow.api.auth.backend.basic_auth'</span>
+    _PIP_ADDITIONAL_REQUIREMENTS: <span class="si">${</span><span class="nv">_PIP_ADDITIONAL_REQUIREMENTS</span><span class="k">:-</span><span class="si">}</span>
+  volumes:
+    - ./dags:/opt/airflow/dags
+    - ./logs:/opt/airflow/logs
+    - ./plugins:/opt/airflow/plugins
+  user: <span class="s2">"</span><span class="si">${</span><span class="nv">AIRFLOW_UID</span><span class="k">:-</span><span class="nv">50000</span><span class="si">}</span><span class="s2">:0"</span>
+  depends_on:
+    <span class="p">&amp;</span>airflow-common-depends-on
+    redis:
+      condition: service_healthy
+    postgres:
+      condition: service_healthy
 
-<span class="n">services</span><span class="p">:</span>
-  <span class="n">postgres</span><span class="p">:</span>
-    <span class="o">...</span>
+services:
+  postgres:
+    ...
 
-  <span class="n">redis</span><span class="p">:</span>
-    <span class="o">...</span>
+  redis:
+    ...
 
-  <span class="n">airflow</span><span class="o">-</span><span class="n">webserver</span><span class="p">:</span>
-    <span class="o">...</span>
+  airflow-webserver:
+    ...
 
-  <span class="n">airflow</span><span class="o">-</span><span class="n">scheduler</span><span class="p">:</span>
-    <span class="o">...</span>
+  airflow-scheduler:
+    ...
 
-  <span class="n">airflow</span><span class="o">-</span><span class="n">worker</span><span class="p">:</span>
-    <span class="o">...</span>
+  airflow-worker:
+    ...
 
-  <span class="n">airflow</span><span class="o">-</span><span class="n">triggerer</span><span class="p">:</span>
-    <span class="o">...</span>
+  airflow-triggerer:
+    ...
 
-  <span class="n">airflow</span><span class="o">-</span><span class="n">init</span><span class="p">:</span>
-    <span class="o">...</span>
+  airflow-init:
+    ...
 
-  <span class="n">airflow</span><span class="o">-</span><span class="n">cli</span><span class="p">:</span>
-    <span class="o">...</span>
-    
-  <span class="n">flower</span><span class="p">:</span>
-    <span class="o">...</span>
+  airflow-cli:
+    ...
 
-<span class="n">volumes</span><span class="p">:</span>
-  <span class="n">postgres</span><span class="o">-</span><span class="n">db</span><span class="o">-</span><span class="n">volume</span><span class="p">:</span>
+  flower:
+    ...
+
+volumes:
+  postgres-db-volume:
 </pre></div>
 
-    </div>
 </div>
 </div>
-
 </div>
-    
-
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -600,24 +584,16 @@ When workflows are defined as code, they become more maintainable, versionable, 
 </div>
 </div>
 </div>
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
+<div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">cd</span> <span class="o">~</span> <span class="o">&amp;&amp;</span> <span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="o">~/.</span><span class="n">google</span><span class="o">/</span><span class="n">credentials</span><span class="o">/</span>
-<span class="n">mv</span> <span class="o">&lt;</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">your</span><span class="o">/</span><span class="n">service</span><span class="o">-</span><span class="n">account</span><span class="o">-</span><span class="n">authkeys</span><span class="o">&gt;.</span><span class="n">json</span> <span class="o">~/.</span><span class="n">google</span><span class="o">/</span><span class="n">credentials</span><span class="o">/</span><span class="n">google_credentials</span><span class="o">.</span><span class="n">json</span>
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="highlight"><pre><span></span><span class="nb">cd</span> ~ <span class="o">&amp;&amp;</span> mkdir -p ~/.google/credentials/
+mv &lt;path/to/your/service-account-authkeys&gt;.json ~/.google/credentials/google_credentials.json
 </pre></div>
 
-    </div>
 </div>
 </div>
-
 </div>
-    
-
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -629,25 +605,17 @@ When workflows are defined as code, they become more maintainable, versionable, 
 </div>
 </div>
 </div>
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
+<div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span>  <span class="n">build</span><span class="p">:</span>
-    <span class="n">context</span><span class="p">:</span> <span class="o">.</span>
-    <span class="n">dockerfile</span><span class="p">:</span> <span class="o">./</span><span class="n">Dockerfile</span>
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="highlight"><pre><span></span>build:
+    context: .
+    dockerfile: ./Dockerfile
 </pre></div>
 
-    </div>
 </div>
 </div>
-
 </div>
-    
-
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -685,26 +653,18 @@ When workflows are defined as code, they become more maintainable, versionable, 
 </div>
 </div>
 </div>
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
+<div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">GOOGLE_APPLICATION_CREDENTIALS</span><span class="p">:</span> <span class="o">/.</span><span class="n">google</span><span class="o">/</span><span class="n">credentials</span><span class="o">/</span><span class="n">google_credentials</span><span class="o">.</span><span class="n">json</span>
-<span class="n">AIRFLOW_CONN_GOOGLE_CLOUD_DEFAULT</span><span class="p">:</span> <span class="s1">'google-cloud-platform://?extra__google_cloud_platform__key_path=/.google/credentials/google_credentials.json'</span>
-<span class="n">GCP_PROJECT_ID</span><span class="p">:</span> <span class="s1">'pivotal-surfer-336713'</span>
-<span class="n">GCP_GCS_BUCKET</span><span class="p">:</span> <span class="s2">"dtc_data_lake_pivotal-surfer-336713"</span>
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="highlight"><pre><span></span>GOOGLE_APPLICATION_CREDENTIALS: /.google/credentials/google_credentials.json
+AIRFLOW_CONN_GOOGLE_CLOUD_DEFAULT: <span class="s1">'google-cloud-platform://?extra__google_cloud_platform__key_path=/.google/credentials/google_credentials.json'</span>
+GCP_PROJECT_ID: <span class="s1">'pivotal-surfer-336713'</span>
+GCP_GCS_BUCKET: <span class="s2">"dtc_data_lake_pivotal-surfer-336713"</span>
 </pre></div>
 
-    </div>
 </div>
 </div>
-
 </div>
-    
-
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -740,46 +700,38 @@ When workflows are defined as code, they become more maintainable, versionable, 
 </div>
 </div>
 </div>
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
+<div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span>  <span class="n">build</span><span class="p">:</span>
-    <span class="n">context</span><span class="p">:</span> <span class="o">.</span>
-    <span class="n">dockerfile</span><span class="p">:</span> <span class="o">./</span><span class="n">Dockerfile</span>
-  <span class="n">environment</span><span class="p">:</span>
-    <span class="o">&amp;</span><span class="n">airflow</span><span class="o">-</span><span class="n">common</span><span class="o">-</span><span class="n">env</span>
-    <span class="n">AIRFLOW__CORE__EXECUTOR</span><span class="p">:</span> <span class="n">CeleryExecutor</span>
-    <span class="n">AIRFLOW__CORE__SQL_ALCHEMY_CONN</span><span class="p">:</span> <span class="n">postgresql</span><span class="o">+</span><span class="n">psycopg2</span><span class="p">:</span><span class="o">//</span><span class="n">airflow</span><span class="p">:</span><span class="n">airflow</span><span class="nd">@postgres</span><span class="o">/</span><span class="n">airflow</span>
-    <span class="n">AIRFLOW__CELERY__RESULT_BACKEND</span><span class="p">:</span> <span class="n">db</span><span class="o">+</span><span class="n">postgresql</span><span class="p">:</span><span class="o">//</span><span class="n">airflow</span><span class="p">:</span><span class="n">airflow</span><span class="nd">@postgres</span><span class="o">/</span><span class="n">airflow</span>
-    <span class="n">AIRFLOW__CELERY__BROKER_URL</span><span class="p">:</span> <span class="n">redis</span><span class="p">:</span><span class="o">//</span><span class="p">:</span><span class="nd">@redis</span><span class="p">:</span><span class="mi">6379</span><span class="o">/</span><span class="mi">0</span>
-    <span class="n">AIRFLOW__CORE__FERNET_KEY</span><span class="p">:</span> <span class="s1">''</span>
-    <span class="n">AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION</span><span class="p">:</span> <span class="s1">'true'</span>
-    <span class="n">AIRFLOW__CORE__LOAD_EXAMPLES</span><span class="p">:</span> <span class="s1">'false'</span>
-    <span class="n">AIRFLOW__API__AUTH_BACKEND</span><span class="p">:</span> <span class="s1">'airflow.api.auth.backend.basic_auth'</span>
-    <span class="n">_PIP_ADDITIONAL_REQUIREMENTS</span><span class="p">:</span> <span class="err">$</span><span class="p">{</span><span class="n">_PIP_ADDITIONAL_REQUIREMENTS</span><span class="p">:</span><span class="o">-</span><span class="p">}</span>
-    <span class="n">GOOGLE_APPLICATION_CREDENTIALS</span><span class="p">:</span> <span class="o">/.</span><span class="n">google</span><span class="o">/</span><span class="n">credentials</span><span class="o">/</span><span class="n">google_credentials</span><span class="o">.</span><span class="n">json</span>
-    <span class="n">AIRFLOW_CONN_GOOGLE_CLOUD_DEFAULT</span><span class="p">:</span> <span class="s1">'google-cloud-platform://?extra__google_cloud_platform__key_path=/.google/credentials/google_credentials.json'</span>
-    <span class="n">GCP_PROJECT_ID</span><span class="p">:</span> <span class="s1">'pivotal-surfer-336713'</span>
-    <span class="n">GCP_GCS_BUCKET</span><span class="p">:</span> <span class="s2">"dtc_data_lake_pivotal-surfer-336713"</span>
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="highlight"><pre><span></span>build:
+    context: .
+    dockerfile: ./Dockerfile
+  environment:
+    <span class="p">&amp;</span>airflow-common-env
+    AIRFLOW__CORE__EXECUTOR: CeleryExecutor
+    AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+    AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://airflow:airflow@postgres/airflow
+    AIRFLOW__CELERY__BROKER_URL: redis://:@redis:6379/0
+    AIRFLOW__CORE__FERNET_KEY: <span class="s1">''</span>
+    AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: <span class="s1">'true'</span>
+    AIRFLOW__CORE__LOAD_EXAMPLES: <span class="s1">'false'</span>
+    AIRFLOW__API__AUTH_BACKEND: <span class="s1">'airflow.api.auth.backend.basic_auth'</span>
+    _PIP_ADDITIONAL_REQUIREMENTS: <span class="si">${</span><span class="nv">_PIP_ADDITIONAL_REQUIREMENTS</span><span class="k">:-</span><span class="si">}</span>
+    GOOGLE_APPLICATION_CREDENTIALS: /.google/credentials/google_credentials.json
+    AIRFLOW_CONN_GOOGLE_CLOUD_DEFAULT: <span class="s1">'google-cloud-platform://?extra__google_cloud_platform__key_path=/.google/credentials/google_credentials.json'</span>
+    GCP_PROJECT_ID: <span class="s1">'pivotal-surfer-336713'</span>
+    GCP_GCS_BUCKET: <span class="s2">"dtc_data_lake_pivotal-surfer-336713"</span>
 
-  <span class="n">volumes</span><span class="p">:</span>
-    <span class="o">-</span> <span class="o">./</span><span class="n">dags</span><span class="p">:</span><span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">airflow</span><span class="o">/</span><span class="n">dags</span>
-    <span class="o">-</span> <span class="o">./</span><span class="n">logs</span><span class="p">:</span><span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">airflow</span><span class="o">/</span><span class="n">logs</span>
-    <span class="o">-</span> <span class="o">./</span><span class="n">plugins</span><span class="p">:</span><span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">airflow</span><span class="o">/</span><span class="n">plugins</span>
-    <span class="o">-</span> <span class="o">~/.</span><span class="n">google</span><span class="o">/</span><span class="n">credentials</span><span class="o">/</span><span class="p">:</span><span class="o">/.</span><span class="n">google</span><span class="o">/</span><span class="n">credentials</span><span class="p">:</span><span class="n">ro</span>
+  volumes:
+    - ./dags:/opt/airflow/dags
+    - ./logs:/opt/airflow/logs
+    - ./plugins:/opt/airflow/plugins
+    - ~/.google/credentials/:/.google/credentials:ro
 </pre></div>
 
-    </div>
 </div>
 </div>
-
 </div>
-    
-
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -789,61 +741,53 @@ The Dockerfile has the custom packages to be installed. The one we'll need the m
 </div>
 </div>
 </div>
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
+<div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># First-time build can take upto 10 mins.</span>
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="highlight"><pre><span></span><span class="c1"># First-time build can take upto 10 mins.</span>
 
-<span class="n">FROM</span> <span class="n">apache</span><span class="o">/</span><span class="n">airflow</span><span class="p">:</span><span class="mf">2.2</span><span class="o">.</span><span class="mi">3</span>
+FROM apache/airflow:2.2.3
 
-<span class="n">ENV</span> <span class="n">AIRFLOW_HOME</span><span class="o">=/</span><span class="n">opt</span><span class="o">/</span><span class="n">airflow</span>
+ENV <span class="nv">AIRFLOW_HOME</span><span class="o">=</span>/opt/airflow
 
-<span class="n">USER</span> <span class="n">root</span>
-<span class="n">RUN</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">update</span> <span class="o">-</span><span class="n">qq</span> <span class="o">&amp;&amp;</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">vim</span> <span class="o">-</span><span class="n">qqq</span>
+USER root
+RUN apt-get update -qq <span class="o">&amp;&amp;</span> apt-get install vim -qqq
 <span class="c1"># git gcc g++ -qqq</span>
 
-<span class="n">COPY</span> <span class="n">requirements</span><span class="o">.</span><span class="n">txt</span> <span class="o">.</span>
-<span class="n">RUN</span> <span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">cache</span><span class="o">-</span><span class="nb">dir</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">.</span><span class="n">txt</span>
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
 
 <span class="c1"># Ref: https://airflow.apache.org/docs/docker-stack/recipes.html</span>
 
-<span class="n">SHELL</span> <span class="p">[</span><span class="s2">"/bin/bash"</span><span class="p">,</span> <span class="s2">"-o"</span><span class="p">,</span> <span class="s2">"pipefail"</span><span class="p">,</span> <span class="s2">"-e"</span><span class="p">,</span> <span class="s2">"-u"</span><span class="p">,</span> <span class="s2">"-x"</span><span class="p">,</span> <span class="s2">"-c"</span><span class="p">]</span>
+SHELL <span class="o">[</span><span class="s2">"/bin/bash"</span>, <span class="s2">"-o"</span>, <span class="s2">"pipefail"</span>, <span class="s2">"-e"</span>, <span class="s2">"-u"</span>, <span class="s2">"-x"</span>, <span class="s2">"-c"</span><span class="o">]</span>
 
-<span class="n">ARG</span> <span class="n">CLOUD_SDK_VERSION</span><span class="o">=</span><span class="mf">322.0</span><span class="o">.</span><span class="mi">0</span>
-<span class="n">ENV</span> <span class="n">GCLOUD_HOME</span><span class="o">=/</span><span class="n">home</span><span class="o">/</span><span class="n">google</span><span class="o">-</span><span class="n">cloud</span><span class="o">-</span><span class="n">sdk</span>
+ARG <span class="nv">CLOUD_SDK_VERSION</span><span class="o">=</span><span class="m">322</span>.0.0
+ENV <span class="nv">GCLOUD_HOME</span><span class="o">=</span>/home/google-cloud-sdk
 
-<span class="n">ENV</span> <span class="n">PATH</span><span class="o">=</span><span class="s2">"$</span><span class="si">{GCLOUD_HOME}</span><span class="s2">/bin/:$</span><span class="si">{PATH}</span><span class="s2">"</span>
+ENV <span class="nv">PATH</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">GCLOUD_HOME</span><span class="si">}</span><span class="s2">/bin/:</span><span class="si">${</span><span class="nv">PATH</span><span class="si">}</span><span class="s2">"</span>
 
-<span class="n">RUN</span> <span class="n">DOWNLOAD_URL</span><span class="o">=</span><span class="s2">"https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-$</span><span class="si">{CLOUD_SDK_VERSION}</span><span class="s2">-linux-x86_64.tar.gz"</span> \
-    <span class="o">&amp;&amp;</span> <span class="n">TMP_DIR</span><span class="o">=</span><span class="s2">"$(mktemp -d)"</span> \
-    <span class="o">&amp;&amp;</span> <span class="n">curl</span> <span class="o">-</span><span class="n">fL</span> <span class="s2">"$</span><span class="si">{DOWNLOAD_URL}</span><span class="s2">"</span> <span class="o">--</span><span class="n">output</span> <span class="s2">"$</span><span class="si">{TMP_DIR}</span><span class="s2">/google-cloud-sdk.tar.gz"</span> \
-    <span class="o">&amp;&amp;</span> <span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="s2">"$</span><span class="si">{GCLOUD_HOME}</span><span class="s2">"</span> \
-    <span class="o">&amp;&amp;</span> <span class="n">tar</span> <span class="n">xzf</span> <span class="s2">"$</span><span class="si">{TMP_DIR}</span><span class="s2">/google-cloud-sdk.tar.gz"</span> <span class="o">-</span><span class="n">C</span> <span class="s2">"$</span><span class="si">{GCLOUD_HOME}</span><span class="s2">"</span> <span class="o">--</span><span class="n">strip</span><span class="o">-</span><span class="n">components</span><span class="o">=</span><span class="mi">1</span> \
-    <span class="o">&amp;&amp;</span> <span class="s2">"$</span><span class="si">{GCLOUD_HOME}</span><span class="s2">/install.sh"</span> \
-       <span class="o">--</span><span class="n">bash</span><span class="o">-</span><span class="n">completion</span><span class="o">=</span><span class="n">false</span> \
-       <span class="o">--</span><span class="n">path</span><span class="o">-</span><span class="n">update</span><span class="o">=</span><span class="n">false</span> \
-       <span class="o">--</span><span class="n">usage</span><span class="o">-</span><span class="n">reporting</span><span class="o">=</span><span class="n">false</span> \
-       <span class="o">--</span><span class="n">quiet</span> \
-    <span class="o">&amp;&amp;</span> <span class="n">rm</span> <span class="o">-</span><span class="n">rf</span> <span class="s2">"$</span><span class="si">{TMP_DIR}</span><span class="s2">"</span> \
-    <span class="o">&amp;&amp;</span> <span class="n">gcloud</span> <span class="o">--</span><span class="n">version</span>
+RUN <span class="nv">DOWNLOAD_URL</span><span class="o">=</span><span class="s2">"https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-</span><span class="si">${</span><span class="nv">CLOUD_SDK_VERSION</span><span class="si">}</span><span class="s2">-linux-x86_64.tar.gz"</span> <span class="se">\</span>
+    <span class="o">&amp;&amp;</span> <span class="nv">TMP_DIR</span><span class="o">=</span><span class="s2">"</span><span class="k">$(</span>mktemp -d<span class="k">)</span><span class="s2">"</span> <span class="se">\</span>
+    <span class="o">&amp;&amp;</span> curl -fL <span class="s2">"</span><span class="si">${</span><span class="nv">DOWNLOAD_URL</span><span class="si">}</span><span class="s2">"</span> --output <span class="s2">"</span><span class="si">${</span><span class="nv">TMP_DIR</span><span class="si">}</span><span class="s2">/google-cloud-sdk.tar.gz"</span> <span class="se">\</span>
+    <span class="o">&amp;&amp;</span> mkdir -p <span class="s2">"</span><span class="si">${</span><span class="nv">GCLOUD_HOME</span><span class="si">}</span><span class="s2">"</span> <span class="se">\</span>
+    <span class="o">&amp;&amp;</span> tar xzf <span class="s2">"</span><span class="si">${</span><span class="nv">TMP_DIR</span><span class="si">}</span><span class="s2">/google-cloud-sdk.tar.gz"</span> -C <span class="s2">"</span><span class="si">${</span><span class="nv">GCLOUD_HOME</span><span class="si">}</span><span class="s2">"</span> --strip-components<span class="o">=</span><span class="m">1</span> <span class="se">\</span>
+    <span class="o">&amp;&amp;</span> <span class="s2">"</span><span class="si">${</span><span class="nv">GCLOUD_HOME</span><span class="si">}</span><span class="s2">/install.sh"</span> <span class="se">\</span>
+       --bash-completion<span class="o">=</span><span class="nb">false</span> <span class="se">\</span>
+       --path-update<span class="o">=</span><span class="nb">false</span> <span class="se">\</span>
+       --usage-reporting<span class="o">=</span><span class="nb">false</span> <span class="se">\</span>
+       --quiet <span class="se">\</span>
+    <span class="o">&amp;&amp;</span> rm -rf <span class="s2">"</span><span class="si">${</span><span class="nv">TMP_DIR</span><span class="si">}</span><span class="s2">"</span> <span class="se">\</span>
+    <span class="o">&amp;&amp;</span> gcloud --version
 
-<span class="n">WORKDIR</span> <span class="err">$</span><span class="n">AIRFLOW_HOME</span>
+WORKDIR <span class="nv">$AIRFLOW_HOME</span>
 
-<span class="n">USER</span> <span class="err">$</span><span class="n">AIRFLOW_UID</span>
+USER <span class="nv">$AIRFLOW_UID</span>
 </pre></div>
 
-    </div>
 </div>
 </div>
-
 </div>
-    
-
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -852,24 +796,16 @@ The Dockerfile has the custom packages to be installed. The one we'll need the m
 </div>
 </div>
 </div>
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
+<div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">apache</span><span class="o">-</span><span class="n">airflow</span><span class="o">-</span><span class="n">providers</span><span class="o">-</span><span class="n">google</span>
-<span class="n">pyarrow</span>
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="highlight"><pre><span></span>apache-airflow-providers-google
+pyarrow
 </pre></div>
 
-    </div>
 </div>
 </div>
-
 </div>
-    
-
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -878,52 +814,44 @@ The Dockerfile has the custom packages to be installed. The one we'll need the m
 </div>
 </div>
 </div>
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
+<div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">version</span><span class="p">:</span> <span class="s1">'3.7'</span>
-<span class="n">services</span><span class="p">:</span>
-    <span class="n">webserver</span><span class="p">:</span>
-        <span class="n">container_name</span><span class="p">:</span> <span class="n">airflow</span>
-        <span class="n">build</span><span class="p">:</span>
-            <span class="n">context</span><span class="p">:</span> <span class="o">..</span>
-            <span class="n">dockerfile</span><span class="p">:</span> <span class="o">../</span><span class="n">Dockerfile</span>
-        <span class="n">environment</span><span class="p">:</span>
-            <span class="o">-</span> <span class="n">PYTHONPATH</span><span class="o">=/</span><span class="n">home</span><span class="o">/</span><span class="n">airflow</span>
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="highlight"><pre><span></span>version: <span class="s1">'3.7'</span>
+services:
+    webserver:
+        container_name: airflow
+        build:
+            context: ..
+            dockerfile: ../Dockerfile
+        environment:
+            - <span class="nv">PYTHONPATH</span><span class="o">=</span>/home/airflow
             <span class="c1"># airflow connection with SQLAlchemy container</span>
-            <span class="o">-</span> <span class="n">AIRFLOW__CORE__SQL_ALCHEMY_CONN</span><span class="o">=</span><span class="n">sqlite</span><span class="p">:</span><span class="o">///</span><span class="err">$</span><span class="n">AIRFLOW_HOME</span><span class="o">/</span><span class="n">airflow</span><span class="o">.</span><span class="n">db</span>
-            <span class="o">-</span> <span class="n">AIRFLOW__CORE__EXECUTOR</span><span class="o">=</span><span class="n">LocalExecutor</span>
+            - <span class="nv">AIRFLOW__CORE__SQL_ALCHEMY_CONN</span><span class="o">=</span>sqlite:///<span class="nv">$AIRFLOW_HOME</span>/airflow.db
+            - <span class="nv">AIRFLOW__CORE__EXECUTOR</span><span class="o">=</span>LocalExecutor
             <span class="c1"># disable example loading</span>
-            <span class="o">-</span> <span class="n">AIRFLOW__CORE__LOAD_EXAMPLES</span><span class="o">=</span><span class="n">FALSE</span>
+            - <span class="nv">AIRFLOW__CORE__LOAD_EXAMPLES</span><span class="o">=</span>FALSE
 
-        <span class="n">volumes</span><span class="p">:</span>
-            <span class="o">-</span> <span class="o">./</span><span class="n">dags</span><span class="p">:</span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">airflow</span><span class="o">/</span><span class="n">dags</span>
+        volumes:
+            - ./dags:/home/airflow/dags
         <span class="c1"># user: "${AIRFLOW_UID:-50000}:0"</span>
-        <span class="n">ports</span><span class="p">:</span>
-            <span class="o">-</span> <span class="s2">"8080:8080"</span>
-        <span class="n">command</span><span class="p">:</span> <span class="o">&gt;</span>  <span class="c1"># airflow db upgrade;</span>
-            <span class="n">bash</span> <span class="o">-</span><span class="n">c</span> <span class="s2">"</span>
-                <span class="n">airflow</span> <span class="n">scheduler</span> <span class="o">-</span><span class="n">D</span><span class="p">;</span>
-                <span class="n">rm</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">airflow</span><span class="o">/</span><span class="n">airflow</span><span class="o">-</span><span class="n">scheduler</span><span class="o">.*</span><span class="p">;</span>
-                <span class="n">airflow</span> <span class="n">webserver</span><span class="s2">"</span>
-        <span class="n">healthcheck</span><span class="p">:</span>
-            <span class="n">test</span><span class="p">:</span> <span class="p">[</span> <span class="s2">"CMD-SHELL"</span><span class="p">,</span> <span class="s2">"[ -f /home/airflow/airflow-webserver.pid ]"</span> <span class="p">]</span>
-            <span class="n">interval</span><span class="p">:</span> <span class="mi">30</span><span class="n">s</span>
-            <span class="n">timeout</span><span class="p">:</span> <span class="mi">30</span><span class="n">s</span>
-            <span class="n">retries</span><span class="p">:</span> <span class="mi">3</span>
+        ports:
+            - <span class="s2">"8080:8080"</span>
+        command: &gt;  <span class="c1"># airflow db upgrade;</span>
+            bash -c <span class="s2">"</span>
+<span class="s2">                airflow scheduler -D;</span>
+<span class="s2">                rm /home/airflow/airflow-scheduler.*;</span>
+<span class="s2">                airflow webserver"</span>
+        healthcheck:
+            test: <span class="o">[</span> <span class="s2">"CMD-SHELL"</span>, <span class="s2">"[ -f /home/airflow/airflow-webserver.pid ]"</span> <span class="o">]</span>
+            interval: 30s
+            timeout: 30s
+            retries: <span class="m">3</span>
 </pre></div>
 
-    </div>
 </div>
 </div>
-
 </div>
-    
-
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -949,24 +877,16 @@ The Dockerfile has the custom packages to be installed. The one we'll need the m
 </div>
 </div>
 </div>
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
+<div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="o">./</span><span class="n">dags</span> <span class="o">./</span><span class="n">logs</span> <span class="o">./</span><span class="n">plugins</span>
-<span class="n">echo</span> <span class="o">-</span><span class="n">e</span> <span class="s2">"AIRFLOW_UID=$(id -u)"</span> <span class="o">&gt;</span> <span class="o">.</span><span class="n">env</span>
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="highlight"><pre><span></span>mkdir -p ./dags ./logs ./plugins
+<span class="nb">echo</span> -e <span class="s2">"AIRFLOW_UID=</span><span class="k">$(</span>id -u<span class="k">)</span><span class="s2">"</span> &gt; .env
 </pre></div>
 
-    </div>
 </div>
 </div>
-
 </div>
-    
-
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -1008,25 +928,17 @@ The Dockerfile has the custom packages to be installed. The one we'll need the m
 </div>
 </div>
 </div>
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
+<div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">build</span>
-<span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">up</span> <span class="n">airflow</span><span class="o">-</span><span class="n">init</span>
-<span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">up</span>
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="highlight"><pre><span></span>docker-compose build
+docker-compose up airflow-init
+docker-compose up
 </pre></div>
 
-    </div>
 </div>
 </div>
-
 </div>
-    
-
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -1036,23 +948,15 @@ The Dockerfile has the custom packages to be installed. The one we'll need the m
 </div>
 </div>
 </div>
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
+<div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">ps</span>
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="highlight"><pre><span></span>docker-compose ps
 </pre></div>
 
-    </div>
 </div>
 </div>
-
 </div>
-    
-
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -1383,23 +1287,15 @@ The Dockerfile has the custom packages to be installed. The one we'll need the m
 </div>
 </div>
 </div>
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
+<div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">down</span>
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="highlight"><pre><span></span>docker-compose down
 </pre></div>
 
-    </div>
 </div>
 </div>
-
 </div>
-    
-
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -1408,27 +1304,17 @@ The Dockerfile has the custom packages to be installed. The one we'll need the m
 </div>
 </div>
 </div>
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
+<div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">down</span> <span class="o">--</span><span class="n">volumes</span> <span class="o">--</span><span class="n">rmi</span> <span class="nb">all</span>
-
-<span class="ow">or</span>
-
-<span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">down</span> <span class="o">--</span><span class="n">volumes</span> <span class="o">--</span><span class="n">remove</span><span class="o">-</span><span class="n">orphans</span>
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="highlight"><pre><span></span>docker-compose down --volumes --rmi all
+or
+docker-compose down --volumes --remove-orphans
 </pre></div>
 
-    </div>
 </div>
 </div>
-
 </div>
-    
-
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -1635,28 +1521,19 @@ networks:
 </div>
 </div>
 </div>
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
+<div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">docker</span> <span class="n">exec</span> <span class="o">-</span><span class="n">it</span> <span class="o">&lt;</span><span class="n">container</span> <span class="nb">id</span><span class="o">&gt;</span> <span class="n">bash</span>
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="highlight"><pre><span></span>docker <span class="nb">exec</span> -it &lt;container id&gt; bash
 <span class="c1"># then type python to open python </span>
-<span class="o">&gt;&gt;</span> <span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">create_engine</span>
-<span class="o">&gt;&gt;</span> <span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="s1">'postgresql://root:root@pgdatabase:5432/ny_taxi'</span><span class="p">)</span>
-<span class="o">&gt;&gt;</span> <span class="n">engine</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+&gt; &gt; from sqlalchemy import create_engine
+&gt;&gt; <span class="nv">engine</span> <span class="o">=</span> create_engine<span class="o">(</span><span class="s1">'postgresql://root:root@pgdatabase:5432/ny_taxi'</span><span class="o">)</span>&gt;&gt; engine.connect<span class="o">()</span>
 <span class="c1"># no error here</span>
 </pre></div>
 
-    </div>
 </div>
 </div>
-
 </div>
-    
-
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -1666,23 +1543,15 @@ networks:
 </div>
 </div>
 </div>
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
+<div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">down</span>
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="highlight"><pre><span></span>docker-compose down
 </pre></div>
 
-    </div>
 </div>
 </div>
-
 </div>
-    
-
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -1691,27 +1560,17 @@ networks:
 </div>
 </div>
 </div>
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
+<div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">down</span> <span class="o">--</span><span class="n">volumes</span> <span class="o">--</span><span class="n">rmi</span> <span class="nb">all</span>
-
-<span class="ow">or</span>
-
-<span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">down</span> <span class="o">--</span><span class="n">volumes</span> <span class="o">--</span><span class="n">remove</span><span class="o">-</span><span class="n">orphans</span>
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="highlight"><pre><span></span>docker-compose down --volumes --rmi all
+or
+docker-compose down --volumes --remove-orphans
 </pre></div>
 
-    </div>
 </div>
 </div>
-
 </div>
-    
-
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">

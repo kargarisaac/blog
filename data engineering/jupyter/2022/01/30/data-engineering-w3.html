@@ -303,37 +303,22 @@ When a query aggregates data based on the values in the clustering columns, perf
 BigQuery supports clustering over both partitioned and non-partitioned tables. When you use clustering and partitioning together, your data can be partitioned by a DATE or TIMESTAMP column and then clustered on a different set of columns (up to four columns). [<a href="https://cloud.google.com/blog/topics/developers-practitioners/bigquery-explained-storage-overview">source</a>]</p>
 <p>Check the previous video and also <a href="https://cloud.google.com/blog/topics/developers-practitioners/bigquery-explained-storage-overview">here</a> to see an example of the performance gain.</p>
 <p>The example SQL query can be like this:</p>
-
-</div>
-</div>
-</div>
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">CREATE</span> <span class="n">OR</span> <span class="n">REPLACE</span> <span class="n">TABLE</span> <span class="err">`</span><span class="n">stackoverflow</span><span class="o">.</span><span class="n">questions_2018_clustered</span><span class="err">`</span>
-<span class="n">PARTITION</span> <span class="n">BY</span>
- <span class="n">DATE</span><span class="p">(</span><span class="n">creation_date</span><span class="p">)</span>
-<span class="n">CLUSTER</span> <span class="n">BY</span>
- <span class="n">tags</span> <span class="n">AS</span>
-<span class="n">SELECT</span>
- <span class="o">*</span>
-<span class="n">FROM</span>
- <span class="err">`</span><span class="n">bigquery</span><span class="o">-</span><span class="n">public</span><span class="o">-</span><span class="n">data</span><span class="o">.</span><span class="n">stackoverflow</span><span class="o">.</span><span class="n">posts_questions</span><span class="err">`</span>
-<span class="n">WHERE</span>
- <span class="n">creation_date</span> <span class="n">BETWEEN</span> <span class="s1">'2018-01-01'</span> <span class="n">AND</span> <span class="s1">'2018-07-01'</span><span class="p">;</span>
+<div class="highlight"><pre><span></span>CREATE OR REPLACE TABLE <span class="sb">`</span>stackoverflow.questions_2018_clustered<span class="sb">`</span>
+PARTITION BY
+ DATE<span class="o">(</span>creation_date<span class="o">)</span>
+CLUSTER BY
+ tags AS
+SELECT
+ *
+FROM
+ <span class="sb">`</span>bigquery-public-data.stackoverflow.posts_questions<span class="sb">`</span>
+WHERE
+ creation_date BETWEEN <span class="s1">'2018-01-01'</span> AND <span class="s1">'2018-07-01'</span><span class="p">;</span>
 </pre></div>
 
-    </div>
 </div>
 </div>
-
 </div>
-    
-
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">

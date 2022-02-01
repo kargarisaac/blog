@@ -1149,18 +1149,7 @@ The Dockerfile has the custom packages to be installed. The one we'll need the m
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>The structure of a DAG file is as follows:</p>
-
-</div>
-</div>
-</div>
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Imports</span>
+<div class="highlight"><pre><span></span><span class="c1"># Imports</span>
 <span class="kn">from</span> <span class="nn">airflow</span> <span class="kn">import</span> <span class="n">DAG</span>
 <span class="o">...</span>
 
@@ -1192,13 +1181,9 @@ The Dockerfile has the custom packages to be installed. The one we'll need the m
     <span class="n">t1</span> <span class="o">&gt;&gt;</span> <span class="p">[</span><span class="n">t2</span><span class="p">,</span> <span class="n">t3</span><span class="p">]</span>
 </pre></div>
 
-    </div>
 </div>
 </div>
-
 </div>
-    
-
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -1250,14 +1235,10 @@ The Dockerfile has the custom packages to be installed. The one we'll need the m
 </div>
 </div>
 </div>
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
+<div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 
 <span class="kn">from</span> <span class="nn">airflow</span> <span class="kn">import</span> <span class="n">DAG</span>
@@ -1369,13 +1350,9 @@ The Dockerfile has the custom packages to be installed. The one we'll need the m
     <span class="n">download_dataset_task</span> <span class="o">&gt;&gt;</span> <span class="n">format_to_parquet_task</span> <span class="o">&gt;&gt;</span> <span class="n">local_to_gcs_task</span> <span class="o">&gt;&gt;</span> <span class="n">bigquery_external_table_task</span>
 </pre></div>
 
-    </div>
 </div>
 </div>
-
 </div>
-    
-
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -1478,14 +1455,10 @@ The Dockerfile has the custom packages to be installed. The one we'll need the m
 </div>
 </div>
 </div>
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
+<div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
 
@@ -1515,9 +1488,9 @@ The Dockerfile has the custom packages to be installed. The one we'll need the m
 
 
 <span class="n">URL_PREFIX</span> <span class="o">=</span> <span class="s1">'https://s3.amazonaws.com/nyc-tlc/trip+data'</span> 
-<span class="n">URL_TEMPLATE</span> <span class="o">=</span> <span class="n">URL_PREFIX</span> <span class="o">+</span> <span class="s1">'/yellow_tripdata_{{ execution_date.strftime(</span><span class="se">\'</span><span class="s1">%Y-%m</span><span class="se">\'</span><span class="s1">) }}.csv'</span>
-<span class="n">OUTPUT_FILE_TEMPLATE</span> <span class="o">=</span> <span class="n">AIRFLOW_HOME</span> <span class="o">+</span> <span class="s1">'/output_{{ execution_date.strftime(</span><span class="se">\'</span><span class="s1">%Y-%m</span><span class="se">\'</span><span class="s1">) }}.csv'</span>
-<span class="n">TABLE_NAME_TEMPLATE</span> <span class="o">=</span> <span class="s1">'yellow_taxi_{{ execution_date.strftime(</span><span class="se">\'</span><span class="s1">%Y_%m</span><span class="se">\'</span><span class="s1">) }}'</span>
+<span class="n">URL_TEMPLATE</span> <span class="o">=</span> <span class="n">URL_PREFIX</span> <span class="o">+</span> <span class="s1">'/yellow_tripdata_.csv'</span>
+<span class="n">OUTPUT_FILE_TEMPLATE</span> <span class="o">=</span> <span class="n">AIRFLOW_HOME</span> <span class="o">+</span> <span class="s1">'/output_.csv'</span>
+<span class="n">TABLE_NAME_TEMPLATE</span> <span class="o">=</span> <span class="s1">'yellow_taxi_'</span>
 
 <span class="k">with</span> <span class="n">local_workflow</span><span class="p">:</span>
     <span class="n">wget_task</span> <span class="o">=</span> <span class="n">BashOperator</span><span class="p">(</span>
@@ -1542,13 +1515,9 @@ The Dockerfile has the custom packages to be installed. The one we'll need the m
     <span class="n">wget_task</span> <span class="o">&gt;&gt;</span> <span class="n">ingest_task</span>
 </pre></div>
 
-    </div>
 </div>
 </div>
-
 </div>
-    
-
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -1557,14 +1526,10 @@ The Dockerfile has the custom packages to be installed. The one we'll need the m
 </div>
 </div>
 </div>
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
+<div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 
 <span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
 
@@ -1614,13 +1579,9 @@ The Dockerfile has the custom packages to be installed. The one we'll need the m
         <span class="nb">print</span><span class="p">(</span><span class="s1">'inserted another chunk, took </span><span class="si">%.3f</span><span class="s1"> second'</span> <span class="o">%</span> <span class="p">(</span><span class="n">t_end</span> <span class="o">-</span> <span class="n">t_start</span><span class="p">))</span>
 </pre></div>
 
-    </div>
 </div>
 </div>
-
 </div>
-    
-
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -1630,48 +1591,40 @@ The Dockerfile has the custom packages to be installed. The one we'll need the m
 </div>
 </div>
 </div>
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
+<div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># docker-compose.yaml of week 1</span>
-<span class="n">services</span><span class="p">:</span>
-    <span class="n">pgdatabase</span><span class="p">:</span>
-        <span class="n">image</span><span class="p">:</span> <span class="n">postgres</span><span class="p">:</span><span class="mi">13</span>
-        <span class="n">environment</span><span class="p">:</span>
-            <span class="o">-</span> <span class="n">POSTGRES_USER</span><span class="o">=</span><span class="n">root</span>
-            <span class="o">-</span> <span class="n">POSTGRES_PASSWORD</span><span class="o">=</span><span class="n">root</span>
-            <span class="o">-</span> <span class="n">POSTGRES_DB</span><span class="o">=</span><span class="n">ny_taxi</span>
-        <span class="n">volumes</span><span class="p">:</span>
-            <span class="o">-</span> <span class="s2">"./ny_taxi_postgres_data:/var/lib/postgresql/data:rw"</span>
-        <span class="n">ports</span><span class="p">:</span>
-            <span class="o">-</span> <span class="s2">"5432:5432"</span>
-        <span class="n">networks</span><span class="p">:</span>
-            <span class="o">-</span> <span class="n">airflow</span>
-    <span class="n">pgadmin</span><span class="p">:</span>
-        <span class="n">image</span><span class="p">:</span> <span class="n">dpage</span><span class="o">/</span><span class="n">pgadmin4</span>
-        <span class="n">environment</span><span class="p">:</span>
-            <span class="o">-</span> <span class="n">PGADMIN_DEFAULT_EMAIL</span><span class="o">=</span><span class="n">admin</span><span class="nd">@admin</span><span class="o">.</span><span class="n">com</span>
-            <span class="o">-</span> <span class="n">PGADMIN_DEFAULT_PASSWORD</span><span class="o">=</span><span class="n">root</span>
-        <span class="n">ports</span><span class="p">:</span>
-            <span class="o">-</span> <span class="s2">"8080:80"</span>
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="highlight"><pre><span></span><span class="c1"># docker-compose.yaml of week 1</span>
+services:
+    pgdatabase:
+        image: postgres:13
+        environment:
+            - <span class="nv">POSTGRES_USER</span><span class="o">=</span>root
+            - <span class="nv">POSTGRES_PASSWORD</span><span class="o">=</span>root
+            - <span class="nv">POSTGRES_DB</span><span class="o">=</span>ny_taxi
+        volumes:
+            - <span class="s2">"./ny_taxi_postgres_data:/var/lib/postgresql/data:rw"</span>
+        ports:
+            - <span class="s2">"5432:5432"</span>
+        networks:
+            - airflow
+    pgadmin:
+        image: dpage/pgadmin4
+        environment:
+            - <span class="nv">PGADMIN_DEFAULT_EMAIL</span><span class="o">=</span>admin@admin.com
+            - <span class="nv">PGADMIN_DEFAULT_PASSWORD</span><span class="o">=</span>root
+        ports:
+            - <span class="s2">"8080:80"</span>
 
-<span class="n">networks</span><span class="p">:</span>
-  <span class="n">airflow</span><span class="p">:</span>
-    <span class="n">external</span><span class="p">:</span>
-      <span class="n">name</span><span class="p">:</span> <span class="n">airflow_default</span>
+networks:
+  airflow:
+    external:
+      name: airflow_default
 </pre></div>
 
-    </div>
 </div>
 </div>
-
 </div>
-    
-
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">

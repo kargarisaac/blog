@@ -121,7 +121,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      8 min read
+      13 min read
     
 </span></p>
 
@@ -391,17 +391,263 @@ WHERE
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Other useful resources:</p>
-<ul>
-<li><a href="https://cloud.google.com/blog/products/data-analytics/new-blog-series-bigquery-explained-overview">BigQuery explained: An overview of BigQuery's architecture</a></li>
-<li>
-<a href="https://cloud.google.com/blog/topics/developers-practitioners/bigquery-explained-storage-overview">BigQuery explained: Storage overview, and how to partition and cluster your data for optimal performance</a>
+<p>Here are some example queries in BQ which shows how to do partitioning and clustering on a public available dataset in BQ [<a href="https://github.com/DataTalksClub/data-engineering-zoomcamp/blob/main/week_3_data_warehouse/big_query.sql">ref</a>]:</p>
+<div class="highlight"><pre><span></span><span class="c1">-- Query public available table</span>
+<span class="k">SELECT</span> <span class="n">station_id</span><span class="p">,</span> <span class="n">name</span> <span class="k">FROM</span>
+    <span class="n">bigquery</span><span class="o">-</span><span class="k">public</span><span class="o">-</span><span class="k">data</span><span class="p">.</span><span class="n">new_york_citibike</span><span class="p">.</span><span class="n">citibike_stations</span>
+<span class="k">LIMIT</span> <span class="mi">100</span><span class="p">;</span>
 
+
+<span class="c1">-- Creating external table referring to gcs path</span>
+<span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="k">EXTERNAL</span> <span class="k">TABLE</span> <span class="o">`</span><span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">external_yellow_tripdata</span><span class="o">`</span>
+<span class="k">OPTIONS</span> <span class="p">(</span>
+  <span class="n">format</span> <span class="o">=</span> <span class="s1">'CSV'</span><span class="p">,</span>
+  <span class="n">uris</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'gs://nyc-tl-data/trip data/yellow_tripdata_2019-*.csv'</span><span class="p">,</span> <span class="s1">'gs://nyc-tl-data/trip data/yellow_tripdata_2020-*.csv'</span><span class="p">]</span>
+<span class="p">);</span>
+
+<span class="c1">-- Check yello trip data</span>
+<span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">external_yellow_tripdata</span> <span class="k">limit</span> <span class="mi">10</span><span class="p">;</span>
+
+<span class="c1">-- Create a non partitioned table from external table</span>
+<span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="k">TABLE</span> <span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">yellow_tripdata_non_partitoned</span> <span class="k">AS</span>
+<span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">external_yellow_tripdata</span><span class="p">;</span>
+
+
+<span class="c1">-- Create a partitioned table from external table</span>
+<span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="k">TABLE</span> <span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">yellow_tripdata_partitoned</span>
+<span class="n">PARTITION</span> <span class="k">BY</span>
+  <span class="nb">DATE</span><span class="p">(</span><span class="n">tpep_pickup_datetime</span><span class="p">)</span> <span class="k">AS</span>
+<span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">external_yellow_tripdata</span><span class="p">;</span>
+
+<span class="c1">-- Impact of partition</span>
+<span class="c1">-- Scanning 1.6GB of data</span>
+<span class="k">SELECT</span> <span class="k">DISTINCT</span><span class="p">(</span><span class="n">VendorID</span><span class="p">)</span>
+<span class="k">FROM</span> <span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">yellow_tripdata_non_partitoned</span>
+<span class="k">WHERE</span> <span class="nb">DATE</span><span class="p">(</span><span class="n">tpep_pickup_datetime</span><span class="p">)</span> <span class="k">BETWEEN</span> <span class="s1">'2019-06-01'</span> <span class="k">AND</span> <span class="s1">'2019-06-30'</span><span class="p">;</span>
+
+<span class="c1">-- Scanning ~106 MB of DATA</span>
+<span class="k">SELECT</span> <span class="k">DISTINCT</span><span class="p">(</span><span class="n">VendorID</span><span class="p">)</span>
+<span class="k">FROM</span> <span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">yellow_tripdata_partitoned</span>
+<span class="k">WHERE</span> <span class="nb">DATE</span><span class="p">(</span><span class="n">tpep_pickup_datetime</span><span class="p">)</span> <span class="k">BETWEEN</span> <span class="s1">'2019-06-01'</span> <span class="k">AND</span> <span class="s1">'2019-06-30'</span><span class="p">;</span>
+
+<span class="c1">-- Let's look into the partitons</span>
+<span class="k">SELECT</span> <span class="k">table_name</span><span class="p">,</span> <span class="n">partition_id</span><span class="p">,</span> <span class="n">total_rows</span>
+<span class="k">FROM</span> <span class="o">`</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">INFORMATION_SCHEMA</span><span class="p">.</span><span class="n">PARTITIONS</span><span class="o">`</span>
+<span class="k">WHERE</span> <span class="k">table_name</span> <span class="o">=</span> <span class="s1">'yellow_tripdata_partitoned'</span>
+<span class="k">ORDER</span> <span class="k">BY</span> <span class="n">total_rows</span> <span class="k">DESC</span><span class="p">;</span>
+
+<span class="c1">-- Creating a partition and cluster table</span>
+<span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="k">TABLE</span> <span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">yellow_tripdata_partitoned_clustered</span>
+<span class="n">PARTITION</span> <span class="k">BY</span> <span class="nb">DATE</span><span class="p">(</span><span class="n">tpep_pickup_datetime</span><span class="p">)</span>
+<span class="k">CLUSTER</span> <span class="k">BY</span> <span class="n">VendorID</span> <span class="k">AS</span>
+<span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">external_yellow_tripdata</span><span class="p">;</span>
+
+<span class="c1">-- Query scans 1.1 GB</span>
+<span class="k">SELECT</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">as</span> <span class="n">trips</span>
+<span class="k">FROM</span> <span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">yellow_tripdata_partitoned</span>
+<span class="k">WHERE</span> <span class="nb">DATE</span><span class="p">(</span><span class="n">tpep_pickup_datetime</span><span class="p">)</span> <span class="k">BETWEEN</span> <span class="s1">'2019-06-01'</span> <span class="k">AND</span> <span class="s1">'2020-12-31'</span>
+  <span class="k">AND</span> <span class="n">VendorID</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+
+<span class="c1">-- Query scans 864.5 MB</span>
+<span class="k">SELECT</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">as</span> <span class="n">trips</span>
+<span class="k">FROM</span> <span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">yellow_tripdata_partitoned_clustered</span>
+<span class="k">WHERE</span> <span class="nb">DATE</span><span class="p">(</span><span class="n">tpep_pickup_datetime</span><span class="p">)</span> <span class="k">BETWEEN</span> <span class="s1">'2019-06-01'</span> <span class="k">AND</span> <span class="s1">'2020-12-31'</span>
+  <span class="k">AND</span> <span class="n">VendorID</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Furthermore, if you are curious to know about internals of BQ, you can check <a href="https://cloud.google.com/blog/products/data-analytics/new-blog-series-bigquery-explained-overview">here</a>, <a href="https://cloud.google.com/blog/topics/developers-practitioners/bigquery-explained-storage-overview">here</a> and also the following video.
+
+</p>
+<center>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/k81mLJVX08w" frameborder="0" allowfullscreen=""></iframe>
+</center>
+
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>It is also possible to do machine learning in BigQuery instead of doing it outside of it. BigQuery ML increases development speed by eliminating the need to move data.</p>
+<p>BigQuery ML supports the following types of models [<a href="https://cloud.google.com/bigquery-ml/docs/introduction">ref</a>]:</p>
+<ul>
+<li>Linear regression for forecasting; for example, the sales of an item on a given day. Labels are real-valued (they cannot be +/- infinity or NaN).</li>
+<li>Binary logistic regression for classification; for example, determining whether a customer will make a purchase. Labels must only have two possible values.</li>
+<li>Multiclass logistic regression for classification. These models can be used to predict multiple possible values such as whether an input is "low-value," "medium-value," or "high-value." Labels can have up to 50 unique values. In BigQuery ML, multiclass logistic regression training uses a multinomial classifier with a cross-entropy loss function.</li>
+<li>K-means clustering for data segmentation; for example, identifying customer segments. K-means is an unsupervised learning technique, so model training does not require labels nor split data for training or evaluation.</li>
+<li>Matrix Factorization for creating product recommendation systems. You can create product recommendations using historical customer behavior, transactions, and product ratings and then use those recommendations for personalized customer experiences.</li>
+<li>Time series for performing time-series forecasts. You can use this feature to create millions of time series models and use them for forecasting. The model automatically handles anomalies, seasonality, and holidays.</li>
+<li>Boosted Tree for creating XGBoost based classification and regression models.</li>
+<li>Deep Neural Network (DNN) for creating TensorFlow-based Deep Neural Networks for classification and regression models.</li>
+<li>AutoML Tables to create best-in-class models without feature engineering or model selection. AutoML Tables searches through a variety of model architectures to decide the best model.</li>
+<li>TensorFlow model importing. This feature lets you create BigQuery ML models from previously trained TensorFlow models, then perform prediction in BigQuery ML.</li>
+<li>Autoencoder for creating Tensorflow-based BigQuery ML models with the support of sparse data representations. The models can be used in BigQuery ML for tasks such as unsupervised anomaly detection and non-linear dimensionality reduction.</li>
+</ul>
+<p>Check <a href="https://cloud.google.com/bigquery-ml/docs/introduction">here</a> and the following video to learn more about how to train a linear regression model in BQ:
+
+</p>
+<center>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/B-WtpB0PuG4" frameborder="0" allowfullscreen=""></iframe>
+</center>
+
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Here is an example of training a liner regression model in BQ on the dataset we uploaded to GCS and BQ in the previous week using Airflow, and also how to do hyperparameter tuning:</p>
+<div class="highlight"><pre><span></span><span class="c1">-- SELECT THE COLUMNS INTERESTED FOR YOU</span>
+<span class="k">SELECT</span> <span class="n">passenger_count</span><span class="p">,</span> <span class="n">trip_distance</span><span class="p">,</span> <span class="n">PULocationID</span><span class="p">,</span> <span class="n">DOLocationID</span><span class="p">,</span> <span class="n">payment_type</span><span class="p">,</span> <span class="n">fare_amount</span><span class="p">,</span> <span class="n">tolls_amount</span><span class="p">,</span> <span class="n">tip_amount</span>
+<span class="k">FROM</span> <span class="o">`</span><span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">yellow_tripdata_partitoned</span><span class="o">`</span> <span class="k">WHERE</span> <span class="n">fare_amount</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="c1">-- CREATE A ML TABLE WITH APPROPRIATE TYPE</span>
+<span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="k">TABLE</span> <span class="o">`</span><span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">yellow_tripdata_ml</span><span class="o">`</span> <span class="p">(</span>
+<span class="o">`</span><span class="n">passenger_count</span><span class="o">`</span> <span class="nb">INTEGER</span><span class="p">,</span>
+<span class="o">`</span><span class="n">trip_distance</span><span class="o">`</span> <span class="n">FLOAT64</span><span class="p">,</span>
+<span class="o">`</span><span class="n">PULocationID</span><span class="o">`</span> <span class="n">STRING</span><span class="p">,</span>
+<span class="o">`</span><span class="n">DOLocationID</span><span class="o">`</span> <span class="n">STRING</span><span class="p">,</span>
+<span class="o">`</span><span class="n">payment_type</span><span class="o">`</span> <span class="n">STRING</span><span class="p">,</span>
+<span class="o">`</span><span class="n">fare_amount</span><span class="o">`</span> <span class="n">FLOAT64</span><span class="p">,</span>
+<span class="o">`</span><span class="n">tolls_amount</span><span class="o">`</span> <span class="n">FLOAT64</span><span class="p">,</span>
+<span class="o">`</span><span class="n">tip_amount</span><span class="o">`</span> <span class="n">FLOAT64</span>
+<span class="p">)</span> <span class="k">AS</span> <span class="p">(</span>
+<span class="k">SELECT</span> <span class="n">passenger_count</span><span class="p">,</span> <span class="n">trip_distance</span><span class="p">,</span> <span class="k">cast</span><span class="p">(</span><span class="n">PULocationID</span> <span class="k">AS</span> <span class="n">STRING</span><span class="p">),</span> <span class="k">CAST</span><span class="p">(</span><span class="n">DOLocationID</span> <span class="k">AS</span> <span class="n">STRING</span><span class="p">),</span>
+<span class="k">CAST</span><span class="p">(</span><span class="n">payment_type</span> <span class="k">AS</span> <span class="n">STRING</span><span class="p">),</span> <span class="n">fare_amount</span><span class="p">,</span> <span class="n">tolls_amount</span><span class="p">,</span> <span class="n">tip_amount</span>
+<span class="k">FROM</span> <span class="o">`</span><span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">yellow_tripdata_partitoned</span><span class="o">`</span> <span class="k">WHERE</span> <span class="n">fare_amount</span> <span class="o">!=</span> <span class="mi">0</span>
+<span class="p">);</span>
+
+<span class="c1">-- CREATE MODEL WITH DEFAULT SETTING</span>
+<span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="n">MODEL</span> <span class="o">`</span><span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">tip_model</span><span class="o">`</span>
+<span class="k">OPTIONS</span>
+<span class="p">(</span><span class="n">model_type</span><span class="o">=</span><span class="s1">'linear_reg'</span><span class="p">,</span>
+<span class="n">input_label_cols</span><span class="o">=</span><span class="p">[</span><span class="s1">'tip_amount'</span><span class="p">],</span>
+<span class="n">DATA_SPLIT_METHOD</span><span class="o">=</span><span class="s1">'AUTO_SPLIT'</span><span class="p">)</span> <span class="k">AS</span>
+<span class="k">SELECT</span>
+<span class="o">*</span>
+<span class="k">FROM</span>
+<span class="o">`</span><span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">yellow_tripdata_ml</span><span class="o">`</span>
+<span class="k">WHERE</span>
+<span class="n">tip_amount</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">;</span>
+
+<span class="c1">-- CHECK FEATURES</span>
+<span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">ML</span><span class="p">.</span><span class="n">FEATURE_INFO</span><span class="p">(</span><span class="n">MODEL</span> <span class="o">`</span><span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">tip_model</span><span class="o">`</span><span class="p">);</span>
+
+<span class="c1">-- EVALUATE THE MODEL</span>
+<span class="k">SELECT</span>
+<span class="o">*</span>
+<span class="k">FROM</span>
+<span class="n">ML</span><span class="p">.</span><span class="n">EVALUATE</span><span class="p">(</span><span class="n">MODEL</span> <span class="o">`</span><span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">tip_model</span><span class="o">`</span><span class="p">,</span>
+<span class="p">(</span>
+<span class="k">SELECT</span>
+<span class="o">*</span>
+<span class="k">FROM</span>
+<span class="o">`</span><span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">yellow_tripdata_ml</span><span class="o">`</span>
+<span class="k">WHERE</span>
+<span class="n">tip_amount</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span>
+<span class="p">));</span>
+
+<span class="c1">-- PREDICT THE MODEL</span>
+<span class="k">SELECT</span>
+<span class="o">*</span>
+<span class="k">FROM</span>
+<span class="n">ML</span><span class="p">.</span><span class="n">PREDICT</span><span class="p">(</span><span class="n">MODEL</span> <span class="o">`</span><span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">tip_model</span><span class="o">`</span><span class="p">,</span>
+<span class="p">(</span>
+<span class="k">SELECT</span>
+<span class="o">*</span>
+<span class="k">FROM</span>
+<span class="o">`</span><span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">yellow_tripdata_ml</span><span class="o">`</span>
+<span class="k">WHERE</span>
+<span class="n">tip_amount</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span>
+<span class="p">));</span>
+
+<span class="c1">-- PREDICT AND EXPLAIN</span>
+<span class="k">SELECT</span>
+<span class="o">*</span>
+<span class="k">FROM</span>
+<span class="n">ML</span><span class="p">.</span><span class="n">EXPLAIN_PREDICT</span><span class="p">(</span><span class="n">MODEL</span> <span class="o">`</span><span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">tip_model</span><span class="o">`</span><span class="p">,</span>
+<span class="p">(</span>
+<span class="k">SELECT</span>
+<span class="o">*</span>
+<span class="k">FROM</span>
+<span class="o">`</span><span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">yellow_tripdata_ml</span><span class="o">`</span>
+<span class="k">WHERE</span>
+<span class="n">tip_amount</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span>
+<span class="p">),</span> <span class="n">STRUCT</span><span class="p">(</span><span class="mi">3</span> <span class="k">as</span> <span class="n">top_k_features</span><span class="p">));</span>
+
+<span class="c1">-- HYPER PARAM TUNNING</span>
+<span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="n">MODEL</span> <span class="o">`</span><span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">tip_hyperparam_model</span><span class="o">`</span>
+<span class="k">OPTIONS</span>
+<span class="p">(</span><span class="n">model_type</span><span class="o">=</span><span class="s1">'linear_reg'</span><span class="p">,</span>
+<span class="n">input_label_cols</span><span class="o">=</span><span class="p">[</span><span class="s1">'tip_amount'</span><span class="p">],</span>
+<span class="n">DATA_SPLIT_METHOD</span><span class="o">=</span><span class="s1">'AUTO_SPLIT'</span><span class="p">,</span>
+<span class="n">num_trials</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+<span class="n">max_parallel_trials</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="n">l1_reg</span><span class="o">=</span><span class="n">hparam_range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span>
+<span class="n">l2_reg</span><span class="o">=</span><span class="n">hparam_candidates</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">]))</span> <span class="k">AS</span>
+<span class="k">SELECT</span>
+<span class="o">*</span>
+<span class="k">FROM</span>
+<span class="o">`</span><span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">yellow_tripdata_ml</span><span class="o">`</span>
+<span class="k">WHERE</span>
+<span class="n">tip_amount</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">;</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>After training the model, we need to deploy it. The following video explains how to that:
+
+</p>
+<center>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/BjARzEWaznU" frameborder="0" allowfullscreen=""></iframe>
+</center>
+
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>And here is the deployment steps: <a href="https://cloud.google.com/bigquery-ml/docs/export-model-tutorial">Tutorial</a></p>
+<div class="highlight"><pre><span></span>- gcloud auth login
+- bq --project_id taxi-rides-ny extract -m nytaxi.tip_model gs://taxi_ml_model/tip_model
+- mkdir /tmp/model
+- gsutil cp -r gs://taxi_ml_model/tip_model /tmp/model
+- mkdir -p serving_dir/tip_model/1
+- cp -r /tmp/model/tip_model/* serving_dir/tip_model/1
+- docker pull tensorflow/serving
+- docker run -p <span class="m">8501</span>:8501 --mount <span class="nv">type</span><span class="o">=</span>bind,source<span class="o">=</span><span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span>/serving_dir/tip_model,target<span class="o">=</span>
+  /models/tip_model -e <span class="nv">MODEL_NAME</span><span class="o">=</span>tip_model -t tensorflow/serving <span class="p">&amp;</span>
+- curl -d <span class="s1">'{"instances": [{"passenger_count":1, "trip_distance":12.2, "PULocationID":"193", "DOLocationID":"264", "payment_type":"2","fare_amount":20.4,"tolls_amount":0.0}]}'</span> -X POST http://localhost:8501/v1/models/tip_model:predict
+- http://localhost:8501/v1/models/tip_model
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Other useful resources:
+
+</p>
 <center>
     <iframe width="560" height="315" src="https://www.youtube.com/embed/ZVgt1-LfWW4" frameborder="0" allowfullscreen=""></iframe>
 </center>
-</li>
-</ul>
+
 
 </div>
 </div>

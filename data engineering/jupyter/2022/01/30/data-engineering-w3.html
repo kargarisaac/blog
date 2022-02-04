@@ -121,7 +121,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      5 min read
+      8 min read
     
 </span></p>
 
@@ -153,16 +153,22 @@ window.onload = wrap_img;
 
   <div class="post-content e-content" itemprop="articleBody">
     <ul class="section-nav">
-<li class="toc-entry toc-h1"><a href="#Data-Warehouse-and-BigQuery">Data Warehouse and BigQuery </a>
+<li class="toc-entry toc-h1"><a href="#Data-Warehouse">Data Warehouse </a>
 <ul>
 <li class="toc-entry toc-h2"><a href="#OLTP-vs-OLAP">OLTP vs OLAP </a></li>
 <li class="toc-entry toc-h2"><a href="#Data-Warehouse">Data Warehouse </a></li>
 <li class="toc-entry toc-h2"><a href="#BigQuery">BigQuery </a>
 <ul>
 <li class="toc-entry toc-h3"><a href="#Partitioning">Partitioning </a></li>
-<li class="toc-entry toc-h3"><a href="#Clustering">Clustering </a></li>
+<li class="toc-entry toc-h3"><a href="#Clustering">Clustering </a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#Direct-Import-(Managed-Tables):">Direct Import (Managed Tables): </a></li>
+<li class="toc-entry toc-h4"><a href="#Query-without-Loading-(External-Tables)">Query without Loading (External Tables) </a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#Amazon-Redshift">Amazon Redshift </a></li>
 </ul>
 </li>
 </ul><!--
@@ -184,8 +190,8 @@ window.onload = wrap_img;
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Data-Warehouse-and-BigQuery">
-<a class="anchor" href="#Data-Warehouse-and-BigQuery" aria-hidden="true"><span class="octicon octicon-link"></span></a>Data Warehouse and BigQuery<a class="anchor-link" href="#Data-Warehouse-and-BigQuery"> </a>
+<h1 id="Data-Warehouse">
+<a class="anchor" href="#Data-Warehouse" aria-hidden="true"><span class="octicon octicon-link"></span></a>Data Warehouse<a class="anchor-link" href="#Data-Warehouse"> </a>
 </h1>
 <h2 id="OLTP-vs-OLAP">
 <a class="anchor" href="#OLTP-vs-OLAP" aria-hidden="true"><span class="octicon octicon-link"></span></a>OLTP vs OLAP<a class="anchor-link" href="#OLTP-vs-OLAP"> </a>
@@ -223,6 +229,7 @@ Because OLTP databases are read, written, and updated frequently, the emphasis i
 <p>The data in the warehouse comes from the operating systems and is uploaded there (such as marketing or sales). Before being used in the DW for reporting, the data may transit via an operational data store and require data cleansing for extra procedures to ensure data quality.</p>
 <p>The two major methodologies used to design a data warehouse system are extract, transform, load (ETL) and extract, load, transform (ELT). [<a href="https://en.wikipedia.org/wiki/Data_warehouse">wikipedia</a>]</p>
 <p><img src="/blog/images/copied_from_nb/images/data-engineering-w3/3.png" alt=""></p>
+<p>Google BigQuery and Amazon Redshift are two data warehouse services proposed by google and amazon.</p>
 
 </div>
 </div>
@@ -315,6 +322,68 @@ FROM
 WHERE
  creation_date BETWEEN <span class="s1">'2018-01-01'</span> AND <span class="s1">'2018-07-01'</span><span class="p">;</span>
 </pre></div>
+<p>Check the following video to learn more:
+
+</p>
+<center>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/-CqXf7vhhDs" frameborder="0" allowfullscreen=""></iframe>
+</center>
+
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>You can also chech this <a href="https://codelabs.developers.google.com/codelabs/gcp-bq-partitioning-and-clustering#0">codelab</a> to learn more about partitioning and clustering.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now let's see how to load or ingest data into BigQuery and analyze them.</p>
+<h4 id="Direct-Import-(Managed-Tables):">
+<a class="anchor" href="#Direct-Import-(Managed-Tables):" aria-hidden="true"><span class="octicon octicon-link"></span></a>Direct Import (Managed Tables):<a class="anchor-link" href="#Direct-Import-(Managed-Tables):"> </a>
+</h4>
+<p>BigQuery can ingest datasets from a variety of different formats directly into its native storage. BigQuery native storage is fully managed by Google—this includes replication, backups, scaling out size, and much more.</p>
+<p>There are multiple ways to load data into BigQuery depending on data sources, data formats, load methods and use cases such as batch, streaming or data transfer. At a high level following are the ways you can ingest data into BigQuery:</p>
+<ul>
+<li>Batch Ingestion: Batch ingestion involves loading large, bounded, data sets that don’t have to be processed in real-time</li>
+<li>Streaming Ingestion: Streaming ingestion supports use cases that require analyzing high volumes of continuously arriving data with near-real-time dashboards and queries.</li>
+<li>Data Transfer Service (DTS): The BigQuery Data Transfer Service (DTS) is a fully managed service to ingest data from Google SaaS apps such as Google Ads, external cloud storage providers such as Amazon S3 and transferring data from data warehouse technologies such as Teradata and Amazon Redshift .</li>
+<li>Query Materialization: When you run queries in BigQuery their result sets can be materialized to create new tables. </li>
+</ul>
+<p><img src="/blog/images/copied_from_nb/images/data-engineering-w3/6.png" alt="">
+<em><a href="https://cloud.google.com/blog/topics/developers-practitioners/bigquery-explained-data-ingestion">source</a></em></p>
+<h4 id="Query-without-Loading-(External-Tables)">
+<a class="anchor" href="#Query-without-Loading-(External-Tables)" aria-hidden="true"><span class="octicon octicon-link"></span></a>Query without Loading (External Tables)<a class="anchor-link" href="#Query-without-Loading-(External-Tables)"> </a>
+</h4>
+<p>Using a federated query is one of the options to query external data sources directly without loading into BigQuery storage. You can query across Google services such as Google Sheets, Google Drive, Google Cloud Storage, Cloud SQL or Cloud BigTable without having to import the data into BigQuery.</p>
+<p>You don’t need to load data into BigQuery before running queries in the following situations:</p>
+<ul>
+<li>Public Datasets: Public datasets are datasets stored in BigQuery and shared with the public. </li>
+<li>Shared Datasets: You can share datasets stored in BigQuery. If someone has shared a dataset with you, you can run queries on that dataset without loading the data.</li>
+<li>External data sources (Federated): You can skip the data loading process by creating a table based on an external data source.</li>
+</ul>
+<p>Apart from the solutions available natively in BigQuery, you can also check data integration options from Google Cloud partners who have integrated their industry-leading tools with BigQuery.</p>
+<p>To read more, please check <a href="https://cloud.google.com/blog/topics/developers-practitioners/bigquery-explained-data-ingestion">here</a>.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Check the following video for BQ best practices:
+
+</p>
+<center>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/k81mLJVX08w" frameborder="0" allowfullscreen=""></iframe>
+</center>
+
 
 </div>
 </div>
@@ -333,6 +402,17 @@ WHERE
 </center>
 </li>
 </ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Amazon-Redshift">
+<a class="anchor" href="#Amazon-Redshift" aria-hidden="true"><span class="octicon octicon-link"></span></a>Amazon Redshift<a class="anchor-link" href="#Amazon-Redshift"> </a>
+</h2>
+<p>Amazon Redshift is a fully managed, petabyte-scale data warehouse service in the AWS Cloud. An Amazon Redshift data warehouse is a collection of computing resources called nodes, which are organized into a group called a cluster. Each cluster runs an Amazon Redshift engine and contains one or more databases.</p>
 
 </div>
 </div>

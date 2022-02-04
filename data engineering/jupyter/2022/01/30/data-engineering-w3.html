@@ -476,7 +476,7 @@ WHERE
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>It is also possible to do machine learning in BigQuery instead of doing it outside of it. BigQuery ML increases development speed by eliminating the need to move data.</p>
-<p>BigQuery ML supports the following types of models [<a href="https://cloud.google.com/bigquery-ml/docs/introduction">ref</a>]:</p>
+<p>BigQuery ML supports the following types of models: [<a href="https://cloud.google.com/bigquery-ml/docs/introduction">ref</a>]</p>
 <ul>
 <li>Linear regression for forecasting; for example, the sales of an item on a given day. Labels are real-valued (they cannot be +/- infinity or NaN).</li>
 <li>Binary logistic regression for classification; for example, determining whether a customer will make a purchase. Labels must only have two possible values.</li>
@@ -490,6 +490,8 @@ WHERE
 <li>TensorFlow model importing. This feature lets you create BigQuery ML models from previously trained TensorFlow models, then perform prediction in BigQuery ML.</li>
 <li>Autoencoder for creating Tensorflow-based BigQuery ML models with the support of sparse data representations. The models can be used in BigQuery ML for tasks such as unsupervised anomaly detection and non-linear dimensionality reduction.</li>
 </ul>
+<p><img src="/blog/images/copied_from_nb/images/data-engineering-w3/8.png" alt="">
+<em><a href="https://cloud.google.com/blog/products/data-analytics/automl-tables-now-generally-available-bigquery-ml">source</a></em></p>
 <p>Check <a href="https://cloud.google.com/bigquery-ml/docs/introduction">here</a> and the following video to learn more about how to train a linear regression model in BQ:
 
 </p>
@@ -504,7 +506,7 @@ WHERE
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Here is an example of training a liner regression model in BQ on the dataset we uploaded to GCS and BQ in the previous week using Airflow, and also how to do hyperparameter tuning:</p>
+<p>Here is an example of training a liner regression model in BQ on the dataset we uploaded to GCS and BQ in the previous week using Airflow, and also how to do hyperparameter tuning: [<a href="https://github.com/DataTalksClub/data-engineering-zoomcamp/blob/main/week_3_data_warehouse/extract_model.md">ref1</a>]</p>
 <div class="highlight"><pre><span></span><span class="c1">-- SELECT THE COLUMNS INTERESTED FOR YOU</span>
 <span class="k">SELECT</span> <span class="n">passenger_count</span><span class="p">,</span> <span class="n">trip_distance</span><span class="p">,</span> <span class="n">PULocationID</span><span class="p">,</span> <span class="n">DOLocationID</span><span class="p">,</span> <span class="n">payment_type</span><span class="p">,</span> <span class="n">fare_amount</span><span class="p">,</span> <span class="n">tolls_amount</span><span class="p">,</span> <span class="n">tip_amount</span>
 <span class="k">FROM</span> <span class="o">`</span><span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">yellow_tripdata_partitoned</span><span class="o">`</span> <span class="k">WHERE</span> <span class="n">fare_amount</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">;</span>
@@ -621,7 +623,7 @@ WHERE
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>And here is the deployment steps: <a href="https://cloud.google.com/bigquery-ml/docs/export-model-tutorial">Tutorial</a></p>
+<p>And here is the deployment steps: [<a href="https://github.com/DataTalksClub/data-engineering-zoomcamp/blob/main/week_3_data_warehouse/extract_model.md">ref1</a>, <a href="https://cloud.google.com/bigquery-ml/docs/export-model-tutorial">ref2</a>]</p>
 <div class="highlight"><pre><span></span>- gcloud auth login
 - bq --project_id taxi-rides-ny extract -m nytaxi.tip_model gs://taxi_ml_model/tip_model
 - mkdir /tmp/model
@@ -634,6 +636,7 @@ WHERE
 - curl -d <span class="s1">'{"instances": [{"passenger_count":1, "trip_distance":12.2, "PULocationID":"193", "DOLocationID":"264", "payment_type":"2","fare_amount":20.4,"tolls_amount":0.0}]}'</span> -X POST http://localhost:8501/v1/models/tip_model:predict
 - http://localhost:8501/v1/models/tip_model
 </pre></div>
+<p><a href="https://www.visual-design.net/post/how-to-build-ml-model-using-bigquery">Here</a> is another nice blog post on using ML in BQ.</p>
 
 </div>
 </div>
@@ -658,7 +661,17 @@ WHERE
 <h2 id="Amazon-Redshift">
 <a class="anchor" href="#Amazon-Redshift" aria-hidden="true"><span class="octicon octicon-link"></span></a>Amazon Redshift<a class="anchor-link" href="#Amazon-Redshift"> </a>
 </h2>
-<p>Amazon Redshift is a fully managed, petabyte-scale data warehouse service in the AWS Cloud. An Amazon Redshift data warehouse is a collection of computing resources called nodes, which are organized into a group called a cluster. Each cluster runs an Amazon Redshift engine and contains one or more databases.</p>
+<p>Amazon Redshift is another data warehouse service by AWS which is not covered in the course, but very similar to BigQuery. It is a fully managed, petabyte-scale data warehouse service in the AWS Cloud. An Amazon Redshift data warehouse is a collection of computing resources called nodes, which are organized into a group called a cluster. Each cluster runs an Amazon Redshift engine and contains one or more databases.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Amazon Redshift ML makes it easy for data analysts and database developers to create, train, and apply machine learning models using familiar SQL commands in Amazon Redshift data warehouses. With Redshift ML, you can take advantage of Amazon SageMaker, a fully managed machine learning service, without learning new tools or languages. Simply use SQL statements to create and train Amazon SageMaker machine learning models using your Redshift data and then use these models to make predictions.</p>
+<p><img src="/blog/images/copied_from_nb/images/data-engineering-w3/7.png" alt="">
+<em><a href="https://aws.amazon.com/redshift/features/redshift-ml/">source</a></em></p>
 
 </div>
 </div>

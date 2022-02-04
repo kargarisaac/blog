@@ -121,7 +121,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      13 min read
+      15 min read
     
 </span></p>
 
@@ -672,6 +672,91 @@ WHERE
 <p>Amazon Redshift ML makes it easy for data analysts and database developers to create, train, and apply machine learning models using familiar SQL commands in Amazon Redshift data warehouses. With Redshift ML, you can take advantage of Amazon SageMaker, a fully managed machine learning service, without learning new tools or languages. Simply use SQL statements to create and train Amazon SageMaker machine learning models using your Redshift data and then use these models to make predictions.</p>
 <p><img src="/blog/images/copied_from_nb/images/data-engineering-w3/7.png" alt="">
 <em><a href="https://aws.amazon.com/redshift/features/redshift-ml/">source</a></em></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Check the following demo to see how to do machine learning in Amazon Redshift:
+
+</p>
+<center>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/bpiKwSj0X7g" frameborder="0" allowfullscreen=""></iframe>
+</center>
+
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let's see how to create a model and running some inference queries for different scenarios using the SQL function that the CREATE MODEL command generates. [<a href="https://docs.aws.amazon.com/redshift/latest/dg/tutorial_customer_churn.html">ref</a>]</p>
+<p>first create a table from a dataset in S3:</p>
+<div class="highlight"><pre><span></span><span class="k">DROP</span> <span class="k">TABLE</span> <span class="k">IF</span> <span class="k">EXISTS</span> <span class="n">customer_activity</span><span class="p">;</span>
+
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">customer_activity</span> <span class="p">(</span>
+<span class="k">state</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> 
+<span class="n">account_length</span> <span class="nb">int</span><span class="p">,</span> 
+<span class="n">area_code</span> <span class="nb">int</span><span class="p">,</span>
+<span class="n">phone</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">8</span><span class="p">),</span> 
+<span class="n">intl_plan</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> 
+<span class="n">vMail_plan</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
+<span class="n">vMail_message</span> <span class="nb">int</span><span class="p">,</span> 
+<span class="n">day_mins</span> <span class="nb">float</span><span class="p">,</span> 
+<span class="n">day_calls</span> <span class="nb">int</span><span class="p">,</span> 
+<span class="n">day_charge</span> <span class="nb">float</span><span class="p">,</span>
+<span class="n">total_charge</span> <span class="nb">float</span><span class="p">,</span>
+<span class="n">eve_mins</span> <span class="nb">float</span><span class="p">,</span> 
+<span class="n">eve_calls</span> <span class="nb">int</span><span class="p">,</span> 
+<span class="n">eve_charge</span> <span class="nb">float</span><span class="p">,</span> 
+<span class="n">night_mins</span> <span class="nb">float</span><span class="p">,</span>
+<span class="n">night_calls</span> <span class="nb">int</span><span class="p">,</span> 
+<span class="n">night_charge</span> <span class="nb">float</span><span class="p">,</span> 
+<span class="n">intl_mins</span> <span class="nb">float</span><span class="p">,</span> 
+<span class="n">intl_calls</span> <span class="nb">int</span><span class="p">,</span>
+<span class="n">intl_charge</span> <span class="nb">float</span><span class="p">,</span> 
+<span class="n">cust_serv_calls</span> <span class="nb">int</span><span class="p">,</span> 
+<span class="n">churn</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">6</span><span class="p">),</span>
+<span class="n">record_date</span> <span class="nb">date</span><span class="p">);</span>
+
+<span class="k">COPY</span> <span class="n">customer_activity</span>
+<span class="k">FROM</span> <span class="s1">'s3://redshift-downloads/redshift-ml/customer_activity/'</span>
+<span class="n">REGION</span> <span class="s1">'us-east-1'</span> <span class="n">IAM_ROLE</span> <span class="s1">'arn:aws:iam::XXXXXXXXXXXX:role/Redshift-ML'</span>
+<span class="k">DELIMITER</span> <span class="s1">','</span> <span class="n">IGNOREHEADER</span> <span class="mi">1</span><span class="p">;</span>
+</pre></div>
+<p>Then creating the model.</p>
+<div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="n">MODEL</span> <span class="n">customer_churn_auto_model</span> <span class="k">FROM</span> <span class="p">(</span>
+    <span class="k">SELECT</span> 
+        <span class="k">state</span><span class="p">,</span>
+        <span class="n">account_length</span><span class="p">,</span>
+        <span class="n">area_code</span><span class="p">,</span>
+        <span class="n">total_charge</span><span class="o">/</span><span class="n">account_length</span> <span class="k">AS</span> <span class="n">average_daily_spend</span><span class="p">,</span> 
+        <span class="n">cust_serv_calls</span><span class="o">/</span><span class="n">account_length</span> <span class="k">AS</span> <span class="n">average_daily_cases</span><span class="p">,</span>
+        <span class="n">churn</span> 
+    <span class="k">FROM</span> 
+        <span class="n">customer_activity</span>
+    <span class="k">WHERE</span>  
+        <span class="n">record_date</span> <span class="o">&lt;</span> <span class="s1">'2020-01-01'</span> 
+<span class="p">)</span>
+<span class="n">TARGET</span> <span class="n">churn</span> <span class="k">FUNCTION</span> <span class="n">ml_fn_customer_churn_auto</span>
+<span class="n">IAM_ROLE</span> <span class="s1">'arn:aws:iam::XXXXXXXXXXXX:role/Redshift-ML'</span><span class="n">SETTINGS</span> <span class="p">(</span>
+  <span class="n">S3_BUCKET</span> <span class="s1">'your-bucket'</span>
+<span class="p">);</span>
+</pre></div>
+<p>The SELECT query creates the training data. The TARGET clause specifies which column is the machine learning “label” that the CREATE MODEL uses to learn how to predict. The remaining columns are the features (input) that are used for the prediction.</p>
+<p>And finally, the prediction can be done as follows:</p>
+<div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="n">phone</span><span class="p">,</span> 
+       <span class="n">ml_fn_customer_churn_auto</span><span class="p">(</span> 
+          <span class="k">state</span><span class="p">,</span>
+          <span class="n">account_length</span><span class="p">,</span>
+          <span class="n">area_code</span><span class="p">,</span> 
+          <span class="n">total_charge</span><span class="o">/</span><span class="n">account_length</span> <span class="p">,</span> 
+          <span class="n">cust_serv_calls</span><span class="o">/</span><span class="n">account_length</span> <span class="p">)</span>
+          <span class="k">AS</span> <span class="n">active</span> <span class="k">FROM</span> <span class="n">customer_activity</span> <span class="k">WHERE</span> <span class="n">record_date</span> <span class="o">&gt;</span> <span class="s1">'2020-01-01'</span><span class="p">;</span>
+</pre></div>
 
 </div>
 </div>

@@ -121,7 +121,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      15 min read
+      17 min read
     
 </span></p>
 
@@ -661,7 +661,7 @@ WHERE
 <h2 id="Amazon-Redshift">
 <a class="anchor" href="#Amazon-Redshift" aria-hidden="true"><span class="octicon octicon-link"></span></a>Amazon Redshift<a class="anchor-link" href="#Amazon-Redshift"> </a>
 </h2>
-<p>Amazon Redshift is another data warehouse service by AWS which is not covered in the course, but very similar to BigQuery. It is a fully managed, petabyte-scale data warehouse service in the AWS Cloud. An Amazon Redshift data warehouse is a collection of computing resources called nodes, which are organized into a group called a cluster. Each cluster runs an Amazon Redshift engine and contains one or more databases.</p>
+<p>Amazon Redshift is an alternate AWS data warehouse service that is not covered in the course but is quite comparable to BigQuery. It is an AWS Cloud-based petabyte-scale data warehouse solution that is completely managed. An Amazon Redshift data warehouse is a group of computer resources known as nodes that are arranged into a group known as a cluster. Each cluster contains one or more databases and is powered by an Amazon Redshift engine.</p>
 
 </div>
 </div>
@@ -669,7 +669,43 @@ WHERE
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Amazon Redshift ML makes it easy for data analysts and database developers to create, train, and apply machine learning models using familiar SQL commands in Amazon Redshift data warehouses. With Redshift ML, you can take advantage of Amazon SageMaker, a fully managed machine learning service, without learning new tools or languages. Simply use SQL statements to create and train Amazon SageMaker machine learning models using your Redshift data and then use these models to make predictions.</p>
+<p>The following diagram illustrates a typical data processing flow in Amazon Redshift. [<a href="https://docs.aws.amazon.com/redshift/latest/gsg/concepts-diagrams.html">ref</a>]</p>
+<p><img src="/blog/images/copied_from_nb/images/data-engineering-w3/9.png" alt="">
+<em><a href="https://docs.aws.amazon.com/redshift/latest/gsg/concepts-diagrams.html">source</a></em></p>
+<p>Different types of data sources constantly upload structured, semistructured, or unstructured data to the data storage layer at the data ingestion layer. This data storage area functions as a staging place for data in various states of consumption readiness. An Amazon Simple Storage Service (Amazon S3) bucket is an example of storage.</p>
+<p>The source data is preprocessed, validated, and transformed utilizing extract, transform, load (ETL) or extract, load, transform (ELT) pipelines at the optional data processing layer. ETL techniques are subsequently used to refine these raw datasets. AWS Glue is an example of an ETL engine.</p>
+<p>Data is imported into your Amazon Redshift cluster at the data consumption layer, where you can perform analytical applications.</p>
+<p>Data can also be consumed for analytical workloads as follows:</p>
+<ul>
+<li>
+<p>Use datashares to securely and easily transfer live data across Amazon Redshift clusters for reading purposes. Data can be shared at different levels, such as databases, schemas, tables, views, and SQL user-defined functions (UDFs).</p>
+</li>
+<li>
+<p>Amazon Redshift Spectrum may be used to query data in Amazon S3 files without having to load the data into Amazon Redshift tables. Amazon Redshift offers SQL capabilities designed for quick and online analytical processing (OLAP) of very big datasets stored in Amazon Redshift clusters and Amazon S3 data lakes.</p>
+</li>
+<li>
+<p>Using a federated query, you can join data from relational databases such as Amazon Relational Database Service (Amazon RDS), Amazon Aurora, or Amazon S3 with data from your Amazon Redshift database. Amazon Redshift can be used to query operational data directly (without moving it), apply transformations, and insert data into Amazon Redshift tables.</p>
+</li>
+<li>
+<p>Amazon Redshift machine learning (ML) generates models based on the data you provide and the metadata associated with the data inputs. Patterns in the incoming data are captured by these models. These models can be used to make predictions for new input data. Amazon Redshift works with Amazon SageMaker Autopilot to choose the best model and make the prediction function available in Amazon Redshift.</p>
+</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>To learn more about Amazon Redshift and how to create database, tables, query data from Redshift or external sources check <a href="https://docs.aws.amazon.com/redshift/latest/gsg/new-user.html">this</a> and <a href="https://docs.aws.amazon.com/redshift/latest/gsg/data-querying.html">this</a> tutorials. It's almost similar to BigQuery.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Amazon Redshift ML makes it simple for data analysts and database engineers to construct, train, and deploy machine learning models in Amazon Redshift data warehouses using standard SQL commands. You can use Redshift ML to access Amazon SageMaker, a fully managed machine learning service, without learning new tools or languages. Simply utilize SQL commands to develop and train Amazon SageMaker machine learning models on your Redshift data, and then use these models to predict.</p>
 <p><img src="/blog/images/copied_from_nb/images/data-engineering-w3/7.png" alt="">
 <em><a href="https://aws.amazon.com/redshift/features/redshift-ml/">source</a></em></p>
 
@@ -693,7 +729,7 @@ WHERE
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Let's see how to create a model and running some inference queries for different scenarios using the SQL function that the CREATE MODEL command generates. [<a href="https://docs.aws.amazon.com/redshift/latest/dg/tutorial_customer_churn.html">ref</a>]</p>
+<p>Let's see how to create a model and running some inference queries for different scenarios using the SQL function that the <code>CREATE MODEL</code> command generates. [<a href="https://docs.aws.amazon.com/redshift/latest/dg/tutorial_customer_churn.html">ref</a>]</p>
 <p>first create a table from a dataset in S3:</p>
 <div class="highlight"><pre><span></span><span class="k">DROP</span> <span class="k">TABLE</span> <span class="k">IF</span> <span class="k">EXISTS</span> <span class="n">customer_activity</span><span class="p">;</span>
 
@@ -746,7 +782,7 @@ WHERE
   <span class="n">S3_BUCKET</span> <span class="s1">'your-bucket'</span>
 <span class="p">);</span>
 </pre></div>
-<p>The SELECT query creates the training data. The TARGET clause specifies which column is the machine learning “label” that the CREATE MODEL uses to learn how to predict. The remaining columns are the features (input) that are used for the prediction.</p>
+<p>The <code>SELECT</code> query creates the training data. The <code>TARGET</code> clause specifies which column is the machine learning <code>label</code> that the <code>CREATE MODEL</code> uses to learn how to predict. The remaining columns are the features (input) that are used for the prediction.</p>
 <p>And finally, the prediction can be done as follows:</p>
 <div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="n">phone</span><span class="p">,</span> 
        <span class="n">ml_fn_customer_churn_auto</span><span class="p">(</span> 

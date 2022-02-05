@@ -166,6 +166,7 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h4"><a href="#Query-without-Loading-(External-Tables)">Query without Loading (External Tables) </a></li>
 </ul>
 </li>
+<li class="toc-entry toc-h3"><a href="#Machine-Learning-in-BigQuery">Machine Learning in BigQuery </a></li>
 </ul>
 </li>
 <li class="toc-entry toc-h2"><a href="#Amazon-Redshift">Amazon Redshift </a></li>
@@ -238,7 +239,7 @@ Because OLTP databases are read, written, and updated frequently, the emphasis i
 <p>The data in the warehouse comes from the operating systems and is uploaded there (such as marketing or sales). Before being used in the DW for reporting, the data may transit via an operational data store and require data cleansing for extra procedures to ensure data quality.</p>
 <p>The two major methodologies used to design a data warehouse system are extract, transform, load (ETL) and extract, load, transform (ELT). [<a href="https://en.wikipedia.org/wiki/Data_warehouse">wikipedia</a>]</p>
 <p><img src="/blog/images/copied_from_nb/images/data-engineering-w3/3.png" alt=""></p>
-<p>Google BigQuery and Amazon Redshift are two data warehouse services proposed by google and amazon.</p>
+<p>Google BigQuery, Amazon Redshift, and Microsoft Azure Synapse Analytics are three data warehouse services. Here we review BigQuery and Redshift.</p>
 
 </div>
 </div>
@@ -520,6 +521,9 @@ WHERE
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Machine-Learning-in-BigQuery">
+<a class="anchor" href="#Machine-Learning-in-BigQuery" aria-hidden="true"><span class="octicon octicon-link"></span></a>Machine Learning in BigQuery<a class="anchor-link" href="#Machine-Learning-in-BigQuery"> </a>
+</h3>
 <p>It is also possible to do machine learning in BigQuery instead of doing it outside of it. BigQuery ML increases development speed by eliminating the need to move data.</p>
 <p>BigQuery ML supports the following types of models: [<a href="https://cloud.google.com/bigquery-ml/docs/introduction">ref</a>]</p>
 <ul>

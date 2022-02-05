@@ -121,7 +121,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      17 min read
+      18 min read
     
 </span></p>
 
@@ -278,31 +278,23 @@ Because OLTP databases are read, written, and updated frequently, the emphasis i
 </div>
 </div>
 </div>
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
+<div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">CREATE</span> <span class="n">OR</span> <span class="n">REPLACE</span> <span class="n">TABLE</span> <span class="err">`</span><span class="n">stackoverflow</span><span class="o">.</span><span class="n">questions_2018_partitioned</span><span class="err">`</span>
-<span class="n">PARTITION</span> <span class="n">BY</span>
- <span class="n">DATE</span><span class="p">(</span><span class="n">creation_date</span><span class="p">)</span> <span class="n">AS</span>
-<span class="n">SELECT</span>
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="k">TABLE</span> <span class="o">`</span><span class="n">stackoverflow</span><span class="p">.</span><span class="n">questions_2018_partitioned</span><span class="o">`</span>
+<span class="n">PARTITION</span> <span class="k">BY</span>
+ <span class="nb">DATE</span><span class="p">(</span><span class="n">creation_date</span><span class="p">)</span> <span class="k">AS</span>
+<span class="k">SELECT</span>
  <span class="o">*</span>
-<span class="n">FROM</span>
- <span class="err">`</span><span class="n">bigquery</span><span class="o">-</span><span class="n">public</span><span class="o">-</span><span class="n">data</span><span class="o">.</span><span class="n">stackoverflow</span><span class="o">.</span><span class="n">posts_questions</span><span class="err">`</span>
-<span class="n">WHERE</span>
- <span class="n">creation_date</span> <span class="n">BETWEEN</span> <span class="s1">'2018-01-01'</span> <span class="n">AND</span> <span class="s1">'2018-07-01'</span><span class="p">;</span>
+<span class="k">FROM</span>
+ <span class="o">`</span><span class="n">bigquery</span><span class="o">-</span><span class="k">public</span><span class="o">-</span><span class="k">data</span><span class="p">.</span><span class="n">stackoverflow</span><span class="p">.</span><span class="n">posts_questions</span><span class="o">`</span>
+<span class="k">WHERE</span>
+ <span class="n">creation_date</span> <span class="k">BETWEEN</span> <span class="s1">'2018-01-01'</span> <span class="k">AND</span> <span class="s1">'2018-07-01'</span><span class="p">;</span>
 </pre></div>
 
-    </div>
 </div>
 </div>
-
 </div>
-    
-
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -346,6 +338,48 @@ WHERE
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>You can also chech this <a href="https://codelabs.developers.google.com/codelabs/gcp-bq-partitioning-and-clustering#0">codelab</a> to learn more about partitioning and clustering.</p>
+<p>Let's now compare clustering and partitioning:</p>
+<p><img src="/blog/images/copied_from_nb/images/data-engineering-w3/10.png" alt="">
+<em><a href="https://youtu.be/-CqXf7vhhDs">source</a></em></p>
+<p>Now, let's see when we have to choose clustering over partitioning [<a href="https://youtu.be/-CqXf7vhhDs">ref</a>]:</p>
+<ul>
+<li>Partitioning results in a small amount of data per partition (approximately less than 1 GB)</li>
+<li>Partitioning results in a large number of partitions beyond the limits on partitioned tables</li>
+<li>Partitioning results in your mutation operations modifying the majority of partitions in the table frequently (for example, every few minutes)</li>
+</ul>
+<p>In order to have better performance with lower cost, the following best practices in BQ are useful:</p>
+<ul>
+<li>
+<p>Cost reduction</p>
+<ul>
+<li>Avoid SELECT *</li>
+<li>Price your queries before running them</li>
+<li>Use clustered or partitioned tables</li>
+<li>Use streaming inserts with caution</li>
+<li>Materialize query results in stages</li>
+</ul>
+</li>
+<li>
+<p>Query performance</p>
+<ul>
+<li>Filter on partitioned columns</li>
+<li>Denormalizing data</li>
+<li>Use nested or repeated columns</li>
+<li>Use external data sources appropriately</li>
+<li>Don't use it, in case u want a high query performance</li>
+<li>Reduce data before using a JOIN</li>
+<li>Do not treat WITH clauses as prepared statements</li>
+<li>Avoid oversharding tables</li>
+<li>Avoid JavaScript user-defined functions</li>
+<li>Use approximate aggregation functions (HyperLogLog++)</li>
+<li>Order Last, for query operations to maximize performance</li>
+<li>Optimize your join patterns<ul>
+<li>As a best practice, place the table with the largest number of rows first, followed by the table with the fewest rows, and then place the remaining tables by decreasing size.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 
 </div>
 </div>

@@ -121,7 +121,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      28 min read
+      29 min read
     
 </span></p>
 
@@ -160,6 +160,7 @@ window.onload = wrap_img;
 <ul>
 <li class="toc-entry toc-h3"><a href="#Airflow">Airflow </a></li>
 <li class="toc-entry toc-h3"><a href="#Google-Cloud-Dataflow">Google Cloud Dataflow </a></li>
+<li class="toc-entry toc-h3"><a href="#Google-Cloud-Composer">Google Cloud Composer </a></li>
 </ul>
 </li>
 <li class="toc-entry toc-h1"><a href="#Airflow">Airflow </a>
@@ -332,6 +333,83 @@ When workflows are defined as code, they become more maintainable, versionable, 
 <p><img src="/blog/images/copied_from_nb/images/data-engineering-w2/9.jpeg" alt="">
 <em><a href="https://cloud.google.com/blog/topics/developers-practitioners/dataflow-backbone-data-analytics">Google cloud docs</a></em></p>
 <p><a href="https://stackshare.io/stackups/airflow-vs-google-cloud-dataflow">Here</a> is a comparison between Airflow and Google cloud dataflow.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Google-Cloud-Composer">
+<a class="anchor" href="#Google-Cloud-Composer" aria-hidden="true"><span class="octicon octicon-link"></span></a>Google Cloud Composer<a class="anchor-link" href="#Google-Cloud-Composer"> </a>
+</h3>
+<p>Google also provides a fully managed service for workflow orchestration built on the  Apache Airflow called <a href="https://cloud.google.com/composer?utm_source=google&amp;utm_medium=cpc&amp;utm_campaign=emea-emea-all-en-dr-skws-all-all-trial-e-gcp-1011340&amp;utm_content=text-ad-none-any-DEV_c-CRE_556004442652-ADGP_Hybrid%20%7C%20SKWS%20-%20EXA%20%7C%20Txt%20~%20Data%20Analytics%20~%20Cloud%20Composer-KWID_43700067144729219-aud-606988878374%3Akwd-427702736595-userloc_1005582&amp;utm_term=KW_cloud%20composer-NET_g-PLAC_&amp;gclid=Cj0KCQiAgP6PBhDmARIsAPWMq6ms9Wx1uZ8P_OXQdS-Sj-4hgI9XZxmrrqbaq2hDBOaxxWLfhpFawIQaAmPJEALw_wcB&amp;gclsrc=aw.ds#section-4">Google Cloud Composer</a>. <a href="https://stackoverflow.com/a/62771505">Here</a> is a good comparison between Google Cloud Composer (fully managed workflow orchestration) and Airflow on Docker and on-premise:</p>
+<blockquote>
+<p>Cloud Composer is a GCP managed service for Airflow. Composer runs in something known as a Composer environment, which runs on Google Kubernetes Engine cluster. It also makes use of various other GCP services such as:&gt;&gt; - Cloud SQL - stores the metadata associated with Airflow,</p>
+<ul>
+<li>
+<p>App Engine Flex - Airflow web server runs as an App Engine Flex application, which is protected using an Identity-Aware Proxy,</p>
+</li>
+<li>
+<p>GCS bucket - in order to submit a pipeline to be scheduled and run on Composer, all that we need to do is to copy out Python code into a GCS bucket. Within that, it'll have a folder called DAGs. Any Python code uploaded into that folder is automatically going to be picked up and processed by Composer.</p>
+</li>
+</ul>
+<p>How Cloud Composer benefits?</p>
+<ul>
+<li>
+<p>Focus on your workflows, and let Composer manage the infrastructure (creating the workers, setting up the web server, the message brokers),</p>
+</li>
+<li>
+<p>One-click to create a new Airflow environment,</p>
+</li>
+<li>
+<p>Easy and controlled access to the Airflow Web UI,</p>
+</li>
+<li>
+<p>Provide logging and monitoring metrics, and alert when your workflow is not running,</p>
+</li>
+<li>
+<p>Integrate with all of Google Cloud services:Big Data, Machine Learning and so on. Run jobs elsewhere, i.e. other cloud provider (Amazon).&gt; &gt; Of course you have to pay for the hosting service, but the cost is low compare to if you have to host a production airflow server on your own.</p>
+</li>
+</ul>
+<p>Airflow on-premise</p>
+<ul>
+<li>DevOps work that need to be done:create a new server, manage Airflow installation, takes care of dependency and package management, check server health, scaling and security.&gt;</li>
+<li>
+<p>pull an Airflow image from a registry and creating the container</p>
+</li>
+<li>
+<p>creating a volume that maps the directory on local machine where DAGs are held, and the locations where Airflow reads them on the container,</p>
+</li>
+<li>
+<p>whenever you want to submit a DAG that needs to access GCP service, you need to take care of setting up credentials. Application's service account should be created and downloaded as a JSON file that contains the credentials. This JSON file must be linked into your docker container and the GOOGLE_APPLICATION_CREDENTIALS environment variable must contain the path to the JSON file inside the container.</p>
+</li>
+</ul>
+<p>To sum up, if you don’t want to deal with all of those DevOps problem, and instead just want to focus on your workflow, then Google Cloud composer is a great solution for you.</p>
+</blockquote>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>To compare Google Dataflow and Google Cloud Composer, I found <a href="https://stackoverflow.com/a/54155104">this</a> stackoverflow answer very interesting:</p>
+<blockquote>
+<p>For the basics of your described task, Cloud Dataflow is a good choice. Big data that can be processed in parallel is a good choice for Cloud Dataflow.</p>
+<p>The real world of processing big data is usually messy. Data is usually somewhat to very dirty, arrives constantly or in big batches and needs to be processed in time sensitive ways. Usually it takes the coordination of more than one task / system to extract desired data. Think of load, transform, merge, extract and store types of tasks. Big data processing is often glued together using using shell scripts and / or Python programs. This makes automation, management, scheduling and control processes difficult.</p>
+<p>Google Cloud Composer is a big step up from Cloud Dataflow. Cloud Composer is a cross platform orchestration tool that supports AWS, Azure and GCP (and more) with management, scheduling and processing abilities.</p>
+<p>Cloud Dataflow handles tasks. Cloud Composer manages entire processes coordinating tasks that may involve BigQuery, Dataflow, Dataproc, Storage, on-premises, etc.</p>
+<p>If you need / require more management, control, scheduling, etc. of your big data tasks, then Cloud Composer adds significant value. If you are just running a simple Cloud Dataflow task on demand once in a while, Cloud Composer might be overkill.</p>
+</blockquote>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>In this post, we just review Airflow and how to use it on Docker. Let's get started.</p>
 
 </div>
 </div>
@@ -1311,52 +1389,6 @@ docker-compose up
 or
 docker-compose down --volumes --remove-orphans
 </pre></div>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Google also provides a fully managed service for workflow orchestration and Airflow called Google Cloud Composer. <a href="https://stackoverflow.com/a/62771505">Here</a> is a good comparison between Google Cloud Composer (fully managed workflow orchestration) and Airflow on Docker and on-premise:</p>
-<blockquote>
-<p>Cloud Composer is a GCP managed service for Airflow. Composer runs in something known as a Composer environment, which runs on Google Kubernetes Engine cluster. It also makes use of various other GCP services such as:&gt; - Cloud SQL - stores the metadata associated with Airflow,&gt; - App Engine Flex - Airflow web server runs as an App Engine Flex application, which is protected using an Identity-Aware Proxy,</p>
-<ul>
-<li>GCS bucket - in order to submit a pipeline to be scheduled and run on Composer, all that we need to do is to copy out Python code into a GCS bucket. Within that, it'll have a folder called DAGs. Any Python code uploaded into that folder is automatically going to be picked up and processed by Composer.</li>
-</ul>
-<p>How Cloud Composer benefits?</p>
-<ul>
-<li>
-<p>Focus on your workflows, and let Composer manage the infrastructure (creating the workers, setting up the web server, the message brokers),</p>
-</li>
-<li>
-<p>One-click to create a new Airflow environment,</p>
-</li>
-<li>
-<p>Easy and controlled access to the Airflow Web UI,</p>
-</li>
-<li>
-<p>Provide logging and monitoring metrics, and alert when your workflow is not running,</p>
-</li>
-<li>
-<p>Integrate with all of Google Cloud services:Big Data, Machine Learning and so on. Run jobs elsewhere, i.e. other cloud provider (Amazon).&gt; Of course you have to pay for the hosting service, but the cost is low compare to if you have to host a production airflow server on your own.</p>
-</li>
-</ul>
-<p>Airflow on-premise</p>
-<ul>
-<li>DevOps work that need to be done:create a new server, manage Airflow installation, takes care of dependency and package management, check server health, scaling and security.</li>
-<li>
-<p>pull an Airflow image from a registry and creating the container</p>
-</li>
-<li>
-<p>creating a volume that maps the directory on local machine where DAGs are held, and the locations where Airflow reads them on the container,</p>
-</li>
-<li>
-<p>whenever you want to submit a DAG that needs to access GCP service, you need to take care of setting up credentials. Application's service account should be created and downloaded as a JSON file that contains the credentials. This JSON file must be linked into your docker container and the GOOGLE_APPLICATION_CREDENTIALS environment variable must contain the path to the JSON file inside the container.</p>
-</li>
-</ul>
-<p>To sum up, if you don’t want to deal with all of those DevOps problem, and instead just want to focus on your workflow, then Google Cloud composer is a great solution for you.</p>
-</blockquote>
 
 </div>
 </div>

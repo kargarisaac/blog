@@ -1,164 +1,4 @@
-<!DOCTYPE html>
-<html lang="en"><head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Data Engineering - Week 1 | Isaac Kargar</title>
-<meta name="generator" content="Jekyll v4.0.0" />
-<meta property="og:title" content="Data Engineering - Week 1" />
-<meta property="og:locale" content="en_US" />
-<meta name="description" content="Week 1 - Data Engineering Zoomcamp course." />
-<meta property="og:description" content="Week 1 - Data Engineering Zoomcamp course." />
-<link rel="canonical" href="https://kargarisaac.github.io/blog/data%20engineering/jupyter/2022/01/18/data-engineering-w1.html" />
-<meta property="og:url" content="https://kargarisaac.github.io/blog/data%20engineering/jupyter/2022/01/18/data-engineering-w1.html" />
-<meta property="og:site_name" content="Isaac Kargar" />
-<meta property="og:image" content="https://kargarisaac.github.io/blog/images/some_folder/your_image.png" />
-<meta property="og:type" content="article" />
-<meta property="article:published_time" content="2022-01-18T00:00:00-06:00" />
-<script type="application/ld+json">
-{"mainEntityOfPage":{"@type":"WebPage","@id":"https://kargarisaac.github.io/blog/data%20engineering/jupyter/2022/01/18/data-engineering-w1.html"},"description":"Week 1 - Data Engineering Zoomcamp course.","@type":"BlogPosting","url":"https://kargarisaac.github.io/blog/data%20engineering/jupyter/2022/01/18/data-engineering-w1.html","headline":"Data Engineering - Week 1","dateModified":"2022-01-18T00:00:00-06:00","datePublished":"2022-01-18T00:00:00-06:00","image":"https://kargarisaac.github.io/blog/images/some_folder/your_image.png","@context":"https://schema.org"}</script>
-<!-- End Jekyll SEO tag -->
-<link rel="stylesheet" href="/blog/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://kargarisaac.github.io/blog/feed.xml" title="Isaac Kargar" /><!-- the google_analytics_id gets auto inserted from the config file -->
-
-
-
-<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','G-7C8WW0BBJ4','auto');ga('require','displayfeatures');ga('send','pageview');</script>
-
-<link rel="shortcut icon" type="image/x-icon" href="/blog/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Data Engineering - Week 1 | Isaac Kargar</title>
-<meta name="generator" content="Jekyll v4.0.0" />
-<meta property="og:title" content="Data Engineering - Week 1" />
-<meta property="og:locale" content="en_US" />
-<meta name="description" content="Week 1 - Data Engineering Zoomcamp course." />
-<meta property="og:description" content="Week 1 - Data Engineering Zoomcamp course." />
-<link rel="canonical" href="https://kargarisaac.github.io/blog/data%20engineering/jupyter/2022/01/18/data-engineering-w1.html" />
-<meta property="og:url" content="https://kargarisaac.github.io/blog/data%20engineering/jupyter/2022/01/18/data-engineering-w1.html" />
-<meta property="og:site_name" content="Isaac Kargar" />
-<meta property="og:image" content="https://kargarisaac.github.io/blog/images/some_folder/your_image.png" />
-<meta property="og:type" content="article" />
-<meta property="article:published_time" content="2022-01-18T00:00:00-06:00" />
-<script type="application/ld+json">
-{"mainEntityOfPage":{"@type":"WebPage","@id":"https://kargarisaac.github.io/blog/data%20engineering/jupyter/2022/01/18/data-engineering-w1.html"},"description":"Week 1 - Data Engineering Zoomcamp course.","@type":"BlogPosting","url":"https://kargarisaac.github.io/blog/data%20engineering/jupyter/2022/01/18/data-engineering-w1.html","headline":"Data Engineering - Week 1","dateModified":"2022-01-18T00:00:00-06:00","datePublished":"2022-01-18T00:00:00-06:00","image":"https://kargarisaac.github.io/blog/images/some_folder/your_image.png","@context":"https://schema.org"}</script>
-<!-- End Jekyll SEO tag -->
-
-<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
-<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://kargarisaac.github.io/blog/feed.xml" title="Isaac Kargar" /><!-- the google_analytics_id gets auto inserted from the config file -->
-
-
-
-<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','G-7C8WW0BBJ4','auto');ga('require','displayfeatures');ga('send','pageview');</script>
-
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
-    <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
-    <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        renderMathInElement( document.body, {
-        delimiters: [
-            {left: "$$", right: "$$", display: true},
-            {left: "[%", right: "%]", display: true},
-            {left: "$", right: "$", display: false}
-        ]}
-        );
-    });
-    </script>
-
-
-<script>
-function wrap_img(fn) {
-    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
-        var elements = document.querySelectorAll(".post img");
-        Array.prototype.forEach.call(elements, function(el, i) {
-            if (el.getAttribute("title")) {
-                const caption = document.createElement('figcaption');
-                var node = document.createTextNode(el.getAttribute("title"));
-                caption.appendChild(node);
-                const wrapper = document.createElement('figure');
-                wrapper.className = 'image';
-                el.parentNode.insertBefore(wrapper, el);
-                el.parentNode.removeChild(el);
-                wrapper.appendChild(el);
-                wrapper.appendChild(caption);
-            }
-        });
-    } else { document.addEventListener('DOMContentLoaded', fn); }
-}
-window.onload = wrap_img;
-</script>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function(){
-    // add link icon to anchor tags
-    var elem = document.querySelectorAll(".anchor-link")
-    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
-    });
-</script>
-</head><body><header class="site-header">
-
-  <div class="wrapper"><a class="site-title" rel="author" href="/blog/">Isaac Kargar</a><nav class="site-nav">
-        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
-        <label for="nav-trigger">
-          <span class="menu-icon">
-            <svg viewBox="0 0 18 15" width="18px" height="15px">
-              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
-            </svg>
-          </span>
-        </label>
-
-        <div class="trigger"><a class="page-link" href="/blog/about/">About Me</a><a class="page-link" href="/blog/search/">Search</a><a class="page-link" href="/blog/categories/">Tags</a></div>
-      </nav></div>
-</header>
-<main class="page-content" aria-label="Content">
-      <div class="wrapper">
-        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
-
-  <header class="post-header">
-    <h1 class="post-title p-name" itemprop="name headline">Data Engineering - Week 1</h1><p class="page-description">Week 1 - Data Engineering Zoomcamp course.</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2022-01-18T00:00:00-06:00" itemprop="datePublished">
-        Jan 18, 2022
-      </time>
-       • <span class="read-time" title="Estimated read time">
-    
-    
-      18 min read
-    
-</span></p>
-
-    
-
-    
-      
-        <div class="pb-5 d-flex flex-wrap flex-justify-end">
-          <div class="px-2">
-
-    <a href="https://github.com/kargarisaac/blog/tree/master/_notebooks/2022-01-18-data-engineering-w1.ipynb" role="button" target="_blank">
-<img class="notebook-badge-image" src="/blog/assets/badges/github.svg" alt="View On GitHub">
-    </a>
-</div>
-
-          <div class="px-2">
-    <a href="https://mybinder.org/v2/gh/kargarisaac/blog/master?filepath=_notebooks%2F2022-01-18-data-engineering-w1.ipynb" target="_blank">
-        <img class="notebook-badge-image" src="/blog/assets/badges/binder.svg" alt="Open In Binder"/>
-    </a>
-</div>
-
-          <div class="px-2">
-    <a href="https://colab.research.google.com/github/kargarisaac/blog/blob/master/_notebooks/2022-01-18-data-engineering-w1.ipynb" target="_blank">
-        <img class="notebook-badge-image" src="/blog/assets/badges/colab.svg" alt="Open In Colab"/>
-    </a>
-</div>
-        </div>
-      </header>
-
-  <div class="post-content e-content" itemprop="articleBody">
-    <ul class="section-nav">
-<li class="toc-entry toc-h1"><a href="#Google-Cloud-Platform">Google Cloud Platform </a></li>
-<li class="toc-entry toc-h1"><a href="#Docker">Docker </a></li>
-<li class="toc-entry toc-h1"><a href="#PostgreSQL">PostgreSQL </a></li>
-<li class="toc-entry toc-h1"><a href="#PgAdmin">PgAdmin </a></li>
-<li class="toc-entry toc-h1"><a href="#Terraform">Terraform </a></li>
-</ul><!--
+<!--
 #################################################
 ### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
 #################################################
@@ -174,12 +14,11 @@ window.onload = wrap_img;
 </div>
     
 
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>The goal of this course is to build a data pipeline around a dataset like <em>TLC Trip Record Data</em> which is about pickups and drop offs in New York City.</p>
 <p>Here is the architecture of what we want to do in this course:</p>
-<p><img src="/blog/images/copied_from_nb/images/data-engineering-w1/arch_1.png" alt=""></p>
+<p><img src="/blog/images/copied_from_nb/images/data-engineering-w1/arch_1.png" alt="" /></p>
 <p>We will take this data, process it, then upload it into Google cloud storage, and then from there we will upload it to Google BigQuery, and then we will use BigQuery to do Analytics engineering and building transformation using spark and so on. In the other part, we will pretend that this data is coming in real time and we will build a system around processing this data using kafka.</p>
 <p>HEre is the list of technologist will be used in this course:</p>
 <ul>
@@ -195,76 +34,63 @@ window.onload = wrap_img;
 <li>Kafka: Streaming</li>
 </ul>
 <p>The course will be around 10 weeks:</p>
-<p><img src="/blog/images/copied_from_nb/images/data-engineering-w1/3.png" alt=""></p>
+<p><img src="/blog/images/copied_from_nb/images/data-engineering-w1/3.png" alt="" /></p>
 <p>Here is the video of this week which will introduce teachers of the course and overview what you can expect from the course in each week:
 
-</p>
 <center>
     <iframe width="560" height="315" src="https://www.youtube.com/embed/bkJZDmreIpA" frameborder="0" allowfullscreen=""></iframe>
 </center>
 
-<strong>Note</strong>: You can also find the github repo for the course <a href="https://github.com/DataTalksClub/data-engineering-zoomcamp">here</a>.
+<strong>Note</strong>: You can also find the github repo for the course <a href="https://github.com/DataTalksClub/data-engineering-zoomcamp">here</a>.</p>
 <p><strong>Note</strong>: You can also find the playlist of videos of the course <a href="https://www.youtube.com/playlist?list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb">here</a>.</p>
 <p>In the first week, we will cover the following topics:</p>
-<p><img src="/blog/images/copied_from_nb/images/data-engineering-w1/4.png" alt=""></p>
+<p><img src="/blog/images/copied_from_nb/images/data-engineering-w1/4.png" alt="" /></p>
 <p>Let's get started.</p>
 
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Google-Cloud-Platform">
-<a class="anchor" href="#Google-Cloud-Platform" aria-hidden="true"><span class="octicon octicon-link"></span></a>Google Cloud Platform<a class="anchor-link" href="#Google-Cloud-Platform"> </a>
-</h1>
-<p>We will use some services from Google Cloud Platform (GCP). Here is a very short introduction of its services:
+<h1 id="Google-Cloud-Platform">Google Cloud Platform<a class="anchor-link" href="#Google-Cloud-Platform"> </a></h1><p>We will use some services from Google Cloud Platform (GCP). Here is a very short introduction of its services:
 
-</p>
 <center>
     <iframe width="560" height="315" src="https://www.youtube.com/embed/18jIzE41fJ4" frameborder="0" allowfullscreen=""></iframe>
 </center>
+</p>
 
-
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>First you need to create a new account <a href="https://cloud.google.com/">google cloud</a>. You can also use your account if you have one, but with a new account, you will get 300 dollars credit for free. Will see more on GCP in next sections.</p>
 
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Docker">
-<a class="anchor" href="#Docker" aria-hidden="true"><span class="octicon octicon-link"></span></a>Docker<a class="anchor-link" href="#Docker"> </a>
-</h1>
+<h1 id="Docker">Docker<a class="anchor-link" href="#Docker"> </a></h1>
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>
-</p>
 <center>
     <iframe width="560" height="315" src="https://www.youtube.com/embed/EYNwNlOrpr0" frameborder="0" allowfullscreen=""></iframe>
 </center>
+</p>
 
-
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><a href="https://www.docker.com/">Docker</a> is a set of platform as a service products that use OS-level virtualization to deliver software in packages called containers. Containers are isolated from one another and bundle their own software, libraries, and configuration files; they can communicate with each other through well-defined channels [wikipedia].</p>
 <p>The main goal is to get data (in csv format for example) and process it and then push it into postgres database:</p>
-<p><img src="/blog/images/copied_from_nb/images/data-engineering-w1/data-pipeline.png" alt=""></p>
+<p><img src="/blog/images/copied_from_nb/images/data-engineering-w1/data-pipeline.png" alt="" /></p>
 <p>Let's write a Dockerfile and build an image to run a simple python script:</p>
 
 </div>
@@ -285,7 +111,7 @@ window.onload = wrap_img;
 <span class="n">day</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 <span class="c1"># some fancy stuff with pandas</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'job finished successfully for day = </span><span class="si">{</span><span class="n">day</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;job finished successfully for day = </span><span class="si">{</span><span class="n">day</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -308,10 +134,10 @@ window.onload = wrap_img;
 
 <span class="n">RUN</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">pandas</span> <span class="c1">#run a command to install python packages</span>
 
-<span class="n">WORKDIR</span> <span class="o">/</span><span class="n">app</span> <span class="c1">#change the working directory - it's like cd command in linux </span>
+<span class="n">WORKDIR</span> <span class="o">/</span><span class="n">app</span> <span class="c1">#change the working directory - it&#39;s like cd command in linux </span>
 <span class="n">COPY</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">py</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">py</span> <span class="c1"># copy the file from current folder in the host machine to the working directory</span>
 
-<span class="n">ENTRYPOINT</span> <span class="p">[</span> <span class="s2">"python"</span><span class="p">,</span> <span class="s2">"pipeline.py"</span> <span class="p">]</span> <span class="c1"># run the python pipeline.py command when we use docker run command</span>
+<span class="n">ENTRYPOINT</span> <span class="p">[</span> <span class="s2">&quot;python&quot;</span><span class="p">,</span> <span class="s2">&quot;pipeline.py&quot;</span> <span class="p">]</span> <span class="c1"># run the python pipeline.py command when we use docker run command</span>
 </pre></div>
 
     </div>
@@ -321,8 +147,7 @@ window.onload = wrap_img;
 </div>
     
 
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>use the following command to build the image from Dockerfile in the current directory</p>
 
@@ -346,24 +171,18 @@ window.onload = wrap_img;
 </div>
     
 
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="PostgreSQL">
-<a class="anchor" href="#PostgreSQL" aria-hidden="true"><span class="octicon octicon-link"></span></a>PostgreSQL<a class="anchor-link" href="#PostgreSQL"> </a>
-</h1>
-<p>
-</p>
+<h1 id="PostgreSQL">PostgreSQL<a class="anchor-link" href="#PostgreSQL"> </a></h1><p>
 <center>
     <iframe width="560" height="315" src="https://www.youtube.com/embed/2JM-ziJt0WI" frameborder="0" allowfullscreen=""></iframe>
 </center>
+</p>
 
-
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>PostgreSQL, also known as Postgres, is a free and open-source relational database management system emphasizing extensibility and SQL compliance [wikipedia].</p>
 <p>Now let's see how we can run a PostgreSQL database with docker and push some data into that.</p>
@@ -380,9 +199,9 @@ window.onload = wrap_img;
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">-</span><span class="n">it</span> \
- <span class="o">-</span><span class="n">e</span> <span class="n">POSTGRES_USER</span><span class="o">=</span><span class="s2">"root"</span> \
- <span class="o">-</span><span class="n">e</span> <span class="n">POSTGRES_PASSWORD</span><span class="o">=</span><span class="s2">"root"</span> \
- <span class="o">-</span><span class="n">e</span> <span class="n">POSTGRES_DB</span><span class="o">=</span><span class="s2">"ny_taxi"</span> \
+ <span class="o">-</span><span class="n">e</span> <span class="n">POSTGRES_USER</span><span class="o">=</span><span class="s2">&quot;root&quot;</span> \
+ <span class="o">-</span><span class="n">e</span> <span class="n">POSTGRES_PASSWORD</span><span class="o">=</span><span class="s2">&quot;root&quot;</span> \
+ <span class="o">-</span><span class="n">e</span> <span class="n">POSTGRES_DB</span><span class="o">=</span><span class="s2">&quot;ny_taxi&quot;</span> \
  <span class="o">-</span><span class="n">v</span> <span class="err">$</span><span class="p">(</span><span class="n">pwd</span><span class="p">)</span><span class="o">/</span><span class="n">ny_taxi_postgres_data</span><span class="p">:</span><span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">postgresql</span><span class="o">/</span><span class="n">data</span> \
  <span class="o">-</span><span class="n">p</span> <span class="mi">5432</span><span class="p">:</span><span class="mi">5432</span> \
  <span class="n">postgres</span><span class="p">:</span><span class="mi">13</span>
@@ -395,8 +214,7 @@ window.onload = wrap_img;
 </div>
     
 
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Download data from <a href="https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page">here</a> and under <code>2021 &gt; January &gt; Yellow Taxi Trip Records</code>. The file name is <em>yellow_tripdata_2021-01.csv</em>.</p>
 <p>Using the following codes you can load and visualize and import data to postgres.</p>
@@ -416,15 +234,15 @@ window.onload = wrap_img;
 <span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">create_engine</span>
 
 <span class="c1"># create engine and set the root as postgresql://user:password@host:port/database</span>
-<span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="s1">'postgresql://root:root@localhost:5432/ny_taxi'</span><span class="p">)</span>
+<span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="s1">&#39;postgresql://root:root@localhost:5432/ny_taxi&#39;</span><span class="p">)</span>
 
-<span class="n">df_iter</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'yellow_tripdata_2021-01.csv'</span><span class="p">,</span> <span class="n">iterator</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">chunksize</span><span class="o">=</span><span class="mi">100000</span><span class="p">)</span>
+<span class="n">df_iter</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;yellow_tripdata_2021-01.csv&#39;</span><span class="p">,</span> <span class="n">iterator</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">chunksize</span><span class="o">=</span><span class="mi">100000</span><span class="p">)</span>
 
 <span class="k">while</span> <span class="kc">True</span><span class="p">:</span> <span class="c1">#iterate and read chunks of data and append it to the table</span>
     <span class="n">df</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">df_iter</span><span class="p">)</span>
     <span class="n">df</span><span class="o">.</span><span class="n">tpep_pickup_datetime</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">tpep_pickup_datetime</span><span class="p">)</span>
     <span class="n">df</span><span class="o">.</span><span class="n">tpep_dropoff_datetime</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">tpep_dropoff_datetime</span><span class="p">)</span>
-    <span class="n">df</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">'yellow_taxi_data'</span><span class="p">,</span> <span class="n">con</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span> <span class="n">if_exists</span><span class="o">=</span><span class="s1">'append'</span><span class="p">)</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;yellow_taxi_data&#39;</span><span class="p">,</span> <span class="n">con</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span> <span class="n">if_exists</span><span class="o">=</span><span class="s1">&#39;append&#39;</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -434,8 +252,7 @@ window.onload = wrap_img;
 </div>
     
 
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Then we need to connect to the postgres database. <code>pgcli</code> is a python package and a command line interface to quickly look at data and we can use it for connecting to the database and do whatever we want with the data.</p>
 
@@ -476,8 +293,7 @@ window.onload = wrap_img;
 </div>
     
 
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Then using <code>\dt</code> command, we can list tables of the database.</p>
 <p>Use <code>\d yellow_taxi_data</code> command to see the imported data schema:</p>
@@ -523,8 +339,7 @@ window.onload = wrap_img;
 </div>
     
 
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>We can also write any query on imported tables in the database. For example:</p>
 
@@ -556,17 +371,15 @@ window.onload = wrap_img;
 </div>
     
 
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Now let's write our data ingestion pipeline to download the data and put it into postgres and then dockerize it.
 
-</p>
 <center>
     <iframe width="560" height="315" src="https://www.youtube.com/embed/B1WwATwf-vY" frameborder="0" allowfullscreen=""></iframe>
 </center>
 
-here is the <code>ingest_data.py</code> file:
+here is the <code>ingest_data.py</code> file:</p>
 
 </div>
 </div>
@@ -598,11 +411,11 @@ here is the <code>ingest_data.py</code> file:
     <span class="n">db</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">db</span>
     <span class="n">table_name</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">table_name</span>
     <span class="n">url</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">url</span>
-    <span class="n">csv_name</span> <span class="o">=</span> <span class="s1">'output.csv'</span>
+    <span class="n">csv_name</span> <span class="o">=</span> <span class="s1">&#39;output.csv&#39;</span>
 
-    <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="sa">f</span><span class="s2">"wget </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2"> -O </span><span class="si">{</span><span class="n">csv_name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;wget </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2"> -O </span><span class="si">{</span><span class="n">csv_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-    <span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="sa">f</span><span class="s1">'postgresql://</span><span class="si">{</span><span class="n">user</span><span class="si">}</span><span class="s1">:</span><span class="si">{</span><span class="n">password</span><span class="si">}</span><span class="s1">@</span><span class="si">{</span><span class="n">host</span><span class="si">}</span><span class="s1">:</span><span class="si">{</span><span class="n">port</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">db</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+    <span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;postgresql://</span><span class="si">{</span><span class="n">user</span><span class="si">}</span><span class="s1">:</span><span class="si">{</span><span class="n">password</span><span class="si">}</span><span class="s1">@</span><span class="si">{</span><span class="n">host</span><span class="si">}</span><span class="s1">:</span><span class="si">{</span><span class="n">port</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">db</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
     <span class="n">df_iter</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">csv_name</span><span class="p">,</span> <span class="n">iterator</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">chunksize</span><span class="o">=</span><span class="mi">100000</span><span class="p">)</span>
 
@@ -611,9 +424,9 @@ here is the <code>ingest_data.py</code> file:
     <span class="n">df</span><span class="o">.</span><span class="n">tpep_pickup_datetime</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">tpep_pickup_datetime</span><span class="p">)</span>
     <span class="n">df</span><span class="o">.</span><span class="n">tpep_dropoff_datetime</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">tpep_dropoff_datetime</span><span class="p">)</span>
 
-    <span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">table_name</span><span class="p">,</span> <span class="n">con</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span> <span class="n">if_exists</span><span class="o">=</span><span class="s1">'replace'</span><span class="p">)</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">table_name</span><span class="p">,</span> <span class="n">con</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span> <span class="n">if_exists</span><span class="o">=</span><span class="s1">&#39;replace&#39;</span><span class="p">)</span>
 
-    <span class="n">df</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">table_name</span><span class="p">,</span> <span class="n">con</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span> <span class="n">if_exists</span><span class="o">=</span><span class="s1">'append'</span><span class="p">)</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">table_name</span><span class="p">,</span> <span class="n">con</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span> <span class="n">if_exists</span><span class="o">=</span><span class="s1">&#39;append&#39;</span><span class="p">)</span>
 
 
     <span class="k">while</span> <span class="kc">True</span><span class="p">:</span> 
@@ -624,23 +437,23 @@ here is the <code>ingest_data.py</code> file:
         <span class="n">df</span><span class="o">.</span><span class="n">tpep_pickup_datetime</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">tpep_pickup_datetime</span><span class="p">)</span>
         <span class="n">df</span><span class="o">.</span><span class="n">tpep_dropoff_datetime</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">tpep_dropoff_datetime</span><span class="p">)</span>
 
-        <span class="n">df</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">table_name</span><span class="p">,</span> <span class="n">con</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span> <span class="n">if_exists</span><span class="o">=</span><span class="s1">'append'</span><span class="p">)</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">table_name</span><span class="p">,</span> <span class="n">con</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span> <span class="n">if_exists</span><span class="o">=</span><span class="s1">&#39;append&#39;</span><span class="p">)</span>
 
         <span class="n">t_end</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
 
-        <span class="nb">print</span><span class="p">(</span><span class="s1">'inserted another chunk, took </span><span class="si">%.3f</span><span class="s1"> second'</span> <span class="o">%</span> <span class="p">(</span><span class="n">t_end</span> <span class="o">-</span> <span class="n">t_start</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;inserted another chunk, took </span><span class="si">%.3f</span><span class="s1"> second&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">t_end</span> <span class="o">-</span> <span class="n">t_start</span><span class="p">))</span>
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">'__main__'</span><span class="p">:</span>
-    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s1">'Ingest CSV data to Postgres'</span><span class="p">)</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s1">&#39;Ingest CSV data to Postgres&#39;</span><span class="p">)</span>
 
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">'--user'</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">'user name for postgres'</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">'--password'</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">'password for postgres'</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">'--host'</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">'host for postgres'</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">'--port'</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">'port for postgres'</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">'--db'</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">'database name for postgres'</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">'--table_name'</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">'name of the table where we will write the results to'</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">'--url'</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">'url of the csv file'</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--user&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;user name for postgres&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--password&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;password for postgres&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--host&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;host for postgres&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--port&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;port for postgres&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--db&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;database name for postgres&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--table_name&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;name of the table where we will write the results to&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--url&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;url of the csv file&#39;</span><span class="p">)</span>
 
     <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
 
@@ -654,8 +467,7 @@ here is the <code>ingest_data.py</code> file:
 </div>
     
 
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>And now we can write a docker file for data ingestion:</p>
 
@@ -677,7 +489,7 @@ here is the <code>ingest_data.py</code> file:
 <span class="n">WORKDIR</span> <span class="o">/</span><span class="n">app</span>
 <span class="n">COPY</span> <span class="n">ingest_data</span><span class="o">.</span><span class="n">py</span> <span class="n">ingest_data</span><span class="o">.</span><span class="n">py</span> 
 
-<span class="n">ENTRYPOINT</span> <span class="p">[</span> <span class="s2">"python"</span><span class="p">,</span> <span class="s2">"ingest_data.py"</span> <span class="p">]</span>
+<span class="n">ENTRYPOINT</span> <span class="p">[</span> <span class="s2">&quot;python&quot;</span><span class="p">,</span> <span class="s2">&quot;ingest_data.py&quot;</span> <span class="p">]</span>
 </pre></div>
 
     </div>
@@ -704,27 +516,21 @@ here is the <code>ingest_data.py</code> file:
 </div>
     
 
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>You can check the following video to learn more about how to use jupyter and connect to pgcli:
 
-</p>
 <center>
     <iframe width="560" height="315" src="https://www.youtube.com/embed/3IkfkTwqHx4" frameborder="0" allowfullscreen=""></iframe>
 </center>
+</p>
 
-
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="PgAdmin">
-<a class="anchor" href="#PgAdmin" aria-hidden="true"><span class="octicon octicon-link"></span></a>PgAdmin<a class="anchor-link" href="#PgAdmin"> </a>
-</h1>
-<p>pgAdmin is the leading Open Source management tool, the world’s most advanced Open Source database. The pgAdmin package is a free and open-source graphical user interface (GUI) administration tool for PostgreSQL, which is supported on many computer platforms.
+<h1 id="PgAdmin">PgAdmin<a class="anchor-link" href="#PgAdmin"> </a></h1><p>pgAdmin is the leading Open Source management tool, the world’s most advanced Open Source database. The pgAdmin package is a free and open-source graphical user interface (GUI) administration tool for PostgreSQL, which is supported on many computer platforms.
 pgAdmin 4 is designed to meet the needs of both novice and experienced Postgres users alike, providing a powerful graphical interface that simplifies the creation, maintenance and use of database objects [wikipedia, pgAdmin documentation]. <a href="https://www.pgadmin.org/docs/pgadmin4/latest/index.html">Here</a> is the documentation.</p>
 <p>Instead of pgcli which was a command line interface, we can use pgAdmin which is GUI-based and more convenient to work with the database.</p>
 <p>We can use a docker image that contains both postgres and pgadmin.</p>
@@ -753,8 +559,7 @@ pgAdmin 4 is designed to meet the needs of both novice and experienced Postgres 
 </div>
     
 
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>And then go to this address in your browser: <code>http://localhost:8080/</code> and use the email and password you used above to log in.</p>
 <p>Then right click on <code>Servers</code> in the left side of the page and then <code>create &gt; server...</code>. Then in the <code>General</code> tab set a name and in the <code>connection</code> tab use <code>localhost</code> and <code>root</code> and <code>root</code> for host, user, and password. But it doesn't work and it cannot find postgres in its localhost (it cannot see it because there is no connection between these two containers).</p>
@@ -790,9 +595,9 @@ pgAdmin 4 is designed to meet the needs of both novice and experienced Postgres 
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># terminal1</span>
 <span class="n">docker</span> <span class="n">run</span> <span class="o">-</span><span class="n">it</span> \
-  <span class="o">-</span><span class="n">e</span> <span class="n">POSTGRES_USER</span><span class="o">=</span><span class="s2">"root"</span> \
-  <span class="o">-</span><span class="n">e</span> <span class="n">POSTGRES_PASSWORD</span><span class="o">=</span><span class="s2">"root"</span> \
-  <span class="o">-</span><span class="n">e</span> <span class="n">POSTGRES_DB</span><span class="o">=</span><span class="s2">"ny_taxi"</span> \
+  <span class="o">-</span><span class="n">e</span> <span class="n">POSTGRES_USER</span><span class="o">=</span><span class="s2">&quot;root&quot;</span> \
+  <span class="o">-</span><span class="n">e</span> <span class="n">POSTGRES_PASSWORD</span><span class="o">=</span><span class="s2">&quot;root&quot;</span> \
+  <span class="o">-</span><span class="n">e</span> <span class="n">POSTGRES_DB</span><span class="o">=</span><span class="s2">&quot;ny_taxi&quot;</span> \
   <span class="o">-</span><span class="n">v</span> <span class="err">$</span><span class="p">(</span><span class="n">pwd</span><span class="p">)</span><span class="o">/</span><span class="n">ny_taxi_postgres_data</span><span class="p">:</span><span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">postgresql</span><span class="o">/</span><span class="n">data</span> \
   <span class="o">-</span><span class="n">p</span> <span class="mi">5432</span><span class="p">:</span><span class="mi">5432</span> \
   <span class="o">--</span><span class="n">network</span><span class="o">=</span><span class="n">pg</span><span class="o">-</span><span class="n">network</span> \
@@ -816,8 +621,8 @@ pgAdmin 4 is designed to meet the needs of both novice and experienced Postgres 
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#terminal2</span>
 <span class="n">docker</span> <span class="n">run</span> <span class="o">-</span><span class="n">it</span> \
-  <span class="o">-</span><span class="n">e</span> <span class="n">PGADMIN_DEFAULT_EMAIL</span><span class="o">=</span><span class="s2">"admin@admin.com"</span> \
-  <span class="o">-</span><span class="n">e</span> <span class="n">PGADMIN_DEFAULT_PASSWORD</span><span class="o">=</span><span class="s2">"root"</span> \
+  <span class="o">-</span><span class="n">e</span> <span class="n">PGADMIN_DEFAULT_EMAIL</span><span class="o">=</span><span class="s2">&quot;admin@admin.com&quot;</span> \
+  <span class="o">-</span><span class="n">e</span> <span class="n">PGADMIN_DEFAULT_PASSWORD</span><span class="o">=</span><span class="s2">&quot;root&quot;</span> \
   <span class="o">-</span><span class="n">p</span> <span class="mi">8080</span><span class="p">:</span><span class="mi">80</span> \
   <span class="o">--</span><span class="n">network</span><span class="o">=</span><span class="n">pg</span><span class="o">-</span><span class="n">network</span> \
   <span class="o">--</span><span class="n">name</span> <span class="n">pgadmin</span> \
@@ -831,8 +636,7 @@ pgAdmin 4 is designed to meet the needs of both novice and experienced Postgres 
 </div>
     
 
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Let's run the container that we had for data ingestion on the network to ingest data into postgres. Note that as we have donwloaded the dataset and do not want to download it again (we can if we want by providing the url from the website), we use python to make the address (folder in our local machine) that contains the csv dataset as a server and download the csv from that. For this, we can use the following python command in the folder address (<code>week_1_basics_n_setup/2_docker_sql</code>:</p>
 
@@ -863,9 +667,9 @@ pgAdmin 4 is designed to meet the needs of both novice and experienced Postgres 
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">URL</span><span class="o">=</span><span class="s2">"http://http://192.168.43.156:8000/:8000/yellow_tripdata_2021-01.csv"</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">URL</span><span class="o">=</span><span class="s2">&quot;http://http://192.168.43.156:8000/:8000/yellow_tripdata_2021-01.csv&quot;</span>
 <span class="ow">or</span> 
-<span class="n">URL</span><span class="o">=</span><span class="s2">"https://s3.amazonaws.com/nyc-tlc/trip+data/yellow_tripdata_2021-01.csv"</span>
+<span class="n">URL</span><span class="o">=</span><span class="s2">&quot;https://s3.amazonaws.com/nyc-tlc/trip+data/yellow_tripdata_2021-01.csv&quot;</span>
 
 <span class="n">docker</span> <span class="n">run</span> <span class="o">-</span><span class="n">it</span> \
   <span class="o">--</span><span class="n">network</span><span class="o">=</span><span class="n">pg</span><span class="o">-</span><span class="n">network</span> \
@@ -886,16 +690,14 @@ pgAdmin 4 is designed to meet the needs of both novice and experienced Postgres 
 </div>
     
 
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>in real world, instead of using this network (<code>pg-network</code>) and host (<code>pg-databse</code>), we will have a database in the cloud and a url to a database that can be used for connection. Also, instead of docker, this data ingestion can be done using kubernetes or airflow. We will see how to do it using airflow, but not kubernetes in the next weeks.</p>
 
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Now let's use docker-compose and put everything in one yaml file instead of creating network and run two containers in two terminals. Install docker-compose from <a href="https://docs.docker.com/compose/install/">here</a>.</p>
 <p>Then we can create a <code>docker-compose.yaml</code> file:</p>
@@ -918,16 +720,16 @@ pgAdmin 4 is designed to meet the needs of both novice and experienced Postgres 
       <span class="o">-</span> <span class="n">POSTGRES_PASSWORD</span><span class="o">=</span><span class="n">root</span>
       <span class="o">-</span> <span class="n">POSTGRES_DB</span><span class="o">=</span><span class="n">ny_taxi</span>
     <span class="n">volumes</span><span class="p">:</span>
-      <span class="o">-</span> <span class="s2">"./ny_taxi_postgres_data:/var/lib/postgresql/data:rw"</span>
+      <span class="o">-</span> <span class="s2">&quot;./ny_taxi_postgres_data:/var/lib/postgresql/data:rw&quot;</span>
     <span class="n">ports</span><span class="p">:</span>
-      <span class="o">-</span> <span class="s2">"5432:5432"</span>
+      <span class="o">-</span> <span class="s2">&quot;5432:5432&quot;</span>
   <span class="n">pgadmin</span><span class="p">:</span>
     <span class="n">image</span><span class="p">:</span> <span class="n">dpage</span><span class="o">/</span><span class="n">pgadmin4</span>
     <span class="n">environment</span><span class="p">:</span>
       <span class="o">-</span> <span class="n">PGADMIN_DEFAULT_EMAIL</span><span class="o">=</span><span class="n">admin</span><span class="nd">@admin</span><span class="o">.</span><span class="n">com</span>
       <span class="o">-</span> <span class="n">PGADMIN_DEFAULT_PASSWORD</span><span class="o">=</span><span class="n">root</span>
     <span class="n">ports</span><span class="p">:</span>
-      <span class="o">-</span> <span class="s2">"8080:80"</span>
+      <span class="o">-</span> <span class="s2">&quot;8080:80&quot;</span>
 </pre></div>
 
     </div>
@@ -937,8 +739,7 @@ pgAdmin 4 is designed to meet the needs of both novice and experienced Postgres 
 </div>
     
 
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>And then:</p>
 
@@ -962,22 +763,19 @@ pgAdmin 4 is designed to meet the needs of both novice and experienced Postgres 
 </div>
     
 
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Check the following video for more explaination on docker-compose, network, and ports:
 
-</p>
 <center>
     <iframe width="560" height="315" src="https://www.youtube.com/embed/tOr4hTsHOzU" frameborder="0" allowfullscreen=""></iframe>
 </center>
+</p>
 
-
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>This will run two dockers on a network and we do not need to create a separate network. Note that the network created automatically by docker compose has changed (<code>2_docker_sql_default</code>) and also the host name (<code>pgdatabase</code>). You can find the network name by <code>docker network ls</code> command.</p>
 
@@ -991,9 +789,9 @@ pgAdmin 4 is designed to meet the needs of both novice and experienced Postgres 
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">URL</span><span class="o">=</span><span class="s2">"http://192.168.43.156:8000/yellow_tripdata_2021-01.csv"</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">URL</span><span class="o">=</span><span class="s2">&quot;http://192.168.43.156:8000/yellow_tripdata_2021-01.csv&quot;</span>
 <span class="ow">or</span> 
-<span class="n">URL</span><span class="o">=</span><span class="s2">"https://s3.amazonaws.com/nyc-tlc/trip+data/yellow_tripdata_2021-01.csv"</span>
+<span class="n">URL</span><span class="o">=</span><span class="s2">&quot;https://s3.amazonaws.com/nyc-tlc/trip+data/yellow_tripdata_2021-01.csv&quot;</span>
 
 <span class="n">docker</span> <span class="n">run</span> <span class="o">-</span><span class="n">it</span> \
   <span class="o">--</span><span class="n">network</span><span class="o">=</span><span class="mi">2</span><span class="n">_docker_sql_default</span> \
@@ -1014,22 +812,16 @@ pgAdmin 4 is designed to meet the needs of both novice and experienced Postgres 
 </div>
     
 
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Then we can go to <code>localhost:8080</code> and create a server with a name like <code>localDocker</code> and connections info: host:<code>pgdatabase</code>, username:<code>root</code>, password:<code>root</code>. The table is in <code>databases &gt; ny_taxi &gt; schemas &gt; tables &gt; yellow_taxi_trips</code>.</p>
 
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Terraform">
-<a class="anchor" href="#Terraform" aria-hidden="true"><span class="octicon octicon-link"></span></a>Terraform<a class="anchor-link" href="#Terraform"> </a>
-</h1>
-<p>
-</p>
+<h1 id="Terraform">Terraform<a class="anchor-link" href="#Terraform"> </a></h1><p>
 <center>
     <iframe width="560" height="315" src="https://www.youtube.com/embed/Hajwnmj0xfQ" frameborder="0" allowfullscreen=""></iframe>
 </center>
@@ -1037,37 +829,30 @@ pgAdmin 4 is designed to meet the needs of both novice and experienced Postgres 
 <center>
     <iframe width="560" height="315" src="https://www.youtube.com/embed/dNkEgO-CExg" frameborder="0" allowfullscreen=""></iframe>
 </center>
+</p>
 
-
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>In this section we will go for an introduction to Terraform and how to setup GCP infrastructure using Terraform.</p>
 <p>Terraform is an infrastructure as code (IaC) tool that allows you to build, change, and version infrastructure safely and efficiently. This includes low-level components such as compute instances, storage, and networking, as well as high-level components such as DNS entries, SaaS features, etc. Terraform can manage both existing service providers and custom in-house solutions [<a href="https://www.terraform.io/intro">terraform docs</a>].</p>
-<p><img src="/blog/images/copied_from_nb/images/data-engineering-w1/6.png" alt=""></p>
+<p><img src="/blog/images/copied_from_nb/images/data-engineering-w1/6.png" alt="" /></p>
 <p>To deploy infrastructure with Terraform [<a href="https://learn.hashicorp.com/tutorials/terraform/infrastructure-as-code?in=terraform/gcp-get-started">terraform docs</a>]:</p>
 <ul>
-<li>
-<strong>Scope</strong> - Identify the infrastructure for your project.</li>
-<li>
-<strong>Author</strong> - Write the configuration for your infrastructure.</li>
-<li>
-<strong>Initialize</strong> - Install the plugins Terraform needs to manage the infrastructure.</li>
-<li>
-<strong>Plan</strong> - Preview the changes Terraform will make to match your configuration.</li>
-<li>
-<strong>Apply</strong> - Make the planned changes.</li>
+<li><strong>Scope</strong> - Identify the infrastructure for your project.</li>
+<li><strong>Author</strong> - Write the configuration for your infrastructure.</li>
+<li><strong>Initialize</strong> - Install the plugins Terraform needs to manage the infrastructure.</li>
+<li><strong>Plan</strong> - Preview the changes Terraform will make to match your configuration.</li>
+<li><strong>Apply</strong> - Make the planned changes.</li>
 </ul>
-<p><img src="/blog/images/copied_from_nb/images/data-engineering-w1/5.png" alt=""></p>
+<p><img src="/blog/images/copied_from_nb/images/data-engineering-w1/5.png" alt="" /></p>
 
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>We need to first install Terraform client from <a href="https://www.terraform.io/downloads">this link</a> based on your OS type.</p>
 <p>After setting up your GCP account, you need to create a project (follow the video). Then you need to create a service account from <code>IAM &amp; Admin &gt; Services &gt; Create service account</code> and then fill the name and other stuff to create it. Then grant <code>Viewer</code> role to begin with.</p>
@@ -1106,8 +891,7 @@ A service account is identified by its email address, which is unique to the acc
 </div>
     
 
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Then set environment variable to point to your downloaded GCP keys:</p>
 
@@ -1134,8 +918,7 @@ A service account is identified by its email address, which is unique to the acc
 </div>
     
 
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Let's now create the infrastructure for our project in GCP:</p>
 <ul>
@@ -1153,8 +936,7 @@ BigQuery is the Google Cloud’s modern and serverless data warehousing solution
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Now let's add permissions for our service account. From <code>IAM &amp; Admin &gt; IAM</code> in the <code>Permissions</code> tab select the permission we created and edit it. In order to give Terraform access to go and create buckets and objects in GCS, we need to add two new roles called <code>storage admin</code> and <code>storage object admin</code>. Note that in production you may want to create custom rules to limit the access and not use Admin version which gives full access.
 The ideal case would be to create one service account for Terrafrom and assign its permissions, and then a different service for data pipeline with its own permissions.</p>
@@ -1168,8 +950,7 @@ The ideal case would be to create one service account for Terrafrom and assign i
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Here is the <code>main.tf</code> file (check <a href="https://learn.hashicorp.com/tutorials/terraform/google-cloud-platform-build?in=terraform/gcp-get-started">here</a> to learn about different parts and how ro write the config file):</p>
 
@@ -1184,16 +965,16 @@ The ideal case would be to create one service account for Terrafrom and assign i
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">terraform</span> <span class="p">{</span>
-  <span class="n">required_version</span> <span class="o">=</span> <span class="s2">"&gt;= 1.0"</span>
-  <span class="n">backend</span> <span class="s2">"local"</span> <span class="p">{}</span>  <span class="c1"># Can change from "local" to "gcs" (for google) or "s3" (for aws), if you would like to preserve your tf-state online</span>
+  <span class="n">required_version</span> <span class="o">=</span> <span class="s2">&quot;&gt;= 1.0&quot;</span>
+  <span class="n">backend</span> <span class="s2">&quot;local&quot;</span> <span class="p">{}</span>  <span class="c1"># Can change from &quot;local&quot; to &quot;gcs&quot; (for google) or &quot;s3&quot; (for aws), if you would like to preserve your tf-state online</span>
   <span class="n">required_providers</span> <span class="p">{</span>
     <span class="n">google</span> <span class="o">=</span> <span class="p">{</span>
-      <span class="n">source</span>  <span class="o">=</span> <span class="s2">"hashicorp/google"</span>
+      <span class="n">source</span>  <span class="o">=</span> <span class="s2">&quot;hashicorp/google&quot;</span>
     <span class="p">}</span>
   <span class="p">}</span>
 <span class="p">}</span>
 
-<span class="n">provider</span> <span class="s2">"google"</span> <span class="p">{</span>
+<span class="n">provider</span> <span class="s2">&quot;google&quot;</span> <span class="p">{</span>
   <span class="n">project</span> <span class="o">=</span> <span class="n">var</span><span class="o">.</span><span class="n">project</span>
   <span class="n">region</span> <span class="o">=</span> <span class="n">var</span><span class="o">.</span><span class="n">region</span>
   <span class="o">//</span> <span class="n">credentials</span> <span class="o">=</span> <span class="n">file</span><span class="p">(</span><span class="n">var</span><span class="o">.</span><span class="n">credentials</span><span class="p">)</span>  <span class="c1"># Use this if you do not want to set env-var GOOGLE_APPLICATION_CREDENTIALS</span>
@@ -1201,8 +982,8 @@ The ideal case would be to create one service account for Terrafrom and assign i
 
 <span class="c1"># Data Lake Bucket</span>
 <span class="c1"># Ref: https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket</span>
-<span class="n">resource</span> <span class="s2">"google_storage_bucket"</span> <span class="s2">"data-lake-bucket"</span> <span class="p">{</span>
-  <span class="n">name</span>          <span class="o">=</span> <span class="s2">"$</span><span class="si">{local.data_lake_bucket}</span><span class="s2">_$</span><span class="si">{var.project}</span><span class="s2">"</span> <span class="c1"># Concatenating DL bucket &amp; Project name for unique naming</span>
+<span class="n">resource</span> <span class="s2">&quot;google_storage_bucket&quot;</span> <span class="s2">&quot;data-lake-bucket&quot;</span> <span class="p">{</span>
+  <span class="n">name</span>          <span class="o">=</span> <span class="s2">&quot;$</span><span class="si">{local.data_lake_bucket}</span><span class="s2">_$</span><span class="si">{var.project}</span><span class="s2">&quot;</span> <span class="c1"># Concatenating DL bucket &amp; Project name for unique naming</span>
   <span class="n">location</span>      <span class="o">=</span> <span class="n">var</span><span class="o">.</span><span class="n">region</span>
 
   <span class="c1"># Optional, but recommended settings:</span>
@@ -1215,7 +996,7 @@ The ideal case would be to create one service account for Terrafrom and assign i
 
   <span class="n">lifecycle_rule</span> <span class="p">{</span>
     <span class="n">action</span> <span class="p">{</span>
-      <span class="nb">type</span> <span class="o">=</span> <span class="s2">"Delete"</span>
+      <span class="nb">type</span> <span class="o">=</span> <span class="s2">&quot;Delete&quot;</span>
     <span class="p">}</span>
     <span class="n">condition</span> <span class="p">{</span>
       <span class="n">age</span> <span class="o">=</span> <span class="mi">30</span>  <span class="o">//</span> <span class="n">days</span>
@@ -1227,7 +1008,7 @@ The ideal case would be to create one service account for Terrafrom and assign i
 
 <span class="c1"># DWH</span>
 <span class="c1"># Ref: https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/bigquery_dataset</span>
-<span class="n">resource</span> <span class="s2">"google_bigquery_dataset"</span> <span class="s2">"dataset"</span> <span class="p">{</span>
+<span class="n">resource</span> <span class="s2">&quot;google_bigquery_dataset&quot;</span> <span class="s2">&quot;dataset&quot;</span> <span class="p">{</span>
   <span class="n">dataset_id</span> <span class="o">=</span> <span class="n">var</span><span class="o">.</span><span class="n">BQ_DATASET</span>
   <span class="n">project</span>    <span class="o">=</span> <span class="n">var</span><span class="o">.</span><span class="n">project</span>
   <span class="n">location</span>   <span class="o">=</span> <span class="n">var</span><span class="o">.</span><span class="n">region</span>
@@ -1241,8 +1022,7 @@ The ideal case would be to create one service account for Terrafrom and assign i
 </div>
     
 
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>And the <code>variables.tf</code> is as follows:</p>
 
@@ -1257,30 +1037,30 @@ The ideal case would be to create one service account for Terrafrom and assign i
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">locals</span> <span class="p">{</span>
-  <span class="n">data_lake_bucket</span> <span class="o">=</span> <span class="s2">"dtc_data_lake"</span>
+  <span class="n">data_lake_bucket</span> <span class="o">=</span> <span class="s2">&quot;dtc_data_lake&quot;</span>
 <span class="p">}</span>
 
-<span class="n">variable</span> <span class="s2">"project"</span> <span class="p">{</span>
-  <span class="n">description</span> <span class="o">=</span> <span class="s2">"Your GCP Project ID"</span>
+<span class="n">variable</span> <span class="s2">&quot;project&quot;</span> <span class="p">{</span>
+  <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Your GCP Project ID&quot;</span>
   <span class="nb">type</span> <span class="o">=</span> <span class="n">string</span>
 <span class="p">}</span>
 
 
-<span class="n">variable</span> <span class="s2">"region"</span> <span class="p">{</span>
-  <span class="n">description</span> <span class="o">=</span> <span class="s2">"Region for GCP resources. Choose as per your location: https://cloud.google.com/about/locations"</span>
-  <span class="n">default</span> <span class="o">=</span> <span class="s2">"europe-west6"</span>
+<span class="n">variable</span> <span class="s2">&quot;region&quot;</span> <span class="p">{</span>
+  <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Region for GCP resources. Choose as per your location: https://cloud.google.com/about/locations&quot;</span>
+  <span class="n">default</span> <span class="o">=</span> <span class="s2">&quot;europe-west6&quot;</span>
   <span class="nb">type</span> <span class="o">=</span> <span class="n">string</span>
 <span class="p">}</span>
 
-<span class="n">variable</span> <span class="s2">"storage_class"</span> <span class="p">{</span>
-  <span class="n">description</span> <span class="o">=</span> <span class="s2">"Storage class type for your bucket. Check official docs for more info."</span>
-  <span class="n">default</span> <span class="o">=</span> <span class="s2">"STANDARD"</span>
+<span class="n">variable</span> <span class="s2">&quot;storage_class&quot;</span> <span class="p">{</span>
+  <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Storage class type for your bucket. Check official docs for more info.&quot;</span>
+  <span class="n">default</span> <span class="o">=</span> <span class="s2">&quot;STANDARD&quot;</span>
 <span class="p">}</span>
 
-<span class="n">variable</span> <span class="s2">"BQ_DATASET"</span> <span class="p">{</span>
-  <span class="n">description</span> <span class="o">=</span> <span class="s2">"BigQuery Dataset that raw data (from GCS) will be written to"</span>
+<span class="n">variable</span> <span class="s2">&quot;BQ_DATASET&quot;</span> <span class="p">{</span>
+  <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;BigQuery Dataset that raw data (from GCS) will be written to&quot;</span>
   <span class="nb">type</span> <span class="o">=</span> <span class="n">string</span>
-  <span class="n">default</span> <span class="o">=</span> <span class="s2">"trips_data_all"</span>
+  <span class="n">default</span> <span class="o">=</span> <span class="s2">&quot;trips_data_all&quot;</span>
 <span class="p">}</span>
 </pre></div>
 
@@ -1291,8 +1071,7 @@ The ideal case would be to create one service account for Terrafrom and assign i
 </div>
     
 
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>We can then do the following commands for terraform:</p>
 
@@ -1323,103 +1102,53 @@ The ideal case would be to create one service account for Terrafrom and assign i
 </div>
     
 
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>That's it for this week. The following video shows how to create a VM instance, add ssh key and connect to it, install docker and docker-compose, run pgAdmin and postgres on the VM, how to connect to the database from our local machine, and how to install terraform and do initialization.
 
-</p>
 <center>
     <iframe width="560" height="315" src="https://www.youtube.com/embed/ae-CV2KfoN0" frameborder="0" allowfullscreen=""></iframe>
 </center>
+</p>
 
-
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>To refresh your SQL knowledge, check the following videos:
 
-</p>
 <center>
     <iframe width="560" height="315" src="https://www.youtube.com/embed/QEcps_iskgg" frameborder="0" allowfullscreen=""></iframe>
 </center>
+</p>
 
-
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>The questions for homework can be found <a href="https://github.com/DataTalksClub/data-engineering-zoomcamp/blob/main/week_1_basics_n_setup/homework.md">here</a>. The following video shows the solution:
 
-</p>
 <center>
     <iframe width="560" height="315" src="https://www.youtube.com/embed/HxHqH2ARfxM" frameborder="0" allowfullscreen=""></iframe>
 </center>
+</p>
 
-
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>You can also learn more about terraform here:
 
-</p>
 <center>
     <iframe width="560" height="315" src="https://www.youtube.com/embed/SLB_c_ayRMo" frameborder="0" allowfullscreen=""></iframe>
 </center>
-
+</p>
 
 </div>
 </div>
 </div>
 </div>
 
-
-
-  </div><!-- from https://github.com/utterance/utterances -->
-<script src="https://utteranc.es/client.js"
-        repo="kargarisaac/blog"
-        issue-term="title"
-        label="blogpost-comment"
-        theme="github-light"
-        crossorigin="anonymous"
-        async>
-</script><a class="u-url" href="/blog/data%20engineering/jupyter/2022/01/18/data-engineering-w1.html" hidden></a>
-</article>
-      </div>
-    </main><footer class="site-footer h-card">
-  <data class="u-url" href="/blog/"></data>
-
-  <div class="wrapper">
-
-    <div class="footer-col-wrapper">
-      <div class="footer-col">
-        <p class="feed-subscribe">
-          <a href="/blog/feed.xml">
-            <svg class="svg-icon orange">
-              <use xlink:href="/blog/assets/minima-social-icons.svg#rss"></use>
-            </svg><span>Subscribe</span>
-          </a>
-        </p>
-      </div>
-      <div class="footer-col">
-        <p>My posts about Machine Learning</p>
-      </div>
-    </div>
-
-    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/kargarisaac" target="_blank" title="kargarisaac"><svg class="svg-icon grey"><use xlink:href="/blog/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://www.linkedin.com/in/eshagh-kargar" target="_blank" title="eshagh-kargar"><svg class="svg-icon grey"><use xlink:href="/blog/assets/minima-social-icons.svg#linkedin"></use></svg></a></li><li><a rel="me" href="https://twitter.com/kargarisaac" target="_blank" title="kargarisaac"><svg class="svg-icon grey"><use xlink:href="/blog/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
-</div>
-
-  </div>
-
-</footer>
-</body>
-
-</html>

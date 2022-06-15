@@ -183,23 +183,23 @@ window.onload = wrap_img;
 <p>Here is the expalanation from MLFLOW documentations:</p>
 <blockquote>
 <p>MLflow’s Tracking Server supports utilizing the host as a proxy server for operations involving artifacts. Once configured with the appropriate access requirements, an administrator can start the tracking server to enable assumed-role operations involving the saving, loading, or listing of model artifacts, images, documents, and files. This eliminates the need to allow end users to have direct path access to a remote object store (e.g., s3, adls, gcs, hdfs) for artifact handling and eliminates the need for an end-user to provide access credentials to interact with an underlying object store.</p>
-<p>Enabling the Tracking Server to perform proxied artifact access in order to route client artifact requests to an object store location:&gt; - Part 1a and b:&gt; The MLflow client creates an instance of a RestStore and sends REST API requests to log MLflow entities</p>
+<p>Enabling the Tracking Server to perform proxied artifact access in order to route client artifact requests to an object store location:&gt; - <strong>Part 1a and b:</strong>&gt; The MLflow client creates an instance of a RestStore and sends REST API requests to log MLflow entities</p>
+<p>The Tracking Server creates an instance of an SQLAlchemyStore and connects to the remote host for inserting tracking information in the database (i.e., metrics, parameters, tags, etc.)</p>
+<ul>
+<li>
+<strong>Part 1c and d:</strong>&gt; Retrieval requests by the client return information from the configured SQLAlchemyStore table</li>
+</ul>
+<ul>
+<li>
+<strong>Part 2a and b:</strong>&gt; Logging events for artifacts are made by the client using the HttpArtifactRepository to write files to MLflow Tracking Server</li>
+</ul>
+<p>The Tracking Server then writes these files to the configured object store location with assumed role authentication</p>
+<ul>
+<li><strong>Part 2c and d:</strong></li>
+</ul>
+<p>Retrieving artifacts from the configured backend store for a user request is done with the same authorized authentication that was configured at server start</p>
+<p>Artifacts are passed to the end user through the Tracking Server through the interface of the HttpArtifactRepository</p>
 </blockquote>
-
-<pre><code>The Tracking Server creates an instance of an SQLAlchemyStore and connects to the remote host for inserting tracking information in the database (i.e., metrics, parameters, tags, etc.)
-
-- Part 1c and d:Retrieval requests by the client return information from the configured SQLAlchemyStore table
-- Part 2a and b:
-
-Logging events for artifacts are made by the client using the HttpArtifactRepository to write files to MLflow Tracking Server
-
-The Tracking Server then writes these files to the configured object store location with assumed role authentication
-
-- Part 2c and d:
-
-Retrieving artifacts from the configured backend store for a user request is done with the same authorized authentication that was configured at server start
-
-Artifacts are passed to the end user through the Tracking Server through the interface of the HttpArtifactRepository</code></pre>
 
 </div>
 </div>

@@ -121,7 +121,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      4 min read
+      6 min read
     
 </span></p>
 
@@ -180,6 +180,33 @@ window.onload = wrap_img;
 <p>The architecture that we want to implement here is like scenario number 5 and would be as the following image:</p>
 <p><img src="/blog/images/copied_from_nb/images/mlflow-gcp/scenario_5.png" alt="">
 <em><a href="https://www.mlflow.org/docs/latest/tracking.html#scenario-5-mlflow-tracking-server-enabled-with-proxied-artifact-storage-access">source</a></em></p>
+<p>Here is the expalanation from MLFLOW documentations:</p>
+
+<pre><code>MLflow’s Tracking Server supports utilizing the host as a proxy server for operations involving artifacts. Once configured with the appropriate access requirements, an administrator can start the tracking server to enable assumed-role operations involving the saving, loading, or listing of model artifacts, images, documents, and files. This eliminates the need to allow end users to have direct path access to a remote object store (e.g., s3, adls, gcs, hdfs) for artifact handling and eliminates the need for an end-user to provide access credentials to interact with an underlying object store.
+
+Enabling the Tracking Server to perform proxied artifact access in order to route client artifact requests to an object store location:
+
+- Part 1a and b:
+
+The MLflow client creates an instance of a RestStore and sends REST API requests to log MLflow entities
+
+The Tracking Server creates an instance of an SQLAlchemyStore and connects to the remote host for inserting tracking information in the database (i.e., metrics, parameters, tags, etc.)
+
+- Part 1c and d:
+
+Retrieval requests by the client return information from the configured SQLAlchemyStore table
+
+- Part 2a and b:
+
+Logging events for artifacts are made by the client using the HttpArtifactRepository to write files to MLflow Tracking Server
+
+The Tracking Server then writes these files to the configured object store location with assumed role authentication
+
+- Part 2c and d:
+
+Retrieving artifacts from the configured backend store for a user request is done with the same authorized authentication that was configured at server start
+
+Artifacts are passed to the end user through the Tracking Server through the interface of the HttpArtifactRepository</code></pre>
 
 </div>
 </div>

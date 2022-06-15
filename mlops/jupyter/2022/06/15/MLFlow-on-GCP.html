@@ -209,7 +209,7 @@ window.onload = wrap_img;
 <p>We then can create a virtual instance as the tracking server.</p>
 
 <pre><code>gcloud compute instances create mlflow-tracking-server --project=&lt;PROJECT_ID&gt; --zone=europe-west1-b --machine-type=e2-standard-2 --network-interface=network-tier=PREMIUM,subnet=default --maintenance-policy=MIGRATE --provisioning-model=STANDARD --service-account=1094395776754-compute@developer.gserviceaccount.com --scopes=https://www.googleapis.com/auth/cloud-platform --tags=mlflow-tracking-server --create-disk=auto-delete=yes,boot=yes,device-name=mlflow-tracking-server,image=projects/ubuntu-os-cloud/global/images/ubuntu-2004-focal-v20220610,mode=rw,size=10,type=projects/&lt;PROJECT_ID&gt;/zones/europe-west1-b/diskTypes/pd-balanced --no-shielded-secure-boot --shielded-vtpm --shielded-integrity-monitoring --reservation-affinity=any</code></pre>
-<p>You can also use the UI to simply create the virtual machine. Just make sure you use the <code>default</code> network for VPC and the created firewall rule in the networks section. Also give the VM <code>Allow full access to all Cloud APIs</code>i in the Management -&gt; availability policies section.</p>
+<p>You can also use the UI to simply create the virtual machine. Just make sure you use the <code>default</code> network for VPC and the created firewall rule for the <code>networks tags</code> in the <code>Network Interfaces</code> section. Also give the VM <code>Allow full access to all Cloud APIs</code>i in the Management -&gt; availability policies section.</p>
 <p>change <code>PROJECT_ID</code> based on your project. You can also change other configs like zone, machine, etc. if you want. Note that you have to change them in multiple places.</p>
 
 </div>

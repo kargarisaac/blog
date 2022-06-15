@@ -16,7 +16,7 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2022-06-15T00:00:00-05:00" />
 <script type="application/ld+json">
-{"mainEntityOfPage":{"@type":"WebPage","@id":"https://kargarisaac.github.io/blog/mlops/jupyter/2022/06/15/MLFlow-on-GCP.html"},"description":"We will setup MLFlow on GCP for distributed experiment tracking.","@type":"BlogPosting","url":"https://kargarisaac.github.io/blog/mlops/jupyter/2022/06/15/MLFlow-on-GCP.html","headline":"MLFlow on GCP for Experiment Tracking","dateModified":"2022-06-15T00:00:00-05:00","datePublished":"2022-06-15T00:00:00-05:00","image":"https://kargarisaac.github.io/blog/images/some_folder/your_image.png","@context":"https://schema.org"}</script>
+{"description":"We will setup MLFlow on GCP for distributed experiment tracking.","@type":"BlogPosting","url":"https://kargarisaac.github.io/blog/mlops/jupyter/2022/06/15/MLFlow-on-GCP.html","dateModified":"2022-06-15T00:00:00-05:00","datePublished":"2022-06-15T00:00:00-05:00","headline":"MLFlow on GCP for Experiment Tracking","image":"https://kargarisaac.github.io/blog/images/some_folder/your_image.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://kargarisaac.github.io/blog/mlops/jupyter/2022/06/15/MLFlow-on-GCP.html"},"@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/blog/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://kargarisaac.github.io/blog/feed.xml" title="Isaac Kargar" /><!-- the google_analytics_id gets auto inserted from the config file -->
 
@@ -38,7 +38,7 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2022-06-15T00:00:00-05:00" />
 <script type="application/ld+json">
-{"mainEntityOfPage":{"@type":"WebPage","@id":"https://kargarisaac.github.io/blog/mlops/jupyter/2022/06/15/MLFlow-on-GCP.html"},"description":"We will setup MLFlow on GCP for distributed experiment tracking.","@type":"BlogPosting","url":"https://kargarisaac.github.io/blog/mlops/jupyter/2022/06/15/MLFlow-on-GCP.html","headline":"MLFlow on GCP for Experiment Tracking","dateModified":"2022-06-15T00:00:00-05:00","datePublished":"2022-06-15T00:00:00-05:00","image":"https://kargarisaac.github.io/blog/images/some_folder/your_image.png","@context":"https://schema.org"}</script>
+{"description":"We will setup MLFlow on GCP for distributed experiment tracking.","@type":"BlogPosting","url":"https://kargarisaac.github.io/blog/mlops/jupyter/2022/06/15/MLFlow-on-GCP.html","dateModified":"2022-06-15T00:00:00-05:00","datePublished":"2022-06-15T00:00:00-05:00","headline":"MLFlow on GCP for Experiment Tracking","image":"https://kargarisaac.github.io/blog/images/some_folder/your_image.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://kargarisaac.github.io/blog/mlops/jupyter/2022/06/15/MLFlow-on-GCP.html"},"@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 <link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
@@ -121,7 +121,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      3 min read
+      4 min read
     
 </span></p>
 
@@ -176,7 +176,8 @@ window.onload = wrap_img;
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>In this blog post, I will show the steps to setup MLFlow on Google Cloud for distributed experiment tracking. The architecture would be as the following image:</p>
+<p>In this blog post, I will show the steps to setup MLFlow on Google Cloud for distributed experiment tracking. MLFlow can be used for machine learning experiment tracking. There are several ways to use MLFLow which you can check them <a href="https://www.mlflow.org/docs/latest/tracking.html">here</a>.</p>
+<p>The architecture that we want to implement here is like scenario number 5 and would be as the following image:</p>
 <p><img src="/blog/images/copied_from_nb/images/mlflow-gcp/scenario_5.png" alt="">
 <em><a href="https://www.mlflow.org/docs/latest/tracking.html#scenario-5-mlflow-tracking-server-enabled-with-proxied-artifact-storage-access">source</a></em></p>
 
@@ -189,8 +190,8 @@ window.onload = wrap_img;
 <p>We will have :</p>
 <ul>
 <li>one virtual machine as tracking server</li>
-<li>one google storage bucket as artifact store</li>
-<li>one PostgreSQL as backend store</li>
+<li>one google storage bucket as artifact store - persists artifacts (files, models, images, in-memory objects, or model summary, etc).</li>
+<li>one PostgreSQL as backend store - persists MLflow entities (runs, parameters, metrics, tags, notes, metadata, etc).</li>
 </ul>
 
 </div>
@@ -202,12 +203,13 @@ window.onload = wrap_img;
 <h1 id="Virtual-Machine-as-The-Tracking-Server">
 <a class="anchor" href="#Virtual-Machine-as-The-Tracking-Server" aria-hidden="true"><span class="octicon octicon-link"></span></a>Virtual Machine as The Tracking Server<a class="anchor-link" href="#Virtual-Machine-as-The-Tracking-Server"> </a>
 </h1>
-<p>We also need a firewall rule like the following:</p>
+<p>We need a firewall rule which can be created like the following:</p>
 
 <pre><code>gcloud compute firewall-rules create mlflow-tracking-server --network default --priority 1000 --direction ingress --action allow --target-tags mlflow-tracking-server --source-ranges 0.0.0.0/0 --rules tcp:5000 --enable-logging</code></pre>
-<p>We need a virtual instance as the tracking server.</p>
+<p>We then can create a virtual instance as the tracking server.</p>
 
 <pre><code>gcloud compute instances create mlflow-tracking-server --project=&lt;PROJECT_ID&gt; --zone=europe-west1-b --machine-type=e2-standard-2 --network-interface=network-tier=PREMIUM,subnet=default --maintenance-policy=MIGRATE --provisioning-model=STANDARD --service-account=1094395776754-compute@developer.gserviceaccount.com --scopes=https://www.googleapis.com/auth/cloud-platform --tags=mlflow-tracking-server --create-disk=auto-delete=yes,boot=yes,device-name=mlflow-tracking-server,image=projects/ubuntu-os-cloud/global/images/ubuntu-2004-focal-v20220610,mode=rw,size=10,type=projects/&lt;PROJECT_ID&gt;/zones/europe-west1-b/diskTypes/pd-balanced --no-shielded-secure-boot --shielded-vtpm --shielded-integrity-monitoring --reservation-affinity=any</code></pre>
+<p>You can also use the UI to simply create the virtual machine. Just make sure you use the <code>default</code> network for VPC and the created firewall rule in the networks section. Also give the VM <code>Allow full access to all Cloud APIs</code>i in the Management -&gt; availability policies section.</p>
 <p>change <code>PROJECT_ID</code> based on your project. You can also change other configs like zone, machine, etc. if you want. Note that you have to change them in multiple places.</p>
 
 </div>

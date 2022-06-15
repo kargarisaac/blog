@@ -121,7 +121,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      6 min read
+      7 min read
     
 </span></p>
 
@@ -218,16 +218,39 @@ Retrieving artifacts from the configured backend store for a user request is don
 <a class="anchor" href="#Virtual-Machine-as-The-Tracking-Server" aria-hidden="true"><span class="octicon octicon-link"></span></a>Virtual Machine as The Tracking Server<a class="anchor-link" href="#Virtual-Machine-as-The-Tracking-Server"> </a>
 </h1>
 <p>We need a firewall rule which can be created like the following:</p>
-<div class="highlight"><pre><span></span>gcloud compute firewall-rules create mlflow-tracking-server --network default --priority <span class="m">1000</span> --direction ingress --action allow --target-tags mlflow-tracking-server --source-ranges <span class="m">0</span>.0.0.0/0 --rules tcp:5000 --enable-logging
+<div class="highlight"><pre><span></span>gcloud compute firewall-rules create mlflow-tracking-server <span class="se">\</span>
+    --network default <span class="se">\</span>
+    --priority <span class="m">1000</span> <span class="se">\</span>
+    --direction ingress <span class="se">\</span>
+    --action allow <span class="se">\</span>
+    --target-tags mlflow-tracking-server <span class="se">\</span>
+    --source-ranges <span class="m">0</span>.0.0.0/0 <span class="se">\</span>
+    --rules tcp:5000 <span class="se">\</span>
+    --enable-logging
 </pre></div>
 <p>Here is the firewall rule after creation:</p>
 <p><img src="/blog/images/copied_from_nb/images/mlflow-gcp/1.png" alt=""></p>
 <p>We then can create a virtual instance as the tracking server.</p>
-<div class="highlight"><pre><span></span>gcloud compute instances create mlflow-tracking-server --project<span class="o">=</span>&lt;PROJECT_ID&gt; --zone<span class="o">=</span>europe-west1-b --machine-type<span class="o">=</span>e2-standard-2 --network-interface<span class="o">=</span>network-tier<span class="o">=</span>PREMIUM,subnet<span class="o">=</span>default --maintenance-policy<span class="o">=</span>MIGRATE --provisioning-model<span class="o">=</span>STANDARD --service-account<span class="o">=</span>&lt;PROJECT_NUMBER&gt;-compute@developer.gserviceaccount.com --scopes<span class="o">=</span>https://www.googleapis.com/auth/cloud-platform --tags<span class="o">=</span>mlflow-tracking-server --create-disk<span class="o">=</span>auto-delete<span class="o">=</span>yes,boot<span class="o">=</span>yes,device-name<span class="o">=</span>mlflow-tracking-server,image<span class="o">=</span>projects/ubuntu-os-cloud/global/images/ubuntu-2004-focal-v20220610,mode<span class="o">=</span>rw,size<span class="o">=</span><span class="m">10</span>,type<span class="o">=</span>projects/&lt;PROJECT_ID&gt;/zones/europe-west1-b/diskTypes/pd-balanced --no-shielded-secure-boot --shielded-vtpm --shielded-integrity-monitoring --reservation-affinity<span class="o">=</span>any
+<div class="highlight"><pre><span></span>gcloud compute instances create mlflow-tracking-server <span class="se">\</span>
+    --project<span class="o">=</span>&lt;PROJECT_ID&gt; <span class="se">\</span>
+    --zone<span class="o">=</span>europe-west1-b <span class="se">\</span>
+    --machine-type<span class="o">=</span>e2-standard-2 <span class="se">\</span>
+    --network-interface<span class="o">=</span>network-tier<span class="o">=</span>PREMIUM,subnet<span class="o">=</span>default <span class="se">\</span>
+    --maintenance-policy<span class="o">=</span>MIGRATE <span class="se">\</span>
+    --provisioning-model<span class="o">=</span>STANDARD <span class="se">\</span>
+    --service-account<span class="o">=</span>&lt;PROJECT_NUMBER&gt;-compute@developer.gserviceaccount.com <span class="se">\</span>
+    --scopes<span class="o">=</span>https://www.googleapis.com/auth/cloud-platform <span class="se">\</span>
+    --tags<span class="o">=</span>mlflow-tracking-server <span class="se">\</span>
+    --create-disk<span class="o">=</span>auto-delete<span class="o">=</span>yes,boot<span class="o">=</span>yes,device-name<span class="o">=</span>mlflow-tracking-server,image<span class="o">=</span>projects/ubuntu-os-cloud/global/images/ubuntu-2004-focal-v20220610,mode<span class="o">=</span>rw,size<span class="o">=</span><span class="m">10</span>,type<span class="o">=</span>projects/&lt;PROJECT_ID&gt;/zones/europe-west1-b/diskTypes/pd-balanced <span class="se">\</span>
+    --no-shielded-secure-boot <span class="se">\</span>
+    --shielded-vtpm <span class="se">\</span>
+    --shielded-integrity-monitoring <span class="se">\</span>
+    --reservation-affinity<span class="o">=</span>any
 </pre></div>
 <p>change <code>PROJECT_ID</code> based on your project. You can also change other configs like zone, machine, etc. if you want. Note that you have to change them in multiple places. The service account is the default service account for compute engine and is as follows:</p>
 <div class="highlight"><pre><span></span>PROJECT_NUMBER-compute@developer.gserviceaccount.com
 </pre></div>
+<p>Where <code>PROJECT_NUMBER</code> is the project number of the project that owns the service account. You can find it <a href="https://cloud.google.com/resource-manager/docs/creating-managing-projects#identifying_projects">here</a>.</p>
 <p>You can also use the UI to simply create the virtual machine. Just make sure you use the <code>default</code> network for VPC and the created firewall rule for the <code>networks tags</code> in the <code>Network Interfaces</code> section. Also give the VM <code>Allow full access to all Cloud APIs</code>i in the Management -&gt; availability policies section.</p>
 <p>Here is the networking section of the VM after creation (other configs can be based on your choice):</p>
 <p><img src="/blog/images/copied_from_nb/images/mlflow-gcp/2.png" alt=""></p>
@@ -297,7 +320,11 @@ python3 -m venv mlflow
 pip install mlflow boto3 google-cloud-storage psycopg2-binary
 </pre></div>
 <p>Then run the mlflow server:</p>
-<div class="highlight"><pre><span></span>mlflow server -h <span class="m">0</span>.0.0.0 -p <span class="m">5000</span> --backend-store-uri postgresql://&lt;user&gt;:&lt;pass&gt;@&lt;db private ip&gt;:5432/&lt;db name&gt; --default-artifact-root gs://&lt;bucket name&gt;/&lt;folder name&gt;
+<div class="highlight"><pre><span></span>mlflow server <span class="se">\</span>
+    -h <span class="m">0</span>.0.0.0 <span class="se">\</span>
+    -p <span class="m">5000</span> <span class="se">\</span>
+    --backend-store-uri postgresql://&lt;user&gt;:&lt;pass&gt;@&lt;db private ip&gt;:5432/&lt;db name&gt; <span class="se">\</span>
+    --default-artifact-root gs://&lt;bucket name&gt;/&lt;folder name&gt;
 </pre></div>
 <p>Then you can go to <code>http:&lt;tracking server external IP&gt;:5000</code> address and you should see the mlflow UI!</p>
 

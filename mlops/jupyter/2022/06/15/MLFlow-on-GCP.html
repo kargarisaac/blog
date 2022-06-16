@@ -372,6 +372,8 @@ pip install mlflow boto3 google-cloud-storage psycopg2-binary
 </pre></div>
 <p>Note that you need to install <code>google-cloud-storage</code> via pip on your machine.</p>
 <p>You should now see <code>my-experiment-1</code> in the output of the above code and also in UI (refresh the page if you don't see it).</p>
+<p>You can also assign a fixed external IP address for your tracking server. So you don't need to change it in the code everytime you start the VM. You can do this by going to the <code>IP addresses</code> section in <code>VPC network</code> as shown in the below image:</p>
+<p><img src="/blog/images/copied_from_nb/images/mlflow-gcp/4.png" alt=""></p>
 <p>That's it for this post. I will try to replace VM with cloud run in future posts. I also think about having a login UI that each user should sign in to access the mlflow UI.</p>
 
 </div>

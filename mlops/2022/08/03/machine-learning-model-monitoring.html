@@ -121,7 +121,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      16 min read
+      19 min read
     
 </span></p>
 
@@ -161,6 +161,7 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h4"><a href="#Drift-Detection">Drift Detection </a></li>
 </ul>
 </li>
+<li class="toc-entry toc-h1"><a href="#Vertex-AI">Vertex AI </a></li>
 <li class="toc-entry toc-h1"><a href="#Amazon-SageMaker-Model-Monitoring">Amazon SageMaker Model Monitoring </a></li>
 </ul><body>
 <!--
@@ -200,7 +201,8 @@ If not, you still have two possibilities:</p>
 <p>Concept drift: change in relationships -&gt; The world has changed, and the model needs an update. It can be gradual (expected), sudden (you get it), and recurring (seasonal).</p>
 </li>
 </ol>
-<p>For more details, read the Evidently AI blog post series. Here we review different tools and solutions that help us to do model monitoring.</p>
+<p>For more details, read the Evidently AI blog post series. I also recommend reading Seldon ALIBI Detect amazing documentation about drift <a href="https://docs.seldon.io/projects/alibi-detect/en/stable/cd/background.html">here</a>.
+Here we review different tools and solutions that help us to do data and model monitoring.</p>
 
 </div>
 </div>
@@ -629,8 +631,238 @@ window.drawDashboard(evidently_dashboard_ee44cf8a57e0466dbd8f406872fbd0e9,
 <p><strong>Chi-Squared</strong>: The drift detector applies feature-wise Chi-Squared tests for the categorical features. For multivariate data, the p-values for each characteristic are aggregated using either the Bonferroni or False Discovery Rate (FDR) correction. The Bonferroni correction is more conservative and controls for at least one false positive probability. In contrast, the FDR correction permits an expected proportion of false positives to occur.</p>
 </li>
 </ul>
-<p>For more details and also other methods, please refer to their documentations and reference papers. I also recommend reading their amazing documentation about drift <a href="https://docs.seldon.io/projects/alibi-detect/en/stable/cd/background.html">here</a>.</p>
+<p>For more details and also other methods, please refer to their documentations and reference papers. I also recommend reading their amazing documentation about drift <a href="https://docs.seldon.io/projects/alibi-detect/en/stable/cd/background.html">here</a>. They have also a lot of examples on image, text, graph, etc. problems.</p>
 
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let's see an example of <a href="https://docs.seldon.io/projects/alibi-detect/en/stable/examples/cd_chi2ks_adult.html">Categorical and mixed type data drift detection on income prediction</a>. The instances contain a person’s characteristics like age, marital status or education while the label represents whether the person makes more or less than $50k per year. The dataset consists of a mixture of numerical and categorical features.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">alibi</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">alibi_detect.cd</span> <span class="kn">import</span> <span class="n">ChiSquareDrift</span><span class="p">,</span> <span class="n">TabularDrift</span>
+<span class="kn">from</span> <span class="nn">alibi_detect.saving</span> <span class="kn">import</span> <span class="n">save_detector</span><span class="p">,</span> <span class="n">load_detector</span>
+
+<span class="n">adult</span> <span class="o">=</span> <span class="n">alibi</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">fetch_adult</span><span class="p">()</span>
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">adult</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">adult</span><span class="o">.</span><span class="n">target</span>
+<span class="n">feature_names</span> <span class="o">=</span> <span class="n">adult</span><span class="o">.</span><span class="n">feature_names</span>
+<span class="n">category_map</span> <span class="o">=</span> <span class="n">adult</span><span class="o">.</span><span class="n">category_map</span>
+
+<span class="n">n_ref</span> <span class="o">=</span> <span class="mi">10000</span>
+<span class="n">n_test</span> <span class="o">=</span> <span class="mi">10000</span>
+
+<span class="n">X_ref</span><span class="p">,</span> <span class="n">X_t0</span><span class="p">,</span> <span class="n">X_t1</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:</span><span class="n">n_ref</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="n">n_ref</span><span class="p">:</span><span class="n">n_ref</span> <span class="o">+</span> <span class="n">n_test</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="n">n_ref</span> <span class="o">+</span> <span class="n">n_test</span><span class="p">:</span><span class="n">n_ref</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">n_test</span><span class="p">]</span>
+
+<span class="n">categories_per_feature</span> <span class="o">=</span> <span class="p">{</span><span class="n">f</span><span class="p">:</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">category_map</span><span class="o">.</span><span class="n">keys</span><span class="p">())}</span>
+
+<span class="n">cd</span> <span class="o">=</span> <span class="n">TabularDrift</span><span class="p">(</span><span class="n">X_ref</span><span class="p">,</span> <span class="n">p_val</span><span class="o">=.</span><span class="mi">05</span><span class="p">,</span> <span class="n">categories_per_feature</span><span class="o">=</span><span class="n">categories_per_feature</span><span class="p">)</span>
+
+<span class="n">preds</span> <span class="o">=</span> <span class="n">cd</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_t0</span><span class="p">)</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'No!'</span><span class="p">,</span> <span class="s1">'Yes!'</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Drift? </span><span class="si">{}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">labels</span><span class="p">[</span><span class="n">preds</span><span class="p">[</span><span class="s1">'data'</span><span class="p">][</span><span class="s1">'is_drift'</span><span class="p">]]))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>None of PyTorch, TensorFlow &gt;= 2.0, or Flax have been found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Drift? No!
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let’s take a closer look at each of the features. The preds dictionary also returns the K-S or Chi-Squared test statistics and p-value for each feature:</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cd</span><span class="o">.</span><span class="n">n_features</span><span class="p">):</span>
+    <span class="n">stat</span> <span class="o">=</span> <span class="s1">'Chi2'</span> <span class="k">if</span> <span class="n">f</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">categories_per_feature</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="k">else</span> <span class="s1">'K-S'</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="n">feature_names</span><span class="p">[</span><span class="n">f</span><span class="p">]</span>
+    <span class="n">stat_val</span><span class="p">,</span> <span class="n">p_val</span> <span class="o">=</span> <span class="n">preds</span><span class="p">[</span><span class="s1">'data'</span><span class="p">][</span><span class="s1">'distance'</span><span class="p">][</span><span class="n">f</span><span class="p">],</span> <span class="n">preds</span><span class="p">[</span><span class="s1">'data'</span><span class="p">][</span><span class="s1">'p_val'</span><span class="p">][</span><span class="n">f</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s1"> -- </span><span class="si">{</span><span class="n">stat</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">stat_val</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1"> -- p-value </span><span class="si">{</span><span class="n">p_val</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Age -- K-S 0.012 -- p-value 0.508
+Workclass -- Chi2 8.487 -- p-value 0.387
+Education -- Chi2 4.753 -- p-value 0.576
+Marital Status -- Chi2 3.160 -- p-value 0.368
+Occupation -- Chi2 8.194 -- p-value 0.415
+Relationship -- Chi2 0.485 -- p-value 0.993
+Race -- Chi2 0.587 -- p-value 0.965
+Sex -- Chi2 0.217 -- p-value 0.641
+Capital Gain -- K-S 0.002 -- p-value 1.000
+Capital Loss -- K-S 0.002 -- p-value 1.000
+Hours per week -- K-S 0.012 -- p-value 0.508
+Country -- Chi2 9.991 -- p-value 0.441
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>None of the feature-level p-values are below the threshold:</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">preds</span><span class="p">[</span><span class="s1">'data'</span><span class="p">][</span><span class="s1">'threshold'</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>0.004166666666666667</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>If you are interested in individual feature-wise drift, this is also possible:</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">fpreds</span> <span class="o">=</span> <span class="n">cd</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_t0</span><span class="p">,</span> <span class="n">drift_type</span><span class="o">=</span><span class="s1">'feature'</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cd</span><span class="o">.</span><span class="n">n_features</span><span class="p">):</span>
+    <span class="n">stat</span> <span class="o">=</span> <span class="s1">'Chi2'</span> <span class="k">if</span> <span class="n">f</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">categories_per_feature</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="k">else</span> <span class="s1">'K-S'</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="n">feature_names</span><span class="p">[</span><span class="n">f</span><span class="p">]</span>
+    <span class="n">is_drift</span> <span class="o">=</span> <span class="n">fpreds</span><span class="p">[</span><span class="s1">'data'</span><span class="p">][</span><span class="s1">'is_drift'</span><span class="p">][</span><span class="n">f</span><span class="p">]</span>
+    <span class="n">stat_val</span><span class="p">,</span> <span class="n">p_val</span> <span class="o">=</span> <span class="n">fpreds</span><span class="p">[</span><span class="s1">'data'</span><span class="p">][</span><span class="s1">'distance'</span><span class="p">][</span><span class="n">f</span><span class="p">],</span> <span class="n">fpreds</span><span class="p">[</span><span class="s1">'data'</span><span class="p">][</span><span class="s1">'p_val'</span><span class="p">][</span><span class="n">f</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s1"> -- Drift? </span><span class="si">{</span><span class="n">labels</span><span class="p">[</span><span class="n">is_drift</span><span class="p">]</span><span class="si">}</span><span class="s1"> -- </span><span class="si">{</span><span class="n">stat</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">stat_val</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1"> -- p-value </span><span class="si">{</span><span class="n">p_val</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Age -- Drift? No! -- K-S 0.012 -- p-value 0.508
+Workclass -- Drift? No! -- Chi2 8.487 -- p-value 0.387
+Education -- Drift? No! -- Chi2 4.753 -- p-value 0.576
+Marital Status -- Drift? No! -- Chi2 3.160 -- p-value 0.368
+Occupation -- Drift? No! -- Chi2 8.194 -- p-value 0.415
+Relationship -- Drift? No! -- Chi2 0.485 -- p-value 0.993
+Race -- Drift? No! -- Chi2 0.587 -- p-value 0.965
+Sex -- Drift? No! -- Chi2 0.217 -- p-value 0.641
+Capital Gain -- Drift? No! -- K-S 0.002 -- p-value 1.000
+Capital Loss -- Drift? No! -- K-S 0.002 -- p-value 1.000
+Hours per week -- Drift? No! -- K-S 0.012 -- p-value 0.508
+Country -- Drift? No! -- Chi2 9.991 -- p-value 0.441
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Vertex-AI">
+<a class="anchor" href="#Vertex-AI" aria-hidden="true"><span class="octicon octicon-link"></span></a>Vertex AI<a class="anchor-link" href="#Vertex-AI"> </a>
+</h1>
 </div>
 </div>
 </div>

@@ -231,43 +231,34 @@ Here we review different tools and solutions that help us to do data and model m
 <em><a href="https://github.com/evidentlyai/evidently">source</a></em></p>
 <ul>
 <li>
-<p><strong>Target Drift</strong>:</p>
-<ul>
-<li>
+<strong>Target Drift</strong>:</li>
+</ul>
 <p><a href="https://docs.evidentlyai.com/reports/num-target-drift">Numerical</a>: The Target Drift report assists in identifying and investigating changes to the target function and/or model predictions. The Numerical Target Drift report is appropriate for problem statements with a numerical target function, such as regression, probabilistic classification, and ranking, among others. To run this report, you must have available input features, target columns, and/or prediction columns. You'll require two datasets. The benchmark dataset is the reference set. By comparing the current production data to the reference data, they analyze the change.</p>
-<p><img src="images/ml-model-monitoring/evidently4.png" alt="">
-  <em><a href="https://github.com/evidentlyai/evidently">source</a></em></p>
-</li>
-<li>
+<p><img src="/blog/images/copied_from_nb/images/ml-model-monitoring/evidently4.png" alt="">
+<em><a href="https://github.com/evidentlyai/evidently">source</a></em></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <p><a href="https://docs.evidentlyai.com/reports/categorical-target-drift">Categorical</a>: Categorical Target Drift is appropriate for problem statements with a categorical target function, such as binary classification, multi-class classification, etc. To run this report, you must have available input features, target columns, and/or prediction columns. You'll require two datasets. The benchmark dataset is the reference set. By comparing the current production data to the reference data, they analyze the change.</p>
-<p><img src="images/ml-model-monitoring/evidently5.png" alt="">
-  <em><a href="https://github.com/evidentlyai/evidently">source</a></em></p>
-</li>
-</ul>
-</li>
-</ul>
+<p><img src="/blog/images/copied_from_nb/images/ml-model-monitoring/evidently5.png" alt="">
+<em><a href="https://github.com/evidentlyai/evidently">source</a></em></p>
 <ul>
 <li>
-<p><strong>Model Performance</strong>:</p>
-<ul>
-<li>
+<strong>Model Performance</strong>: </li>
+</ul>
 <p><a href="https://docs.evidentlyai.com/reports/classification-performance">Classification</a>: Classification Performance report evaluates a classification model's quality. It is applicable for both binary and multiclass classification. This report can be generated for a single model or as a comparison between two models. You can compare the performance of your current production model to that of a previous model or an alternative model. To run this report, you must have available input features, target columns, and prediction columns.</p>
-<p><img src="images/ml-model-monitoring/evidently6.png" alt="">
-  <em><a href="https://github.com/evidentlyai/evidently">source</a></em></p>
-</li>
-<li>
+<p><img src="/blog/images/copied_from_nb/images/ml-model-monitoring/evidently6.png" alt="">
+<em><a href="https://github.com/evidentlyai/evidently">source</a></em></p>
 <p><a href="https://docs.evidentlyai.com/reports/probabilistic-classification-performance">Probabilistic Classification</a>: The Probabilistic Classification Performance report evaluates a probabilistic classification model's quality. It is applicable for both binary and multiclass classification. This report can be generated for a single model or as a comparison between two models. You can compare the performance of your current production model to that of a previous model or an alternative model. To run this report, you must have available input features, target columns, and prediction columns.</p>
-<p><img src="images/ml-model-monitoring/evidently7.png" alt="">
-  <em><a href="https://github.com/evidentlyai/evidently">source</a></em></p>
-</li>
-<li>
+<p><img src="/blog/images/copied_from_nb/images/ml-model-monitoring/evidently7.png" alt="">
+<em><a href="https://github.com/evidentlyai/evidently">source</a></em></p>
 <p><a href="https://docs.evidentlyai.com/reports/reg-performance">Regression</a>: The Regression Performance report evaluates a regression model's quality. It can also compare it to the performance of the same model in the past or to the performance of a different model. To run this report, you must have available input features, target columns, and prediction columns. To generate a comparative report, two datasets are required. The benchmark dataset is the reference set. By comparing the current production data to the reference data, they analyze the change.</p>
-<p><img src="images/ml-model-monitoring/evidently8.png" alt="">
-  <em><a href="https://github.com/evidentlyai/evidently">source</a></em></p>
-</li>
-</ul>
-</li>
-</ul>
+<p><img src="/blog/images/copied_from_nb/images/ml-model-monitoring/evidently8.png" alt="">
+<em><a href="https://github.com/evidentlyai/evidently">source</a></em></p>
 
 </div>
 </div>
@@ -860,9 +851,29 @@ Country -- Drift? No! -- Chi2 9.991 -- p-value 0.441
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<p>Other references:
+
+</p>
+<center>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/3bVGJZ5tHdg" frameborder="0" allowfullscreen=""></iframe>
+</center>
+
+<center>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/JaPMFf0cKlM" frameborder="0" allowfullscreen=""></iframe>
+</center>
+
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Vertex-AI">
 <a class="anchor" href="#Vertex-AI" aria-hidden="true"><span class="octicon octicon-link"></span></a>Vertex AI<a class="anchor-link" href="#Vertex-AI"> </a>
 </h1>
+<p><a href="https://colab.research.google.com/github/GoogleCloudPlatform/vertex-ai-samples/blob/main/notebooks/official/model_monitoring/model_monitoring.ipynb#scrollTo=t6Cd51FkG09E">https://colab.research.google.com/github/GoogleCloudPlatform/vertex-ai-samples/blob/main/notebooks/official/model_monitoring/model_monitoring.ipynb#scrollTo=t6Cd51FkG09E</a></p>
+
 </div>
 </div>
 </div>

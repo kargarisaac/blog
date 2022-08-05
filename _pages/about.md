@@ -4,7 +4,7 @@ title: About Me
 permalink: /about/
 ---
 
-Co-Founder and CIO at SUPPLYZ.eu & Ph.D. candidate at the Intelligent Robotics Group at Aalto University Working on Self-Driving Cars, Reinforcement Learning, Machine Learning, and Robotics.
+Co-Founder and CIO at SUPPLYZ.eu and Ph.D. candidate at the Intelligent Robotics Group at Aalto University Working on Self-Driving Cars, Reinforcement Learning, Machine Learning, and Robotics.
 
 - [Medium](https://kargarisaac.medium.com/)
 

@@ -172,7 +172,7 @@ window.onload = wrap_img;
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>In this series of blog posts, I decided to explain the whole process of creating a machine learning service from development to deployment and monitoring. This is the final project of the amazing <a href="https://www.youtube.com/playlist?list=PL3MmuxUbc_hIUISrluw_A7wDSmfOhErJK">MLOps zoomcamp course</a>. The goal in this blog posts is to train a simple sentiment analysis model and deploy it on Google Cloud and use MLOps as much as I can. The service gets a review about clothing on E-commerce and predicts whether the custoomer will recommed it to her friends or not. You can find the dataset <a href="https://www.kaggle.com/datasets/nicapotato/womens-ecommerce-clothing-reviews">here</a>.</p>
+<p>In this series of blog posts, I will describe the entire procedure for developing a machine learning service, from development to deployment to monitoring. This is the final project for the phenomenal <a href="https://www.youtube.com/playlist?list=PL3MmuxUbc_hIUISrluw_A7wDSmfOhErJK">MLOps zoomcamp course</a>. This series aims to train a simple sentiment analysis model, deploy it to Google Cloud, and utilize MLOps as much as possible. The program receives an E-commerce clothing review and forecasts if the customer would recommend the product to her friends. You can find the dataset <a href="https://www.kaggle.com/datasets/nicapotato/womens-ecommerce-clothing-reviews">here</a>.</p>
 <p>We do not focus that much on the model development here. I use <a href="https://www.kaggle.com/code/granjithkumar/nlp-with-women-clothing-reviews">Kaggle</a> notebook as the reference and will try to do experiment tracking using MLFlow. You can check the main notebook for further data preprocessing and visualizations.</p>
 <p>So, what is experiment tracking? Experiment tracking is the process of keeping track of all the relevant information from an ML experiment, which includes:</p>
 <ul>
@@ -542,7 +542,7 @@ Let's start with the BoW model:</p>
 <p>Let's take a look at what is saved for one of the runs. For example one of the deep learning runs:</p>
 <p><img src="/blog/images/copied_from_nb/images/experiment-tracking-mlflow/3.png" alt="">
 <!-- *[source](https://github.com/evidentlyai/evidently)* --></p>
-<p>As you see, the model, tokenizer, all the information about the required python packages, and many more metadata is saved. Each run has a unique <code>run id</code>, which we will use it later.</p>
+<p>As you see, the model, tokenizer, all the information about the required python packages, and many more metadata are saved. Each run has a unique <code>run id</code>, which we will use it later.</p>
 
 </div>
 </div>
@@ -550,7 +550,7 @@ Let's start with the BoW model:</p>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Now let's see how we can manage the trained models, called Model Management.</p>
+<p>Now let's go for the next stage called Model Management which is about how we can manage the trained models.</p>
 <p><img src="/blog/images/copied_from_nb/images/experiment-tracking-mlflow/2.png" alt="">
 <em><a href="https://neptune.ai/experiment-tracking">source</a></em></p>
 
@@ -560,12 +560,12 @@ Let's start with the BoW model:</p>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>As you see above in the codes, we save models for each run. we should have some kind of model versioning and then deployment. Let's see how we can use MLFlow to do model management.</p>
-<p>After the previous step, we will have several runs and trained models. The data scientist then need to select some of them based on some metrics and register them in the MLFlow model registry. There are several stages/labels in the model registry: staging, production, archive. The model will go first to the staging. The MLflow Model Registry component is a centralized model store, set of APIs, and UI, to collaboratively manage the full lifecycle of an MLflow Model. It provides model lineage (which MLflow experiment and run produced the model), model versioning, stage transitions (for example from staging to production), and annotations [<a href="https://www.mlflow.org/docs/latest/model-registry.html">source</a>].</p>
-<p>The deployment engineer/team then can start working on the models in the model registry and staging and decide based on, for example, the size of the model or the inference time or some other factors, which model to go for the production stage.</p>
+<p>As you can see from the codes above, we save models for every run. Then, there should be model versioning followed by deployment. Let's see how MLFlow can be used for model management.</p>
+<p>Following the previous step, we will have several model runs and trained models. The data scientist must then select a subset of these models based on a number of metrics and register them in the MLFlow model registry. The model registry contains multiple stages/labels, including staging, production, and archive. The model will enter the staging area first. The MLflow Model Registry is a centralized model repository, APIs, and user interface for managing the whole lifecycle of an MLflow Model. It includes model lineage (which MLflow experiment and run created the model), model versioning, stage transitions (such as staging to production), and annotations [<a href="https://www.mlflow.org/docs/latest/model-registry.html">source</a>].</p>
+<p>The deployment engineer or team can then begin working on the models in the model registry and staging and decide, based on parameters such as the size of the model or the inference time, which model will go to the production stage.</p>
 <p><img src="/blog/images/copied_from_nb/images/experiment-tracking-mlflow/4.png" alt="">
 <em><a href="https://www.databricks.com/fr/blog/2020/04/15/databricks-extends-mlflow-model-registry-with-enterprise-features.html">source</a></em></p>
-<p>To register a model into model registry, you can select one of the runs and then select the model folder in the <code>Artifacts</code> section. Then you will be able to see the <code>Register Model</code> button. You will need to select a model name which will contain all the versions. We created <code>customer sentiment-analysis</code> model name and registered three models, one from each method, based on accuracy metric.</p>
+<p>To register a model in the model registry, choose one of the runs and then the model folder under 'Artifacts'. Then, the 'Register Model' button will become visible. You must choose a model name that contains all of the versions. We created the model name "customer-sentiment-analysis" and registered three models, one from each method, based on the accuracy metric.</p>
 <p><img src="/blog/images/copied_from_nb/images/experiment-tracking-mlflow/5.png" alt="">
 <!-- *[source](https://www.databricks.com/fr/blog/2020/04/15/databricks-extends-mlflow-model-registry-with-enterprise-features.html)* --></p>
 <p>Then if you go to the <code>Models</code> tab on top of the screen, you will see all the versions. You can select each version and then set the stage. Here we set all to the <code>staging</code> state. It's a good practice to add a description about the data the stage has changed and also the name of the developer for each version.</p>
@@ -574,7 +574,7 @@ Let's start with the BoW model:</p>
 <p><img src="/blog/images/copied_from_nb/images/experiment-tracking-mlflow/7.png" alt="">
 <!-- *[source](https://www.databricks.com/fr/blog/2020/04/15/databricks-extends-mlflow-model-registry-with-enterprise-features.html)* --></p>
 <p>You can also use the API and <code>MlflowClient</code> and do these steps in code. Check the API <a href="https://www.mlflow.org/docs/latest/model-registry.html">here</a> and the following video for more details. I prefer the UI.</p>
-<p>Then you can compare models in the staging stage and select one to deploy in production. In our case, the deep learning model has higher accuracy and we move it to production stage. Note that the model registry doesn't actually deploy the model to production when you transition a model to the "Production" stage, it just assign a label to that model version. You should complement the registry with some CI/CD code that does the actual deployment.</p>
+<p>Then, you can compare models in the staging phase and choose one for production deployment. In our example, the accuracy of the deep learning model is higher, thus we advance it to the production stage. When you transition a model to the "Production" stage, the model registry simply assigns a label to that model version and does not actually deploy the model to production. Complement the registry with CI/CD code that does actual deployments.</p>
 <p><img src="/blog/images/copied_from_nb/images/experiment-tracking-mlflow/8.png" alt=""></p>
 <p>We can then use the run id for this version and download the model and other required files like the tokenizer and deploy it. In our case, we want to load the Keras model. Check the <a href="https://www.mlflow.org/docs/latest/python_api/mlflow.keras.html">documentation</a> for more details:</p>
 <div class="highlight"><pre><span></span><span class="n">mlflow</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">load_model</span><span class="p">(</span><span class="n">model_uri</span><span class="p">,</span> <span class="n">dst_path</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>

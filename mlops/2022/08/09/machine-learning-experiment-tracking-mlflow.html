@@ -256,7 +256,7 @@ Let's start with the BoW model:</p>
 <span class="kn">import</span> <span class="nn">mlflow</span>
 
 <span class="n">mlflow</span><span class="o">.</span><span class="n">set_tracking_uri</span><span class="p">(</span><span class="s2">"sqlite:///mlflow.db"</span><span class="p">)</span>
-<span class="n">mlflow</span><span class="o">.</span><span class="n">set_experiment</span><span class="p">(</span><span class="s2">"nlp-bow"</span><span class="p">)</span>
+<span class="n">mlflow</span><span class="o">.</span><span class="n">set_experiment</span><span class="p">(</span><span class="s2">"customer-sentiment-analysis"</span><span class="p">)</span>
 
 <span class="c1">## data loading</span>
 <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'Womens Clothing E-Commerce Reviews.csv'</span><span class="p">,</span><span class="n">index_col</span> <span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
@@ -339,7 +339,7 @@ Let's start with the BoW model:</p>
 <span class="kn">import</span> <span class="nn">mlflow</span>
 
 <span class="n">mlflow</span><span class="o">.</span><span class="n">set_tracking_uri</span><span class="p">(</span><span class="s2">"sqlite:///mlflow.db"</span><span class="p">)</span>
-<span class="n">mlflow</span><span class="o">.</span><span class="n">set_experiment</span><span class="p">(</span><span class="s2">"nlp-tfidf"</span><span class="p">)</span>
+<span class="n">mlflow</span><span class="o">.</span><span class="n">set_experiment</span><span class="p">(</span><span class="s2">"customer-sentiment-analysis"</span><span class="p">)</span>
 
 <span class="c1">## data loading</span>
 <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'Womens Clothing E-Commerce Reviews.csv'</span><span class="p">,</span><span class="n">index_col</span> <span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
@@ -423,7 +423,7 @@ Let's start with the BoW model:</p>
 <span class="kn">import</span> <span class="nn">pickle</span>
 
 <span class="n">mlflow</span><span class="o">.</span><span class="n">set_tracking_uri</span><span class="p">(</span><span class="s2">"sqlite:///mlflow.db"</span><span class="p">)</span>
-<span class="n">mlflow</span><span class="o">.</span><span class="n">set_experiment</span><span class="p">(</span><span class="s2">"nlp-tfidf"</span><span class="p">)</span>
+<span class="n">mlflow</span><span class="o">.</span><span class="n">set_experiment</span><span class="p">(</span><span class="s2">"customer-sentiment-analysis"</span><span class="p">)</span>
 
 <span class="c1">## data loading</span>
 <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'Womens Clothing E-Commerce Reviews.csv'</span><span class="p">,</span><span class="n">index_col</span> <span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>

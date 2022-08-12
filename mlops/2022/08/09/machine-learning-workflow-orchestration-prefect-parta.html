@@ -237,7 +237,7 @@ If you move data, you probably need the following functionality:&gt; - schedules
 <p>Implementing all of these features for your dataflows is a huge pain that takes a lot of time — time that could be better used for functional code.
 That's why Prefect 2.0 offers all this functionality and more!</p>
 </blockquote>
-<p>We will use Prefect 2.0 (Orion) here. You can easily install prefect using:<code>bashpip install prefect</code></p>
+<p>We will use Prefect 2.0 (Orion) here. You can easily install prefect using:<code>pip install prefect</code></p>
 
 </div>
 </div>
@@ -453,8 +453,8 @@ That's why Prefect 2.0 offers all this functionality and more!</p>
 <blockquote>
 <p>Calling a task function from within a flow, using the default task settings, executes the function sequentially. Execution of the task function blocks execution of the flow until the task completes. This means, by default, calling multiple tasks in a flow causes them to run in order. <br>
 However, that's not the only way to run tasks! <br>
-You can use the <code>.submit()</code> method on a task function to submit the task to a task runner. Using a task runner enables you to control whether tasks run sequentially, concurrently, or if you want to take advantage of a parallel or distributed execution libraries such as Dask or Ray.</p>
-<p>Prefect currently provides the following built-in task runners:&gt; - <strong>SequentialTaskRunner</strong> can run tasks sequentially.&gt; - <strong>ConcurrentTaskRunner</strong> can run tasks concurrently, allowing tasks to switch when blocking on IO. Tasks will be submitted to a thread pool maintained by anyio. <br></p>
+You can use the <code>.submit()</code> method on a task function to submit the task to a task runner. Using a task runner enables you to control whether tasks run sequentially, concurrently, or if you want to take advantage of a parallel or distributed execution libraries such as Dask or Ray.<br>
+Prefect currently provides the following built-in task runners:&gt; - <strong>SequentialTaskRunner</strong> can run tasks sequentially.&gt; - <strong>ConcurrentTaskRunner</strong> can run tasks concurrently, allowing tasks to switch when blocking on IO. Tasks will be submitted to a thread pool maintained by anyio. <br></p>
 <p>In addition, the following Prefect-developed task runners for parallel or distributed task execution may be installed as Prefect Collections.</p>
 <ul>
 <li>

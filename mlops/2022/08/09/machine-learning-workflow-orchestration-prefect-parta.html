@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>MLOps project - part 2a: Machine Learning Workflow Orchestration using Prefect | Isaac Kargar</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="MLOps project - part 2a: Machine Learning Workflow Orchestration using Prefect" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Machine learning workflow orchestration using Prefect." />
+<meta property="og:description" content="Machine learning workflow orchestration using Prefect." />
+<link rel="canonical" href="https://kargarisaac.github.io/blog/mlops/2022/08/09/machine-learning-workflow-orchestration-prefect-parta.html" />
+<meta property="og:url" content="https://kargarisaac.github.io/blog/mlops/2022/08/09/machine-learning-workflow-orchestration-prefect-parta.html" />
+<meta property="og:site_name" content="Isaac Kargar" />
+<meta property="og:image" content="https://kargarisaac.github.io/blog/images/some_folder/your_image.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-08-09T00:00:00-05:00" />
+<script type="application/ld+json">
+{"datePublished":"2022-08-09T00:00:00-05:00","dateModified":"2022-08-09T00:00:00-05:00","image":"https://kargarisaac.github.io/blog/images/some_folder/your_image.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://kargarisaac.github.io/blog/mlops/2022/08/09/machine-learning-workflow-orchestration-prefect-parta.html"},"description":"Machine learning workflow orchestration using Prefect.","@type":"BlogPosting","url":"https://kargarisaac.github.io/blog/mlops/2022/08/09/machine-learning-workflow-orchestration-prefect-parta.html","headline":"MLOps project - part 2a: Machine Learning Workflow Orchestration using Prefect","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/blog/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://kargarisaac.github.io/blog/feed.xml" title="Isaac Kargar" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','G-7C8WW0BBJ4','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+<link rel="shortcut icon" type="image/x-icon" href="/blog/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>MLOps project - part 2a: Machine Learning Workflow Orchestration using Prefect | Isaac Kargar</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="MLOps project - part 2a: Machine Learning Workflow Orchestration using Prefect" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Machine learning workflow orchestration using Prefect." />
+<meta property="og:description" content="Machine learning workflow orchestration using Prefect." />
+<link rel="canonical" href="https://kargarisaac.github.io/blog/mlops/2022/08/09/machine-learning-workflow-orchestration-prefect-parta.html" />
+<meta property="og:url" content="https://kargarisaac.github.io/blog/mlops/2022/08/09/machine-learning-workflow-orchestration-prefect-parta.html" />
+<meta property="og:site_name" content="Isaac Kargar" />
+<meta property="og:image" content="https://kargarisaac.github.io/blog/images/some_folder/your_image.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-08-09T00:00:00-05:00" />
+<script type="application/ld+json">
+{"datePublished":"2022-08-09T00:00:00-05:00","dateModified":"2022-08-09T00:00:00-05:00","image":"https://kargarisaac.github.io/blog/images/some_folder/your_image.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://kargarisaac.github.io/blog/mlops/2022/08/09/machine-learning-workflow-orchestration-prefect-parta.html"},"description":"Machine learning workflow orchestration using Prefect.","@type":"BlogPosting","url":"https://kargarisaac.github.io/blog/mlops/2022/08/09/machine-learning-workflow-orchestration-prefect-parta.html","headline":"MLOps project - part 2a: Machine Learning Workflow Orchestration using Prefect","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://kargarisaac.github.io/blog/feed.xml" title="Isaac Kargar" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','G-7C8WW0BBJ4','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+    <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/blog/">Isaac Kargar</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/blog/about/">About Me</a><a class="page-link" href="/blog/search/">Search</a><a class="page-link" href="/blog/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">MLOps project - part 2a: Machine Learning Workflow Orchestration using Prefect</h1><p class="page-description">Machine learning workflow orchestration using Prefect.</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2022-08-09T00:00:00-05:00" itemprop="datePublished">
+        Aug 9, 2022
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      9 min read
+    
+</span></p>
+
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-wrap flex-justify-end">
+          <div class="px-2">
+
+    <a href="https://github.com/kargarisaac/blog/tree/master/_notebooks/2022-08-09-machine-learning-workflow-orchestration-prefect-parta.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/blog/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://mybinder.org/v2/gh/kargarisaac/blog/master?filepath=_notebooks%2F2022-08-09-machine-learning-workflow-orchestration-prefect-parta.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/blog/assets/badges/binder.svg" alt="Open In Binder"/>
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://colab.research.google.com/github/kargarisaac/blog/blob/master/_notebooks/2022-08-09-machine-learning-workflow-orchestration-prefect-parta.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/blog/assets/badges/colab.svg" alt="Open In Colab"/>
+    </a>
+</div>
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+<li class="toc-entry toc-h1"><a href="#Prefect">Prefect </a></li>
+</ul><!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2022-08-09-machine-learning-workflow-orchestration-prefect-parta.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>In the previous blog post, we learned how to use MLflow to train a model and track experiments.
+In the second post of this series, we will convert the code from the previous phase into a machine learning pipeline. I'll demonstrate how to complete the task using two popular tools: Prefect and ZenML. There are several incredible tools that we cannot include in this article, such as Flyte, Kale, Aro, etc.</p>
+<p>We begin with Prefect and demonstrate how to utilize it locally and on Google Cloud. The same is then performed using ZenML.</p>
+<p>But why do our machine learning services need a pipeline? The ZenML manual describes it in detail [<a href="https://github.com/zenml-io/zenbytes">source</a>]:</p>
+<blockquote>
+<p>As an ML practitioner, you are probably familiar with building ML models using Scikit-learn, PyTorch, TensorFlow, or similar. An <strong><a href="https://docs.zenml.io/developer-guide/steps-and-pipelines">ML Pipeline</a></strong> is simply an extension, including other steps you would typically do before or after building a model, like data acquisition, preprocessing, model deployment, or monitoring. The ML pipeline essentially defines a step-by-step procedure of your work as an ML practitioner. Defining ML pipelines explicitly in code is great because: <br>&gt; - We can easily rerun all of our work, not just the model, eliminating bugs and making our models easier to reproduce.</p>
+<ul>
+<li>Data and models can be versioned and tracked, so we can see at a glance which dataset a model was trained on and how it compares to other models.</li>
+<li>If the entire pipeline is coded up, we can automate many operational tasks, like retraining and redeploying models when the underlying problem or data changes or rolling out new and improved models with CI/CD workflows.</li>
+</ul>
+</blockquote>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We may have extensive preprocessing that we do not want to repeat every time we train a model, such as in the last blog post where we generated the 'corpus' list.
+We may also need to compare the performance of different models, or wish to deploy the model and monitor data and model performance. Here, ML pipelines come into play, allowing us to specify our workflows as a series of modular processes that can subsequently be combined.</p>
+<p>Additionally, we may have a machine learning pipeline that we would like to execute every week. We can put it on a timetable, and if the machine learning model fails or the incoming data fails, we can analyze and resolve the issues.</p>
+<p>Let's consider a standard machine learning pipeline:</p>
+<p><img src="/blog/images/copied_from_nb/images/workflow-orchestration/1.png" alt="">
+<em><a href="https://www.youtube.com/watch?v=eKzCjNXoCTc&amp;list=PL3MmuxUbc_hIUISrluw_A7wDSmfOhErJK&amp;index=22">source</a></em></p>
+<p>Initially, we have a postgresql database and possibly a process that writes data to a parquet file. Next, we use pandas to consume the parquet file and merge it with the API data we're pulling.
+After training the model, we register the artifact and conduct experiments with MLflow; if specific conditions are met, we may deploy the model using Flask, for example.
+Clearly, these phases are interconnected; if one fails, the entire pipeline will be impacted.
+Failure can occur in even unforeseen ways. For example, inbound data is flawed, the API fails to connect at random, and the same is true for MLflow. Problems may arise if you are using a database to store MLflow artifacts, such as experiments. Workflow orchestration is intended to mitigate the impact of these problems and assist in their resolution.</p>
+<p><img src="/blog/images/copied_from_nb/images/workflow-orchestration/2.png" alt="">
+<em><a href="https://www.youtube.com/watch?v=eKzCjNXoCTc&amp;list=PL3MmuxUbc_hIUISrluw_A7wDSmfOhErJK&amp;index=22">source</a></em></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>All of these will aid the organization and its developers in completing their tasks and locating issues more quickly, allowing them to devote their attention to something more vital.</p>
+<p>Great! let's see how we can do it in practice. First, let's see how Prefect can help us.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Prefect">
+<a class="anchor" href="#Prefect" aria-hidden="true"><span class="octicon octicon-link"></span></a>Prefect<a class="anchor-link" href="#Prefect"> </a>
+</h1>
+<blockquote>
+<p>Prefect is air traffic control for the modern data stack. Monitor, coordinate, and orchestrate dataflows between and across your applications. Build pipelines, deploy them anywhere, and configure them remotely. You might just love your workflows again.
+If you move data, you probably need the following functionality:&gt; - schedules&gt; - retries</p>
+<ul>
+<li>logging</li>
+<li>caching</li>
+<li>notifications</li>
+<li>observability <br>
+</li>
+</ul>
+<p>Implementing all of these features for your dataflows is a huge pain that takes a lot of time — time that could be better used for functional code.
+That's why Prefect 2.0 offers all this functionality and more!</p>
+</blockquote>
+<p>We will use Prefect 2.0 (Orion) here. You can easily install prefect using:```bashpip install prefect</p>
+
+<pre><code>
+We will add Prefect to a Python script containing our code. I will continue with the Keras code from the previous post, although the method is identical for other Scikit-Learn packages. Essentially, we obtain the prior code including all MLflow-related information and convert it into functions as our pipeline steps. Converting the python functions to Prefect steps and flow is as easily as wrapping the function using `@task` and `@flow` decorators. In our case, the code for training the model might look as follows:
+
+```python
+import numpy as np
+import pandas as pd
+import os
+import nltk
+import re
+if os.path.exists('./corpora'):
+    os.environ["NLTK_DATA"] = "./corpora"
+else:
+    nltk.download('stopwords')
+from nltk.corpus import stopwords
+from nltk.stem.porter import PorterStemmer
+import tensorflow as tf
+from tensorflow.keras.preprocessing.text import Tokenizer
+from tensorflow.keras.preprocessing.sequence import pad_sequences
+from sklearn.model_selection import train_test_split
+import mlflow
+import pickle
+from prefect import flow, task
+
+## data loading
+@task
+def read_data(filename='Womens Clothing E-Commerce Reviews.csv'):
+    data = pd.read_csv(filename,index_col =[0])
+    print("Data loaded.\n\n")
+    return data
+
+## preprocess text
+@task
+def preprocess_data(data):
+    #check if data/corpus is created before or not
+    if not os.path.exists('data/corpus_y.pickle'):
+        print("Preprocessed data not found. Creating new data. \n\n")
+        data = data[~data['Review Text'].isnull()]  #Dropping columns which don't have any review
+        X = data[['Review Text']]
+        X.index = np.arange(len(X))
+
+        y = data['Recommended IND']
+
+        corpus =[]
+        for i in range(len(X)):
+            review = re.sub('[^a-zA-z]',' ',X['Review Text'][i])
+            review = review.lower()
+            review = review.split()
+            ps = PorterStemmer()
+            review =[ps.stem(i) for i in review if not i in set(stopwords.words('english'))]
+            review =' '.join(review)
+            corpus.append(review)
+
+        with open('data/corpus_y.pickle', 'wb') as handle:
+            pickle.dump((corpus, y), handle)
+    else:
+        print("Preprocessed data found. Loading data. \n\n")
+        with open('data/corpus_y.pickle', 'rb') as handle:
+            corpus, y = pickle.load(handle)
+
+    print("Data preprocessed.\n\n")
+
+    return corpus, y
+
+## tokenization and dataset creation
+@task
+def create_dataset(corpus, y, test_size=0.2, random_state=0):
+    tokenizer = Tokenizer(num_words = 3000)
+    tokenizer.fit_on_texts(corpus)
+
+    sequences = tokenizer.texts_to_sequences(corpus)
+    padded = pad_sequences(sequences, padding='post')
+
+    X_train, X_test, y_train, y_test = train_test_split(padded, y, test_size = 0.20, random_state = 0)
+
+    print("Dataset created.\n\n")
+    return X_train, X_test, y_train, y_test, tokenizer
+
+# mlflow.tensorflow.autolog()
+@task
+def model_training(X_train, y_train, X_test, y_test, tokenizer):
+    for embedding_dim, batch_size in zip([32, 64, 128], [32, 64, 128]):
+        with mlflow.start_run():
+            ## model definition
+            model = tf.keras.Sequential([
+                tf.keras.layers.Embedding(3000, embedding_dim),
+                tf.keras.layers.GlobalAveragePooling1D(),
+                tf.keras.layers.Dense(6, activation='relu'),
+                tf.keras.layers.Dense(1, activation='sigmoid')
+            ])
+
+            ## training
+            num_epochs = 50
+            callback = tf.keras.callbacks.EarlyStopping(
+                monitor="val_loss",
+                min_delta=0,
+                patience=2,
+                verbose=0,
+                mode="auto",
+                baseline=None,
+                restore_best_weights=False,
+            )
+
+            model.compile(loss='binary_crossentropy',optimizer='adam',metrics=['accuracy'])
+
+            mlflow.set_tag("developer", "Isaac")
+            mlflow.set_tag("algorithm", "Deep Learning")
+            mlflow.log_param("train-data", "Womens Clothing E-Commerce Reviews")
+            mlflow.log_param("embedding-dim", embedding_dim)
+
+            print("Fit model on training data")
+            model.fit(
+                X_train,
+                y_train,
+                batch_size=batch_size,
+                epochs=num_epochs,
+                callbacks=callback,
+                # We pass some validation for
+                # monitoring validation loss and metrics
+                # at the end of each epoch
+                validation_data=(X_test, y_test),
+            )
+
+            ## save model and tokenizer
+            # model.save('models/model_dl.h5')
+            mlflow.keras.log_model(model, 'models/model_dl')
+
+            with open('models/tf_tokenizer.pickle', 'wb') as handle:
+                pickle.dump(tokenizer, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
+            mlflow.log_artifact(local_path="models/tf_tokenizer.pickle", artifact_path="tokenizer_pickle")
+
+            # Evaluate the model on the test data using `evaluate`
+            print("Evaluate on test data")
+            results = model.evaluate(X_test, y_test, batch_size=128)
+            print("test loss, test acc:", results)
+            mlflow.log_metric("loss", results[0])
+            mlflow.log_metric("accuracy", results[1])
+
+    print("Model training completed.\n\n")
+
+@flow
+def main():
+    tracking_uri = "sqlite:///mlflow.db"
+    model_name = "customer-sentiment-analysis"
+    mlflow.set_tracking_uri(tracking_uri)
+    mlflow.set_experiment(model_name)
+
+    data = read_data()
+    corpus, y = preprocess_data(data)
+    X_train, X_test, y_train, y_test, tokenizer = create_dataset(corpus, y)
+    model_training(X_train, y_train, X_test, y_test, tokenizer)
+
+if __name__ == '__main__':
+    main()</code></pre>
+<p>When you trained the mode, you can go to MLflow UI and decide if you want to change the model in the <code>Production</code> stage or not. Then you can easily load the model in the <code>Production</code> stage using a code snippet like this and evaluate it as you wish (maybe creating another pipeline for that):</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mlflow.tracking</span> <span class="kn">import</span> <span class="n">MlflowClient</span>
+
+<span class="k">def</span> <span class="nf">get_best_model</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="n">client</span><span class="p">):</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">mlflow</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">load_model</span><span class="p">(</span><span class="sa">f</span><span class="s2">"models:/</span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s2">/production"</span><span class="p">,</span> <span class="n">dst_path</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">mv</span> <span class="ow">in</span> <span class="n">client</span><span class="o">.</span><span class="n">search_model_versions</span><span class="p">(</span><span class="sa">f</span><span class="s2">"name='</span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s2">'"</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">dict</span><span class="p">(</span><span class="n">mv</span><span class="p">)[</span><span class="s1">'current_stage'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'Production'</span><span class="p">:</span>
+            <span class="n">run_id</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">mv</span><span class="p">)[</span><span class="s1">'run_id'</span><span class="p">]</span>
+
+    <span class="n">artifact_folder</span> <span class="o">=</span> <span class="s2">"models_pickle"</span> <span class="c1">#tokenizer_pickle</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">download_artifacts</span><span class="p">(</span><span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">artifact_folder</span><span class="p">,</span> <span class="n">dst_path</span><span class="o">=</span><span class="s1">'.'</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">artifact_folder</span><span class="si">}</span><span class="s2">/tf_tokenizer.pickle"</span><span class="p">,</span> <span class="s1">'rb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
+        <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Model and tokenizer loaded.</span><span class="se">\n\n</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span>
+
+<span class="k">def</span> <span class="nf">test_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">):</span>
+    <span class="c1"># Generate predictions (probabilities -- the output of the last layer)</span>
+    <span class="c1"># on new data using `predict`</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Generate predictions for 3 samples"</span><span class="p">)</span>
+    <span class="n">predictions</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">[:</span><span class="mi">3</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"predictions shape:"</span><span class="p">,</span> <span class="n">predictions</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+    <span class="n">sample_string</span> <span class="o">=</span> <span class="s2">"I Will tell my friends for sure"</span>
+    <span class="n">sample</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">texts_to_sequences</span><span class="p">(</span><span class="n">sample_string</span><span class="p">)</span>
+    <span class="n">padded_sample</span> <span class="o">=</span> <span class="n">pad_sequences</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s1">'post'</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">sample_predict</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">padded_sample</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"model prediction for input: </span><span class="si">{</span><span class="n">sample_string</span><span class="si">}</span><span class="s2"> </span><span class="se">\n</span><span class="s2"> </span><span class="si">{</span><span class="n">sample_predict</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">'__main__'</span><span class="p">:</span>
+    <span class="n">tracking_uri</span> <span class="o">=</span> <span class="s2">"sqlite:///mlflow.db"</span>
+    <span class="n">model_name</span> <span class="o">=</span> <span class="s2">"customer-sentiment-analysis"</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">MlflowClient</span><span class="p">(</span><span class="n">tracking_uri</span><span class="o">=</span><span class="n">tracking_uri</span><span class="p">)</span>
+    <span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">get_best_model</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="n">client</span><span class="p">)</span>
+    <span class="n">test_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>With wrapping the functions into Prefect, you will get more logs, which helps to observe and debug the pipeline. You can also set number of retries for some tasks using <code>@task(retries=3)</code>, in case something happens and the task cannot be completed.</p>
+<p>You can then run the following command to see the Prefect UI dashboard:</p>
+<div class="highlight"><pre><span></span>prefect orion start
+</pre></div>
+<p>For our code, here is the screenshot:</p>
+<p><img src="/blog/images/copied_from_nb/images/workflow-orchestration/4.png" alt="">
+<!-- *[source](https://www.youtube.com/watch?v=eKzCjNXoCTc&list=PL3MmuxUbc_hIUISrluw_A7wDSmfOhErJK&index=22)* --></p>
+<p>You can see the logs for different tasks and the flow for our code. You can also get much more information from the dashboard. So don't hesitate to play around.</p>
+<p>There are a lot of interesting features in Prefect. I really like the concurrency, parallelization, and the async support. There is also a concept of task runner in Prefect [<a href="https://docs.prefect.io/concepts/task-runners/">source</a>]:</p>
+<blockquote>
+<p>Calling a task function from within a flow, using the default task settings, executes the function sequentially. Execution of the task function blocks execution of the flow until the task completes. This means, by default, calling multiple tasks in a flow causes them to run in order. <br>
+However, that's not the only way to run tasks! <br>
+You can use the <code>.submit()</code> method on a task function to submit the task to a task runner. Using a task runner enables you to control whether tasks run sequentially, concurrently, or if you want to take advantage of a parallel or distributed execution libraries such as Dask or Ray.</p>
+<p>Prefect currently provides the following built-in task runners:&gt; - <strong>SequentialTaskRunner</strong> can run tasks sequentially.&gt; - <strong>ConcurrentTaskRunner</strong> can run tasks concurrently, allowing tasks to switch when blocking on IO. Tasks will be submitted to a thread pool maintained by anyio. <br></p>
+<p>In addition, the following Prefect-developed task runners for parallel or distributed task execution may be installed as Prefect Collections.</p>
+<ul>
+<li>
+<strong>DaskTaskRunner</strong> can run tasks requiring parallel execution using dask.distributed.</li>
+<li>
+<strong>RayTaskRunner</strong> can run tasks requiring parallel execution using Ray.</li>
+</ul>
+</blockquote>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>In our case, I don't want to use this features and just want to run tasks sequentially, which is the default setting.</p>
+<p>After doing all of these steps locally, we can also deploy Prefect on Cloud. I will show how to do deployment and scheduling and maybe more in the next blog post. That's enough for this blog post. Hope it was useful.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>
+</p>
+<center>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/eKzCjNXoCTc" frameborder="0" allowfullscreen=""></iframe>
+</center>
+
+<center>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/Yb6NJwI7bXw" frameborder="0" allowfullscreen=""></iframe>
+</center>
+
+<center>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/MCFpURG506w" frameborder="0" allowfullscreen=""></iframe>
+</center>
+
+
+</div>
+</div>
+</div>
+</div>
+
+
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="kargarisaac/blog"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/blog/mlops/2022/08/09/machine-learning-workflow-orchestration-prefect-parta.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/blog/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/blog/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/blog/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>My posts about Machine Learning</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/kargarisaac" target="_blank" title="kargarisaac"><svg class="svg-icon grey"><use xlink:href="/blog/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://www.linkedin.com/in/eshagh-kargar" target="_blank" title="eshagh-kargar"><svg class="svg-icon grey"><use xlink:href="/blog/assets/minima-social-icons.svg#linkedin"></use></svg></a></li><li><a rel="me" href="https://twitter.com/kargarisaac" target="_blank" title="kargarisaac"><svg class="svg-icon grey"><use xlink:href="/blog/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

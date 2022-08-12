@@ -9,14 +9,7 @@
     
   
     
-        "post4": {
-            "title": "Title",
-            "content": "",
-            "url": "https://kargarisaac.github.io/blog/2022/08/01/diffusion-models-image-generation.html",
-            "relUrl": "/2022/08/01/diffusion-models-image-generation.html",
-            "date": " • Aug 1, 2022"
-        }
-        
+  
     
   
     
@@ -38,7 +31,7 @@
     
   
     
-        ,"post14": {
+        "post15": {
             "title": "AlphaGo - Mastering the game of Go with deep neural networks and tree search",
             "content": ". . . . . . . . . That’s it for the first one. In the next post, I will review the AlphaGo Zero paper. .",
             "url": "https://kargarisaac.github.io/blog/jupyter/2020/04/12/AlphaGo.html",
@@ -82,10 +75,12 @@
   
 
   
+
+  
   
 
   
-      ,"page10": {
+      ,"page11": {
           "title": "",
           "content": "Sitemap: {{ “sitemap.xml” | absolute_url }} | .",
           "url": "https://kargarisaac.github.io/blog/robots.txt",

@@ -11,3 +11,10 @@ _notebooks/.ipynb_checkpoints
 .netlify
 .tweet-cache
 __pycache__
+
+_notebooks/2022-08-12-machine-learning-workflow-orchestration-prefect-partb.ipynb
+_notebooks/2022-08-15-machine-learning-workflow-orchestration-zenml-parta.ipynb
+_notebooks/2022-08-15-machine-learning-workflow-orchestration-zenml-partb.ipynb
+_notebooks/2022-08-03-machine-learning-model-deployment.ipynb
+_notebooks/2022-08-03-machine-learning-model-monitoring.ipynb
+_notebooks/2022-08-01-diffusion-models-image-generation.ipynb

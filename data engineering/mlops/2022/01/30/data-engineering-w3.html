@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Data Engineering - Week 3 | Isaac Kargar</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Data Engineering - Week 3" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Week 3 - Data Engineering Zoomcamp course: Data Warehouse" />
+<meta property="og:description" content="Week 3 - Data Engineering Zoomcamp course: Data Warehouse" />
+<link rel="canonical" href="https://kargarisaac.github.io/blog/data%20engineering/mlops/2022/01/30/data-engineering-w3.html" />
+<meta property="og:url" content="https://kargarisaac.github.io/blog/data%20engineering/mlops/2022/01/30/data-engineering-w3.html" />
+<meta property="og:site_name" content="Isaac Kargar" />
+<meta property="og:image" content="https://kargarisaac.github.io/blog/images/some_folder/your_image.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-01-30T00:00:00-06:00" />
+<script type="application/ld+json">
+{"datePublished":"2022-01-30T00:00:00-06:00","dateModified":"2022-01-30T00:00:00-06:00","image":"https://kargarisaac.github.io/blog/images/some_folder/your_image.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://kargarisaac.github.io/blog/data%20engineering/mlops/2022/01/30/data-engineering-w3.html"},"description":"Week 3 - Data Engineering Zoomcamp course: Data Warehouse","@type":"BlogPosting","url":"https://kargarisaac.github.io/blog/data%20engineering/mlops/2022/01/30/data-engineering-w3.html","headline":"Data Engineering - Week 3","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/blog/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://kargarisaac.github.io/blog/feed.xml" title="Isaac Kargar" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','G-7C8WW0BBJ4','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+<link rel="shortcut icon" type="image/x-icon" href="/blog/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Data Engineering - Week 3 | Isaac Kargar</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Data Engineering - Week 3" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Week 3 - Data Engineering Zoomcamp course: Data Warehouse" />
+<meta property="og:description" content="Week 3 - Data Engineering Zoomcamp course: Data Warehouse" />
+<link rel="canonical" href="https://kargarisaac.github.io/blog/data%20engineering/mlops/2022/01/30/data-engineering-w3.html" />
+<meta property="og:url" content="https://kargarisaac.github.io/blog/data%20engineering/mlops/2022/01/30/data-engineering-w3.html" />
+<meta property="og:site_name" content="Isaac Kargar" />
+<meta property="og:image" content="https://kargarisaac.github.io/blog/images/some_folder/your_image.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-01-30T00:00:00-06:00" />
+<script type="application/ld+json">
+{"datePublished":"2022-01-30T00:00:00-06:00","dateModified":"2022-01-30T00:00:00-06:00","image":"https://kargarisaac.github.io/blog/images/some_folder/your_image.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://kargarisaac.github.io/blog/data%20engineering/mlops/2022/01/30/data-engineering-w3.html"},"description":"Week 3 - Data Engineering Zoomcamp course: Data Warehouse","@type":"BlogPosting","url":"https://kargarisaac.github.io/blog/data%20engineering/mlops/2022/01/30/data-engineering-w3.html","headline":"Data Engineering - Week 3","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://kargarisaac.github.io/blog/feed.xml" title="Isaac Kargar" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','G-7C8WW0BBJ4','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+    <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/blog/">Isaac Kargar</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/blog/about/">About Me</a><a class="page-link" href="/blog/search/">Search</a><a class="page-link" href="/blog/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Data Engineering - Week 3</h1><p class="page-description">Week 3 - Data Engineering Zoomcamp course: Data Warehouse</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2022-01-30T00:00:00-06:00" itemprop="datePublished">
+        Jan 30, 2022
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      19 min read
+    
+</span></p>
+
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-wrap flex-justify-end">
+          <div class="px-2">
+
+    <a href="https://github.com/kargarisaac/blog/tree/master/_notebooks/2022-01-30-data-engineering-w3.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/blog/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://mybinder.org/v2/gh/kargarisaac/blog/master?filepath=_notebooks%2F2022-01-30-data-engineering-w3.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/blog/assets/badges/binder.svg" alt="Open In Binder"/>
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://colab.research.google.com/github/kargarisaac/blog/blob/master/_notebooks/2022-01-30-data-engineering-w3.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/blog/assets/badges/colab.svg" alt="Open In Colab"/>
+    </a>
+</div>
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+<li class="toc-entry toc-h1"><a href="#Data-Warehouse">Data Warehouse </a>
+<ul>
+<li class="toc-entry toc-h2"><a href="#OLTP-vs-OLAP">OLTP vs OLAP </a></li>
+<li class="toc-entry toc-h2"><a href="#Data-Warehouse">Data Warehouse </a></li>
+<li class="toc-entry toc-h2"><a href="#BigQuery">BigQuery </a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#Partitioning">Partitioning </a></li>
+<li class="toc-entry toc-h3"><a href="#Clustering">Clustering </a></li>
+<li class="toc-entry toc-h3"><a href="#Direct-Import-(Managed-Tables)">Direct Import (Managed Tables) </a></li>
+<li class="toc-entry toc-h3"><a href="#Query-without-Loading-(External-Tables)">Query without Loading (External Tables) </a></li>
+<li class="toc-entry toc-h3"><a href="#Machine-Learning-in-BigQuery">Machine Learning in BigQuery </a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#Amazon-Redshift">Amazon Redshift </a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#Machine-Learning-in-Redshift">Machine Learning in Redshift </a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-entry toc-h1"><a href="#Conclusion">Conclusion </a></li>
+</ul><!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2022-01-30-data-engineering-w3.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Note</strong>: The content of this post is from the course videos, my understandings and searches, and reference documentations.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Data-Warehouse">
+<a class="anchor" href="#Data-Warehouse" aria-hidden="true"><span class="octicon octicon-link"></span></a>Data Warehouse<a class="anchor-link" href="#Data-Warehouse"> </a>
+</h1>
+<h2 id="OLTP-vs-OLAP">
+<a class="anchor" href="#OLTP-vs-OLAP" aria-hidden="true"><span class="octicon octicon-link"></span></a>OLTP vs OLAP<a class="anchor-link" href="#OLTP-vs-OLAP"> </a>
+</h2>
+<p>The two terms look similar but refer to different kinds of systems. Online transaction processing (OLTP) captures, stores, and processes data from transactions in real time. Online analytical processing (OLAP) uses complex queries to analyze aggregated historical data from OLTP systems.</p>
+<p>An OLTP system is a database that captures and retains transaction data. Individual database entries made up of numerous fields or columns are involved in each transaction. Banking and credit card transactions, as well as retail checkout scanning, are examples.
+Because OLTP databases are read, written, and updated frequently, the emphasis in OLTP is on fast processing. Built-in system logic protects data integrity if a transaction fails.</p>
+<p>For data mining, analytics, and business intelligence initiatives, OLAP applies complicated queries to massive amounts of historical data aggregated from OLTP databases and other sources. The emphasis in OLAP is on query response speed for these complicated queries. Each query has one or more columns of data derived from a large number of rows. Financial performance year over year or marketing lead generation trends are two examples. Analysts and decision-makers can utilize custom reporting tools to turn data into information using OLAP databases and data warehouses. OLAP query failure does not affect or delay client transaction processing, but it can affect or delay the accuracy of business intelligence insights. [<a href="https://www.stitchdata.com/resources/oltp-vs-olap/#:~:text=OLTP%20and%20OLAP%3A%20The%20two,historical%20data%20from%20OLTP%20systems.">ref</a>]</p>
+<p><img src="/blog/images/copied_from_nb/images/data-engineering-w3/1.png" alt=""></p>
+<p><img src="/blog/images/copied_from_nb/images/data-engineering-w3/2.png" alt=""></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Data-Warehouse">
+<a class="anchor" href="#Data-Warehouse" aria-hidden="true"><span class="octicon octicon-link"></span></a>Data Warehouse<a class="anchor-link" href="#Data-Warehouse"> </a>
+</h2>
+<p>
+</p>
+<center>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/jrHljAoD6nM" frameborder="0" allowfullscreen=""></iframe>
+</center>
+
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>A data warehouse (DW or DWH), often known as an enterprise data warehouse (EDW), is a reporting and data analysis system that is considered a key component of business intelligence. DWs are central data repositories that combine data from a variety of sources. They keep current and historical data in one place and utilize it to generate analytical reports for employees across the company.</p>
+<p>The data in the warehouse comes from the operating systems and is uploaded there (such as marketing or sales). Before being used in the DW for reporting, the data may transit via an operational data store and require data cleansing for extra procedures to ensure data quality.</p>
+<p>The two major methodologies used to design a data warehouse system are extract, transform, load (ETL) and extract, load, transform (ELT). [<a href="https://en.wikipedia.org/wiki/Data_warehouse">wikipedia</a>]</p>
+<p><img src="/blog/images/copied_from_nb/images/data-engineering-w3/3.png" alt=""></p>
+<p>Google BigQuery, Amazon Redshift, and Microsoft Azure Synapse Analytics are three data warehouse services. Here we review BigQuery and Redshift.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="BigQuery">
+<a class="anchor" href="#BigQuery" aria-hidden="true"><span class="octicon octicon-link"></span></a>BigQuery<a class="anchor-link" href="#BigQuery"> </a>
+</h2>
+<p>BigQuery is a fully managed enterprise data warehouse that helps you manage and analyze your data with built-in features like machine learning, geospatial analysis, and business intelligence. BigQuery's serverless architecture lets you use SQL queries to answer your organization's biggest questions with zero infrastructure management. BigQuery's scalable, distributed analysis engine lets you query terabytes in seconds and petabytes in minutes.</p>
+<p>BigQuery maximizes flexibility by separating the compute engine that analyzes your data from your storage choices. You can store and analyze your data within BigQuery or use BigQuery to assess your data where it lives. Federated queries let you read data from external sources while streaming supports continuous data updates. Powerful tools like BigQuery ML and BI Engine let you analyze and understand that data.</p>
+<p>BigQuery interfaces include Google Cloud Console interface and the BigQuery command-line tool. Developers and data scientists can use client libraries with familiar programming including Python, Java, JavaScript, and Go, as well as BigQuery's REST API and RPC API to transform and manage data. ODBC and JDBC drivers provide interaction with existing applications including third-party tools and utilities.</p>
+<p>As a data analyst, data engineer, data warehouse administrator, or data scientist, the BigQuery ML documentation helps you discover, implement, and manage data tools to inform critical business decisions. [<a href="https://cloud.google.com/bigquery/docs/introduction">BigQuery docs</a>]
+
+</p>
+<center>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/CFw4peH2UwU" frameborder="0" allowfullscreen=""></iframe>
+</center>
+
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Partitioning">
+<a class="anchor" href="#Partitioning" aria-hidden="true"><span class="octicon octicon-link"></span></a>Partitioning<a class="anchor-link" href="#Partitioning"> </a>
+</h3>
+<p>A partitioned table is a special table that is divided into segments, called partitions, that make it easier to manage and query your data. You can typically split large tables into many smaller partitions using data ingestion time or <code>TIMESTAMP/DATE</code> column or an <code>INTEGER</code> column. BigQuery’s decoupled storage and compute architecture leverages column-based partitioning simply to minimize the amount of data that slot workers read from disk. Once slot workers read their data from disk, BigQuery can automatically determine more optimal data sharding and quickly repartition data using BigQuery’s in-memory shuffle service. [<a href="https://cloud.google.com/blog/topics/developers-practitioners/bigquery-explained-storage-overview">source</a>]</p>
+<p><img src="/blog/images/copied_from_nb/images/data-engineering-w3/4.png" alt="">
+<em><a href="https://cloud.google.com/blog/topics/developers-practitioners/bigquery-explained-storage-overview">source</a></em></p>
+<p>Check the previous video and also <a href="https://cloud.google.com/blog/topics/developers-practitioners/bigquery-explained-storage-overview">here</a> to see an example of the performance gain.</p>
+<p>The example SQL query can be like this:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="k">TABLE</span> <span class="o">`</span><span class="n">stackoverflow</span><span class="p">.</span><span class="n">questions_2018_partitioned</span><span class="o">`</span>
+<span class="n">PARTITION</span> <span class="k">BY</span>
+ <span class="nb">DATE</span><span class="p">(</span><span class="n">creation_date</span><span class="p">)</span> <span class="k">AS</span>
+<span class="k">SELECT</span>
+ <span class="o">*</span>
+<span class="k">FROM</span>
+ <span class="o">`</span><span class="n">bigquery</span><span class="o">-</span><span class="k">public</span><span class="o">-</span><span class="k">data</span><span class="p">.</span><span class="n">stackoverflow</span><span class="p">.</span><span class="n">posts_questions</span><span class="o">`</span>
+<span class="k">WHERE</span>
+ <span class="n">creation_date</span> <span class="k">BETWEEN</span> <span class="s1">'2018-01-01'</span> <span class="k">AND</span> <span class="s1">'2018-07-01'</span><span class="p">;</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Clustering">
+<a class="anchor" href="#Clustering" aria-hidden="true"><span class="octicon octicon-link"></span></a>Clustering<a class="anchor-link" href="#Clustering"> </a>
+</h3>
+<p>When a table is clustered in BigQuery, the table data is automatically organized based on the contents of one or more columns in the table’s schema. The columns you specify are used to collocate related data. Usually high cardinality and non-temporal columns are preferred for clustering.</p>
+<p>When data is written to a clustered table, BigQuery sorts the data using the values in the clustering columns. These values are used to organize the data into multiple blocks in BigQuery storage. The order of clustered columns determines the sort order of the data. When new data is added to a table or a specific partition, BigQuery performs automatic re-clustering in the background to restore the sort property of the table or partition. Auto re-clustering is completely free and autonomous for the users. [<a href="https://cloud.google.com/blog/topics/developers-practitioners/bigquery-explained-storage-overview">source</a>]</p>
+<p><img src="/blog/images/copied_from_nb/images/data-engineering-w3/5.png" alt="">
+<em><a href="https://cloud.google.com/blog/topics/developers-practitioners/bigquery-explained-storage-overview">source</a></em></p>
+<p>Clustering can improve the performance of certain types of queries, such as those using filter clauses and queries aggregating data.
+When a query containing a filter clause filters data based on the clustering columns, BigQuery uses the sorted blocks to eliminate scans of unnecessary data.
+When a query aggregates data based on the values in the clustering columns, performance is improved because the sorted blocks collocate rows with similar values.
+BigQuery supports clustering over both partitioned and non-partitioned tables. When you use clustering and partitioning together, your data can be partitioned by a DATE or TIMESTAMP column and then clustered on a different set of columns (up to four columns). [<a href="https://cloud.google.com/blog/topics/developers-practitioners/bigquery-explained-storage-overview">source</a>]</p>
+<p>Clustered tables in BigQuery are subject to the following limitations:</p>
+<ul>
+<li>Only standard SQL is supported for querying clustered tables and for writing query results to clustered tables.</li>
+<li>
+<p>Clustering columns must be top-level, non-repeated columns of one of the following types:</p>
+</li>
+<li>
+<p><code>DATE</code></p>
+</li>
+<li><code>BOOL</code></li>
+<li><code>GEOGRAPHY</code></li>
+<li><code>INT64</code></li>
+<li><code>NUMERIC</code></li>
+<li><code>BIGNUMERIC</code></li>
+<li><code>STRING</code></li>
+<li><code>TIMESTAMP</code></li>
+<li>
+<p><code>DATETIME</code></p>
+</li>
+<li>
+<p>You can specify up to four clustering columns.</p>
+</li>
+<li>
+<p>When using <code>STRING</code> type columns for clustering, BigQuery uses only the first 1,024 characters to cluster the data. The values in the columns can themselves be longer than 1,024.</p>
+</li>
+</ul>
+<p>Check the previous video and also <a href="https://cloud.google.com/blog/topics/developers-practitioners/bigquery-explained-storage-overview">here</a> to see an example of the performance gain.</p>
+<p>The example SQL query can be like this:</p>
+<div class="highlight"><pre><span></span>CREATE OR REPLACE TABLE <span class="sb">`</span>stackoverflow.questions_2018_clustered<span class="sb">`</span>
+PARTITION BY
+ DATE<span class="o">(</span>creation_date<span class="o">)</span>
+CLUSTER BY
+ tags AS
+SELECT
+ *
+FROM
+ <span class="sb">`</span>bigquery-public-data.stackoverflow.posts_questions<span class="sb">`</span>
+WHERE
+ creation_date BETWEEN <span class="s1">'2018-01-01'</span> AND <span class="s1">'2018-07-01'</span><span class="p">;</span>
+</pre></div>
+<p>Check the following video to learn more:
+
+</p>
+<center>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/-CqXf7vhhDs" frameborder="0" allowfullscreen=""></iframe>
+</center>
+
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>You can also chech this <a href="https://codelabs.developers.google.com/codelabs/gcp-bq-partitioning-and-clustering#0">codelab</a> to learn more about partitioning and clustering.</p>
+<p>Let's now compare clustering and partitioning:</p>
+<p><img src="/blog/images/copied_from_nb/images/data-engineering-w3/10.png" alt="">
+<em><a href="https://youtu.be/-CqXf7vhhDs">source</a></em></p>
+<p>Now, let's see when we have to choose clustering over partitioning [<a href="https://youtu.be/-CqXf7vhhDs">ref</a>]:</p>
+<ul>
+<li>Partitioning results in a small amount of data per partition (approximately less than 1 GB)</li>
+<li>Partitioning results in a large number of partitions beyond the limits on partitioned tables</li>
+<li>Partitioning results in your mutation operations modifying the majority of partitions in the table frequently (for example, every few minutes)</li>
+</ul>
+<p>In order to have better performance with lower cost, the following best practices in BQ are useful:</p>
+<ul>
+<li>
+<p>Cost reduction</p>
+<ul>
+<li>Avoid SELECT *</li>
+<li>Price your queries before running them</li>
+<li>Use clustered or partitioned tables</li>
+<li>Use streaming inserts with caution</li>
+<li>Materialize query results in stages</li>
+</ul>
+</li>
+<li>
+<p>Query performance</p>
+<ul>
+<li>Filter on partitioned columns</li>
+<li>Denormalizing data</li>
+<li>Use nested or repeated columns</li>
+<li>Use external data sources appropriately<ul>
+<li>Don't use it, in case u want a high query performance</li>
+</ul>
+</li>
+<li>Reduce data before using a JOIN</li>
+<li>Do not treat WITH clauses as prepared statements</li>
+<li>Avoid oversharding tables</li>
+<li>Avoid JavaScript user-defined functions</li>
+<li>Use approximate aggregation functions (HyperLogLog++)</li>
+<li>Order Last, for query operations to maximize performance</li>
+<li>Optimize your join patterns<ul>
+<li>As a best practice, place the table with the largest number of rows first, followed by the table with the fewest rows, and then place the remaining tables by decreasing size.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now let's see how to load or ingest data into BigQuery and analyze them.</p>
+<h3 id="Direct-Import-(Managed-Tables)">
+<a class="anchor" href="#Direct-Import-(Managed-Tables)" aria-hidden="true"><span class="octicon octicon-link"></span></a>Direct Import (Managed Tables)<a class="anchor-link" href="#Direct-Import-(Managed-Tables)"> </a>
+</h3>
+<p>BigQuery can ingest datasets from a variety of different formats directly into its native storage. BigQuery native storage is fully managed by Google—this includes replication, backups, scaling out size, and much more.</p>
+<p>There are multiple ways to load data into BigQuery depending on data sources, data formats, load methods and use cases such as batch, streaming or data transfer. At a high level following are the ways you can ingest data into BigQuery:</p>
+<ul>
+<li>Batch Ingestion: Batch ingestion involves loading large, bounded, data sets that don’t have to be processed in real-time</li>
+<li>Streaming Ingestion: Streaming ingestion supports use cases that require analyzing high volumes of continuously arriving data with near-real-time dashboards and queries.</li>
+<li>Data Transfer Service (DTS): The BigQuery Data Transfer Service (DTS) is a fully managed service to ingest data from Google SaaS apps such as Google Ads, external cloud storage providers such as Amazon S3 and transferring data from data warehouse technologies such as Teradata and Amazon Redshift .</li>
+<li>Query Materialization: When you run queries in BigQuery their result sets can be materialized to create new tables. </li>
+</ul>
+<p><img src="/blog/images/copied_from_nb/images/data-engineering-w3/6.png" alt="">
+<em><a href="https://cloud.google.com/blog/topics/developers-practitioners/bigquery-explained-data-ingestion">source</a></em></p>
+<h3 id="Query-without-Loading-(External-Tables)">
+<a class="anchor" href="#Query-without-Loading-(External-Tables)" aria-hidden="true"><span class="octicon octicon-link"></span></a>Query without Loading (External Tables)<a class="anchor-link" href="#Query-without-Loading-(External-Tables)"> </a>
+</h3>
+<p>Using a federated query is one of the options to query external data sources directly without loading into BigQuery storage. You can query across Google services such as Google Sheets, Google Drive, Google Cloud Storage, Cloud SQL or Cloud BigTable without having to import the data into BigQuery.</p>
+<p>You don’t need to load data into BigQuery before running queries in the following situations:</p>
+<ul>
+<li>Public Datasets: Public datasets are datasets stored in BigQuery and shared with the public. </li>
+<li>Shared Datasets: You can share datasets stored in BigQuery. If someone has shared a dataset with you, you can run queries on that dataset without loading the data.</li>
+<li>External data sources (Federated): You can skip the data loading process by creating a table based on an external data source.</li>
+</ul>
+<p>Apart from the solutions available natively in BigQuery, you can also check data integration options from Google Cloud partners who have integrated their industry-leading tools with BigQuery.</p>
+<p>To read more, please check <a href="https://cloud.google.com/blog/topics/developers-practitioners/bigquery-explained-data-ingestion">here</a>.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Check the following video for BQ best practices:
+
+</p>
+<center>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/k81mLJVX08w" frameborder="0" allowfullscreen=""></iframe>
+</center>
+
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Here are some example queries in BQ which shows how to do partitioning and clustering on a public available dataset in BQ [<a href="https://github.com/DataTalksClub/data-engineering-zoomcamp/blob/main/week_3_data_warehouse/big_query.sql">ref</a>]:</p>
+<div class="highlight"><pre><span></span><span class="c1">-- Query public available table</span>
+<span class="k">SELECT</span> <span class="n">station_id</span><span class="p">,</span> <span class="n">name</span> <span class="k">FROM</span>
+    <span class="n">bigquery</span><span class="o">-</span><span class="k">public</span><span class="o">-</span><span class="k">data</span><span class="p">.</span><span class="n">new_york_citibike</span><span class="p">.</span><span class="n">citibike_stations</span>
+<span class="k">LIMIT</span> <span class="mi">100</span><span class="p">;</span>
+
+
+<span class="c1">-- Creating external table referring to gcs path</span>
+<span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="k">EXTERNAL</span> <span class="k">TABLE</span> <span class="o">`</span><span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">external_yellow_tripdata</span><span class="o">`</span>
+<span class="k">OPTIONS</span> <span class="p">(</span>
+  <span class="n">format</span> <span class="o">=</span> <span class="s1">'CSV'</span><span class="p">,</span>
+  <span class="n">uris</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'gs://nyc-tl-data/trip data/yellow_tripdata_2019-*.csv'</span><span class="p">,</span> <span class="s1">'gs://nyc-tl-data/trip data/yellow_tripdata_2020-*.csv'</span><span class="p">]</span>
+<span class="p">);</span>
+
+<span class="c1">-- Check yello trip data</span>
+<span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">external_yellow_tripdata</span> <span class="k">limit</span> <span class="mi">10</span><span class="p">;</span>
+
+<span class="c1">-- Create a non partitioned table from external table</span>
+<span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="k">TABLE</span> <span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">yellow_tripdata_non_partitoned</span> <span class="k">AS</span>
+<span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">external_yellow_tripdata</span><span class="p">;</span>
+
+
+<span class="c1">-- Create a partitioned table from external table</span>
+<span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="k">TABLE</span> <span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">yellow_tripdata_partitoned</span>
+<span class="n">PARTITION</span> <span class="k">BY</span>
+  <span class="nb">DATE</span><span class="p">(</span><span class="n">tpep_pickup_datetime</span><span class="p">)</span> <span class="k">AS</span>
+<span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">external_yellow_tripdata</span><span class="p">;</span>
+
+<span class="c1">-- Impact of partition</span>
+<span class="c1">-- Scanning 1.6GB of data</span>
+<span class="k">SELECT</span> <span class="k">DISTINCT</span><span class="p">(</span><span class="n">VendorID</span><span class="p">)</span>
+<span class="k">FROM</span> <span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">yellow_tripdata_non_partitoned</span>
+<span class="k">WHERE</span> <span class="nb">DATE</span><span class="p">(</span><span class="n">tpep_pickup_datetime</span><span class="p">)</span> <span class="k">BETWEEN</span> <span class="s1">'2019-06-01'</span> <span class="k">AND</span> <span class="s1">'2019-06-30'</span><span class="p">;</span>
+
+<span class="c1">-- Scanning ~106 MB of DATA</span>
+<span class="k">SELECT</span> <span class="k">DISTINCT</span><span class="p">(</span><span class="n">VendorID</span><span class="p">)</span>
+<span class="k">FROM</span> <span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">yellow_tripdata_partitoned</span>
+<span class="k">WHERE</span> <span class="nb">DATE</span><span class="p">(</span><span class="n">tpep_pickup_datetime</span><span class="p">)</span> <span class="k">BETWEEN</span> <span class="s1">'2019-06-01'</span> <span class="k">AND</span> <span class="s1">'2019-06-30'</span><span class="p">;</span>
+
+<span class="c1">-- Let's look into the partitons</span>
+<span class="k">SELECT</span> <span class="k">table_name</span><span class="p">,</span> <span class="n">partition_id</span><span class="p">,</span> <span class="n">total_rows</span>
+<span class="k">FROM</span> <span class="o">`</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">INFORMATION_SCHEMA</span><span class="p">.</span><span class="n">PARTITIONS</span><span class="o">`</span>
+<span class="k">WHERE</span> <span class="k">table_name</span> <span class="o">=</span> <span class="s1">'yellow_tripdata_partitoned'</span>
+<span class="k">ORDER</span> <span class="k">BY</span> <span class="n">total_rows</span> <span class="k">DESC</span><span class="p">;</span>
+
+<span class="c1">-- Creating a partition and cluster table</span>
+<span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="k">TABLE</span> <span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">yellow_tripdata_partitoned_clustered</span>
+<span class="n">PARTITION</span> <span class="k">BY</span> <span class="nb">DATE</span><span class="p">(</span><span class="n">tpep_pickup_datetime</span><span class="p">)</span>
+<span class="k">CLUSTER</span> <span class="k">BY</span> <span class="n">VendorID</span> <span class="k">AS</span>
+<span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">external_yellow_tripdata</span><span class="p">;</span>
+
+<span class="c1">-- Query scans 1.1 GB</span>
+<span class="k">SELECT</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">as</span> <span class="n">trips</span>
+<span class="k">FROM</span> <span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">yellow_tripdata_partitoned</span>
+<span class="k">WHERE</span> <span class="nb">DATE</span><span class="p">(</span><span class="n">tpep_pickup_datetime</span><span class="p">)</span> <span class="k">BETWEEN</span> <span class="s1">'2019-06-01'</span> <span class="k">AND</span> <span class="s1">'2020-12-31'</span>
+  <span class="k">AND</span> <span class="n">VendorID</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+
+<span class="c1">-- Query scans 864.5 MB</span>
+<span class="k">SELECT</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">as</span> <span class="n">trips</span>
+<span class="k">FROM</span> <span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">yellow_tripdata_partitoned_clustered</span>
+<span class="k">WHERE</span> <span class="nb">DATE</span><span class="p">(</span><span class="n">tpep_pickup_datetime</span><span class="p">)</span> <span class="k">BETWEEN</span> <span class="s1">'2019-06-01'</span> <span class="k">AND</span> <span class="s1">'2020-12-31'</span>
+  <span class="k">AND</span> <span class="n">VendorID</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Furthermore, if you are curious to know about internals of BQ, you can check <a href="https://cloud.google.com/blog/products/data-analytics/new-blog-series-bigquery-explained-overview">here</a>, <a href="https://cloud.google.com/blog/topics/developers-practitioners/bigquery-explained-storage-overview">here</a> and also the following video.
+
+</p>
+<center>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/k81mLJVX08w" frameborder="0" allowfullscreen=""></iframe>
+</center>
+
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Machine-Learning-in-BigQuery">
+<a class="anchor" href="#Machine-Learning-in-BigQuery" aria-hidden="true"><span class="octicon octicon-link"></span></a>Machine Learning in BigQuery<a class="anchor-link" href="#Machine-Learning-in-BigQuery"> </a>
+</h3>
+<p>It is also possible to do machine learning in BigQuery instead of doing it outside of it. BigQuery ML increases development speed by eliminating the need to move data.</p>
+<p>BigQuery ML supports the following types of models: [<a href="https://cloud.google.com/bigquery-ml/docs/introduction">ref</a>]</p>
+<ul>
+<li>Linear regression for forecasting; for example, the sales of an item on a given day. Labels are real-valued (they cannot be +/- infinity or NaN).</li>
+<li>Binary logistic regression for classification; for example, determining whether a customer will make a purchase. Labels must only have two possible values.</li>
+<li>Multiclass logistic regression for classification. These models can be used to predict multiple possible values such as whether an input is "low-value," "medium-value," or "high-value." Labels can have up to 50 unique values. In BigQuery ML, multiclass logistic regression training uses a multinomial classifier with a cross-entropy loss function.</li>
+<li>K-means clustering for data segmentation; for example, identifying customer segments. K-means is an unsupervised learning technique, so model training does not require labels nor split data for training or evaluation.</li>
+<li>Matrix Factorization for creating product recommendation systems. You can create product recommendations using historical customer behavior, transactions, and product ratings and then use those recommendations for personalized customer experiences.</li>
+<li>Time series for performing time-series forecasts. You can use this feature to create millions of time series models and use them for forecasting. The model automatically handles anomalies, seasonality, and holidays.</li>
+<li>Boosted Tree for creating XGBoost based classification and regression models.</li>
+<li>Deep Neural Network (DNN) for creating TensorFlow-based Deep Neural Networks for classification and regression models.</li>
+<li>AutoML Tables to create best-in-class models without feature engineering or model selection. AutoML Tables searches through a variety of model architectures to decide the best model.</li>
+<li>TensorFlow model importing. This feature lets you create BigQuery ML models from previously trained TensorFlow models, then perform prediction in BigQuery ML.</li>
+<li>Autoencoder for creating Tensorflow-based BigQuery ML models with the support of sparse data representations. The models can be used in BigQuery ML for tasks such as unsupervised anomaly detection and non-linear dimensionality reduction.</li>
+</ul>
+<p><img src="/blog/images/copied_from_nb/images/data-engineering-w3/8.png" alt="">
+<em><a href="https://cloud.google.com/blog/products/data-analytics/automl-tables-now-generally-available-bigquery-ml">source</a></em></p>
+<p>Check <a href="https://cloud.google.com/bigquery-ml/docs/introduction">here</a> and the following video to learn more about how to train a linear regression model in BQ:
+
+</p>
+<center>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/B-WtpB0PuG4" frameborder="0" allowfullscreen=""></iframe>
+</center>
+
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Here is an example of training a liner regression model in BQ on the dataset we uploaded to GCS and BQ in the previous week using Airflow, and also how to do hyperparameter tuning: [<a href="https://github.com/DataTalksClub/data-engineering-zoomcamp/blob/main/week_3_data_warehouse/extract_model.md">ref1</a>]</p>
+<div class="highlight"><pre><span></span><span class="c1">-- SELECT THE COLUMNS INTERESTED FOR YOU</span>
+<span class="k">SELECT</span> <span class="n">passenger_count</span><span class="p">,</span> <span class="n">trip_distance</span><span class="p">,</span> <span class="n">PULocationID</span><span class="p">,</span> <span class="n">DOLocationID</span><span class="p">,</span> <span class="n">payment_type</span><span class="p">,</span> <span class="n">fare_amount</span><span class="p">,</span> <span class="n">tolls_amount</span><span class="p">,</span> <span class="n">tip_amount</span>
+<span class="k">FROM</span> <span class="o">`</span><span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">yellow_tripdata_partitoned</span><span class="o">`</span> <span class="k">WHERE</span> <span class="n">fare_amount</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="c1">-- CREATE A ML TABLE WITH APPROPRIATE TYPE</span>
+<span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="k">TABLE</span> <span class="o">`</span><span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">yellow_tripdata_ml</span><span class="o">`</span> <span class="p">(</span>
+<span class="o">`</span><span class="n">passenger_count</span><span class="o">`</span> <span class="nb">INTEGER</span><span class="p">,</span>
+<span class="o">`</span><span class="n">trip_distance</span><span class="o">`</span> <span class="n">FLOAT64</span><span class="p">,</span>
+<span class="o">`</span><span class="n">PULocationID</span><span class="o">`</span> <span class="n">STRING</span><span class="p">,</span>
+<span class="o">`</span><span class="n">DOLocationID</span><span class="o">`</span> <span class="n">STRING</span><span class="p">,</span>
+<span class="o">`</span><span class="n">payment_type</span><span class="o">`</span> <span class="n">STRING</span><span class="p">,</span>
+<span class="o">`</span><span class="n">fare_amount</span><span class="o">`</span> <span class="n">FLOAT64</span><span class="p">,</span>
+<span class="o">`</span><span class="n">tolls_amount</span><span class="o">`</span> <span class="n">FLOAT64</span><span class="p">,</span>
+<span class="o">`</span><span class="n">tip_amount</span><span class="o">`</span> <span class="n">FLOAT64</span>
+<span class="p">)</span> <span class="k">AS</span> <span class="p">(</span>
+<span class="k">SELECT</span> <span class="n">passenger_count</span><span class="p">,</span> <span class="n">trip_distance</span><span class="p">,</span> <span class="k">cast</span><span class="p">(</span><span class="n">PULocationID</span> <span class="k">AS</span> <span class="n">STRING</span><span class="p">),</span> <span class="k">CAST</span><span class="p">(</span><span class="n">DOLocationID</span> <span class="k">AS</span> <span class="n">STRING</span><span class="p">),</span>
+<span class="k">CAST</span><span class="p">(</span><span class="n">payment_type</span> <span class="k">AS</span> <span class="n">STRING</span><span class="p">),</span> <span class="n">fare_amount</span><span class="p">,</span> <span class="n">tolls_amount</span><span class="p">,</span> <span class="n">tip_amount</span>
+<span class="k">FROM</span> <span class="o">`</span><span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">yellow_tripdata_partitoned</span><span class="o">`</span> <span class="k">WHERE</span> <span class="n">fare_amount</span> <span class="o">!=</span> <span class="mi">0</span>
+<span class="p">);</span>
+
+<span class="c1">-- CREATE MODEL WITH DEFAULT SETTING</span>
+<span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="n">MODEL</span> <span class="o">`</span><span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">tip_model</span><span class="o">`</span>
+<span class="k">OPTIONS</span>
+<span class="p">(</span><span class="n">model_type</span><span class="o">=</span><span class="s1">'linear_reg'</span><span class="p">,</span>
+<span class="n">input_label_cols</span><span class="o">=</span><span class="p">[</span><span class="s1">'tip_amount'</span><span class="p">],</span>
+<span class="n">DATA_SPLIT_METHOD</span><span class="o">=</span><span class="s1">'AUTO_SPLIT'</span><span class="p">)</span> <span class="k">AS</span>
+<span class="k">SELECT</span>
+<span class="o">*</span>
+<span class="k">FROM</span>
+<span class="o">`</span><span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">yellow_tripdata_ml</span><span class="o">`</span>
+<span class="k">WHERE</span>
+<span class="n">tip_amount</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">;</span>
+
+<span class="c1">-- CHECK FEATURES</span>
+<span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">ML</span><span class="p">.</span><span class="n">FEATURE_INFO</span><span class="p">(</span><span class="n">MODEL</span> <span class="o">`</span><span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">tip_model</span><span class="o">`</span><span class="p">);</span>
+
+<span class="c1">-- EVALUATE THE MODEL</span>
+<span class="k">SELECT</span>
+<span class="o">*</span>
+<span class="k">FROM</span>
+<span class="n">ML</span><span class="p">.</span><span class="n">EVALUATE</span><span class="p">(</span><span class="n">MODEL</span> <span class="o">`</span><span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">tip_model</span><span class="o">`</span><span class="p">,</span>
+<span class="p">(</span>
+<span class="k">SELECT</span>
+<span class="o">*</span>
+<span class="k">FROM</span>
+<span class="o">`</span><span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">yellow_tripdata_ml</span><span class="o">`</span>
+<span class="k">WHERE</span>
+<span class="n">tip_amount</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span>
+<span class="p">));</span>
+
+<span class="c1">-- PREDICT THE MODEL</span>
+<span class="k">SELECT</span>
+<span class="o">*</span>
+<span class="k">FROM</span>
+<span class="n">ML</span><span class="p">.</span><span class="n">PREDICT</span><span class="p">(</span><span class="n">MODEL</span> <span class="o">`</span><span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">tip_model</span><span class="o">`</span><span class="p">,</span>
+<span class="p">(</span>
+<span class="k">SELECT</span>
+<span class="o">*</span>
+<span class="k">FROM</span>
+<span class="o">`</span><span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">yellow_tripdata_ml</span><span class="o">`</span>
+<span class="k">WHERE</span>
+<span class="n">tip_amount</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span>
+<span class="p">));</span>
+
+<span class="c1">-- PREDICT AND EXPLAIN</span>
+<span class="k">SELECT</span>
+<span class="o">*</span>
+<span class="k">FROM</span>
+<span class="n">ML</span><span class="p">.</span><span class="n">EXPLAIN_PREDICT</span><span class="p">(</span><span class="n">MODEL</span> <span class="o">`</span><span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">tip_model</span><span class="o">`</span><span class="p">,</span>
+<span class="p">(</span>
+<span class="k">SELECT</span>
+<span class="o">*</span>
+<span class="k">FROM</span>
+<span class="o">`</span><span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">yellow_tripdata_ml</span><span class="o">`</span>
+<span class="k">WHERE</span>
+<span class="n">tip_amount</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span>
+<span class="p">),</span> <span class="n">STRUCT</span><span class="p">(</span><span class="mi">3</span> <span class="k">as</span> <span class="n">top_k_features</span><span class="p">));</span>
+
+<span class="c1">-- HYPER PARAM TUNNING</span>
+<span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="n">MODEL</span> <span class="o">`</span><span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">tip_hyperparam_model</span><span class="o">`</span>
+<span class="k">OPTIONS</span>
+<span class="p">(</span><span class="n">model_type</span><span class="o">=</span><span class="s1">'linear_reg'</span><span class="p">,</span>
+<span class="n">input_label_cols</span><span class="o">=</span><span class="p">[</span><span class="s1">'tip_amount'</span><span class="p">],</span>
+<span class="n">DATA_SPLIT_METHOD</span><span class="o">=</span><span class="s1">'AUTO_SPLIT'</span><span class="p">,</span>
+<span class="n">num_trials</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+<span class="n">max_parallel_trials</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="n">l1_reg</span><span class="o">=</span><span class="n">hparam_range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span>
+<span class="n">l2_reg</span><span class="o">=</span><span class="n">hparam_candidates</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">]))</span> <span class="k">AS</span>
+<span class="k">SELECT</span>
+<span class="o">*</span>
+<span class="k">FROM</span>
+<span class="o">`</span><span class="n">taxi</span><span class="o">-</span><span class="n">rides</span><span class="o">-</span><span class="n">ny</span><span class="p">.</span><span class="n">nytaxi</span><span class="p">.</span><span class="n">yellow_tripdata_ml</span><span class="o">`</span>
+<span class="k">WHERE</span>
+<span class="n">tip_amount</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">;</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>After training the model, we need to deploy it. The following video explains how to that:
+
+</p>
+<center>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/BjARzEWaznU" frameborder="0" allowfullscreen=""></iframe>
+</center>
+
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>And here is the deployment steps: [<a href="https://github.com/DataTalksClub/data-engineering-zoomcamp/blob/main/week_3_data_warehouse/extract_model.md">ref1</a>, <a href="https://cloud.google.com/bigquery-ml/docs/export-model-tutorial">ref2</a>]</p>
+<div class="highlight"><pre><span></span>- gcloud auth login
+- bq --project_id taxi-rides-ny extract -m nytaxi.tip_model gs://taxi_ml_model/tip_model
+- mkdir /tmp/model
+- gsutil cp -r gs://taxi_ml_model/tip_model /tmp/model
+- mkdir -p serving_dir/tip_model/1
+- cp -r /tmp/model/tip_model/* serving_dir/tip_model/1
+- docker pull tensorflow/serving
+- docker run -p <span class="m">8501</span>:8501 --mount <span class="nv">type</span><span class="o">=</span>bind,source<span class="o">=</span><span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span>/serving_dir/tip_model,target<span class="o">=</span>
+  /models/tip_model -e <span class="nv">MODEL_NAME</span><span class="o">=</span>tip_model -t tensorflow/serving <span class="p">&amp;</span>
+- curl -d <span class="s1">'{"instances": [{"passenger_count":1, "trip_distance":12.2, "PULocationID":"193", "DOLocationID":"264", "payment_type":"2","fare_amount":20.4,"tolls_amount":0.0}]}'</span> -X POST http://localhost:8501/v1/models/tip_model:predict
+- http://localhost:8501/v1/models/tip_model
+</pre></div>
+<p><a href="https://www.visual-design.net/post/how-to-build-ml-model-using-bigquery">Here</a> is another nice blog post on using ML in BQ.</p>
+<p>You can also check the following video which is a workshop on BQ+Airflow:
+
+</p>
+<center>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/lAxAhHNeGww" frameborder="0" allowfullscreen=""></iframe>
+</center>
+
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Other useful resources:
+
+</p>
+<center>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/ZVgt1-LfWW4" frameborder="0" allowfullscreen=""></iframe>
+</center>
+
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Amazon-Redshift">
+<a class="anchor" href="#Amazon-Redshift" aria-hidden="true"><span class="octicon octicon-link"></span></a>Amazon Redshift<a class="anchor-link" href="#Amazon-Redshift"> </a>
+</h2>
+<p>Amazon Redshift is an alternate AWS data warehouse service that is not covered in the course but is quite comparable to BigQuery. It is an AWS Cloud-based petabyte-scale data warehouse solution that is completely managed. An Amazon Redshift data warehouse is a group of computer resources known as nodes that are arranged into a group known as a cluster. Each cluster contains one or more databases and is powered by an Amazon Redshift engine.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The following diagram illustrates a typical data processing flow in Amazon Redshift. [<a href="https://docs.aws.amazon.com/redshift/latest/gsg/concepts-diagrams.html">ref</a>]</p>
+<p><img src="/blog/images/copied_from_nb/images/data-engineering-w3/9.png" alt="">
+<em><a href="https://docs.aws.amazon.com/redshift/latest/gsg/concepts-diagrams.html">source</a></em></p>
+<p>Different types of data sources constantly upload structured, semistructured, or unstructured data to the data storage layer at the data ingestion layer. This data storage area functions as a staging place for data in various states of consumption readiness. An Amazon Simple Storage Service (Amazon S3) bucket is an example of storage.</p>
+<p>The source data is preprocessed, validated, and transformed utilizing extract, transform, load (ETL) or extract, load, transform (ELT) pipelines at the optional data processing layer. ETL techniques are subsequently used to refine these raw datasets. AWS Glue is an example of an ETL engine.</p>
+<p>Data is imported into your Amazon Redshift cluster at the data consumption layer, where you can perform analytical applications.</p>
+<p>Data can also be consumed for analytical workloads as follows:</p>
+<ul>
+<li>
+<p>Use datashares to securely and easily transfer live data across Amazon Redshift clusters for reading purposes. Data can be shared at different levels, such as databases, schemas, tables, views, and SQL user-defined functions (UDFs).</p>
+</li>
+<li>
+<p>Amazon Redshift Spectrum may be used to query data in Amazon S3 files without having to load the data into Amazon Redshift tables. Amazon Redshift offers SQL capabilities designed for quick and online analytical processing (OLAP) of very big datasets stored in Amazon Redshift clusters and Amazon S3 data lakes.</p>
+</li>
+<li>
+<p>Using a federated query, you can join data from relational databases such as Amazon Relational Database Service (Amazon RDS), Amazon Aurora, or Amazon S3 with data from your Amazon Redshift database. Amazon Redshift can be used to query operational data directly (without moving it), apply transformations, and insert data into Amazon Redshift tables.</p>
+</li>
+<li>
+<p>Amazon Redshift machine learning (ML) generates models based on the data you provide and the metadata associated with the data inputs. Patterns in the incoming data are captured by these models. These models can be used to make predictions for new input data. Amazon Redshift works with Amazon SageMaker Autopilot to choose the best model and make the prediction function available in Amazon Redshift.</p>
+</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>To learn more about Amazon Redshift and how to create database, tables, query data from Redshift or external sources check <a href="https://docs.aws.amazon.com/redshift/latest/gsg/new-user.html">this</a> and <a href="https://docs.aws.amazon.com/redshift/latest/gsg/data-querying.html">this</a> tutorials. It's almost similar to BigQuery.</p>
+<p>Let's check the more interesting part: Machine Learning in Redshift.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Machine-Learning-in-Redshift">
+<a class="anchor" href="#Machine-Learning-in-Redshift" aria-hidden="true"><span class="octicon octicon-link"></span></a>Machine Learning in Redshift<a class="anchor-link" href="#Machine-Learning-in-Redshift"> </a>
+</h3>
+<p>Amazon Redshift ML makes it simple for data analysts and database engineers to construct, train, and deploy machine learning models in Amazon Redshift data warehouses using standard SQL commands. You can use Redshift ML to access Amazon SageMaker, a fully managed machine learning service, without learning new tools or languages. Simply utilize SQL commands to develop and train Amazon SageMaker machine learning models on your Redshift data, and then use these models to predict.</p>
+<p><img src="/blog/images/copied_from_nb/images/data-engineering-w3/7.png" alt="">
+<em><a href="https://aws.amazon.com/redshift/features/redshift-ml/">source</a></em></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Check the following demo to see how to do machine learning in Amazon Redshift:
+
+</p>
+<center>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/bpiKwSj0X7g" frameborder="0" allowfullscreen=""></iframe>
+</center>
+
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let's see how to create a model and running some inference queries for different scenarios using the SQL function that the <code>CREATE MODEL</code> command generates. [<a href="https://docs.aws.amazon.com/redshift/latest/dg/tutorial_customer_churn.html">ref</a>]</p>
+<p>first create a table from a dataset in S3:</p>
+<div class="highlight"><pre><span></span><span class="k">DROP</span> <span class="k">TABLE</span> <span class="k">IF</span> <span class="k">EXISTS</span> <span class="n">customer_activity</span><span class="p">;</span>
+
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">customer_activity</span> <span class="p">(</span>
+<span class="k">state</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> 
+<span class="n">account_length</span> <span class="nb">int</span><span class="p">,</span> 
+<span class="n">area_code</span> <span class="nb">int</span><span class="p">,</span>
+<span class="n">phone</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">8</span><span class="p">),</span> 
+<span class="n">intl_plan</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> 
+<span class="n">vMail_plan</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
+<span class="n">vMail_message</span> <span class="nb">int</span><span class="p">,</span> 
+<span class="n">day_mins</span> <span class="nb">float</span><span class="p">,</span> 
+<span class="n">day_calls</span> <span class="nb">int</span><span class="p">,</span> 
+<span class="n">day_charge</span> <span class="nb">float</span><span class="p">,</span>
+<span class="n">total_charge</span> <span class="nb">float</span><span class="p">,</span>
+<span class="n">eve_mins</span> <span class="nb">float</span><span class="p">,</span> 
+<span class="n">eve_calls</span> <span class="nb">int</span><span class="p">,</span> 
+<span class="n">eve_charge</span> <span class="nb">float</span><span class="p">,</span> 
+<span class="n">night_mins</span> <span class="nb">float</span><span class="p">,</span>
+<span class="n">night_calls</span> <span class="nb">int</span><span class="p">,</span> 
+<span class="n">night_charge</span> <span class="nb">float</span><span class="p">,</span> 
+<span class="n">intl_mins</span> <span class="nb">float</span><span class="p">,</span> 
+<span class="n">intl_calls</span> <span class="nb">int</span><span class="p">,</span>
+<span class="n">intl_charge</span> <span class="nb">float</span><span class="p">,</span> 
+<span class="n">cust_serv_calls</span> <span class="nb">int</span><span class="p">,</span> 
+<span class="n">churn</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">6</span><span class="p">),</span>
+<span class="n">record_date</span> <span class="nb">date</span><span class="p">);</span>
+
+<span class="k">COPY</span> <span class="n">customer_activity</span>
+<span class="k">FROM</span> <span class="s1">'s3://redshift-downloads/redshift-ml/customer_activity/'</span>
+<span class="n">REGION</span> <span class="s1">'us-east-1'</span> <span class="n">IAM_ROLE</span> <span class="s1">'arn:aws:iam::XXXXXXXXXXXX:role/Redshift-ML'</span>
+<span class="k">DELIMITER</span> <span class="s1">','</span> <span class="n">IGNOREHEADER</span> <span class="mi">1</span><span class="p">;</span>
+</pre></div>
+<p>Then creating the model.</p>
+<div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="n">MODEL</span> <span class="n">customer_churn_auto_model</span> <span class="k">FROM</span> <span class="p">(</span>
+    <span class="k">SELECT</span> 
+        <span class="k">state</span><span class="p">,</span>
+        <span class="n">account_length</span><span class="p">,</span>
+        <span class="n">area_code</span><span class="p">,</span>
+        <span class="n">total_charge</span><span class="o">/</span><span class="n">account_length</span> <span class="k">AS</span> <span class="n">average_daily_spend</span><span class="p">,</span> 
+        <span class="n">cust_serv_calls</span><span class="o">/</span><span class="n">account_length</span> <span class="k">AS</span> <span class="n">average_daily_cases</span><span class="p">,</span>
+        <span class="n">churn</span> 
+    <span class="k">FROM</span> 
+        <span class="n">customer_activity</span>
+    <span class="k">WHERE</span>  
+        <span class="n">record_date</span> <span class="o">&lt;</span> <span class="s1">'2020-01-01'</span> 
+<span class="p">)</span>
+<span class="n">TARGET</span> <span class="n">churn</span> <span class="k">FUNCTION</span> <span class="n">ml_fn_customer_churn_auto</span>
+<span class="n">IAM_ROLE</span> <span class="s1">'arn:aws:iam::XXXXXXXXXXXX:role/Redshift-ML'</span><span class="n">SETTINGS</span> <span class="p">(</span>
+  <span class="n">S3_BUCKET</span> <span class="s1">'your-bucket'</span>
+<span class="p">);</span>
+</pre></div>
+<p>The <code>SELECT</code> query creates the training data. The <code>TARGET</code> clause specifies which column is the machine learning <code>label</code> that the <code>CREATE MODEL</code> uses to learn how to predict. The remaining columns are the features (input) that are used for the prediction.</p>
+<p>And finally, the prediction can be done as follows:</p>
+<div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="n">phone</span><span class="p">,</span> 
+       <span class="n">ml_fn_customer_churn_auto</span><span class="p">(</span> 
+          <span class="k">state</span><span class="p">,</span>
+          <span class="n">account_length</span><span class="p">,</span>
+          <span class="n">area_code</span><span class="p">,</span> 
+          <span class="n">total_charge</span><span class="o">/</span><span class="n">account_length</span> <span class="p">,</span> 
+          <span class="n">cust_serv_calls</span><span class="o">/</span><span class="n">account_length</span> <span class="p">)</span>
+          <span class="k">AS</span> <span class="n">active</span> <span class="k">FROM</span> <span class="n">customer_activity</span> <span class="k">WHERE</span> <span class="n">record_date</span> <span class="o">&gt;</span> <span class="s1">'2020-01-01'</span><span class="p">;</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Conclusion">
+<a class="anchor" href="#Conclusion" aria-hidden="true"><span class="octicon octicon-link"></span></a>Conclusion<a class="anchor-link" href="#Conclusion"> </a>
+</h1>
+<p>In this week, we focused more on data warehouses and reviewed Google BigQuery and Amazon Redshift services. We learned how to do normal SQL queries and also how to do machine learning in these warehouses using SQL.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="kargarisaac/blog"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/blog/data%20engineering/mlops/2022/01/30/data-engineering-w3.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/blog/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/blog/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/blog/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>My posts about Machine Learning</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/kargarisaac" target="_blank" title="kargarisaac"><svg class="svg-icon grey"><use xlink:href="/blog/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://www.linkedin.com/in/eshagh-kargar" target="_blank" title="eshagh-kargar"><svg class="svg-icon grey"><use xlink:href="/blog/assets/minima-social-icons.svg#linkedin"></use></svg></a></li><li><a rel="me" href="https://twitter.com/kargarisaac" target="_blank" title="kargarisaac"><svg class="svg-icon grey"><use xlink:href="/blog/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

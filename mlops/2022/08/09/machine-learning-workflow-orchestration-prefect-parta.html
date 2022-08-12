@@ -211,7 +211,9 @@ Failure can occur in even unforeseen ways. For example, inbound data is flawed, 
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>All of these will aid the organization and its developers in completing their tasks and locating issues more quickly, allowing them to devote their attention to something more vital.</p>
-<p>Great! let's see how we can do it in practice. First, let's see how Prefect can help us.</p>
+<p>Great! let's see how we can do it in practice. Our pipeline would be something like the following:</p>
+<p><img src="/blog/images/copied_from_nb/images/workflow-orchestration/5.png" alt=""></p>
+<p>First, let's see how Prefect can help us.</p>
 
 </div>
 </div>
@@ -235,162 +237,166 @@ If you move data, you probably need the following functionality:&gt; - schedules
 <p>Implementing all of these features for your dataflows is a huge pain that takes a lot of time — time that could be better used for functional code.
 That's why Prefect 2.0 offers all this functionality and more!</p>
 </blockquote>
-<p>We will use Prefect 2.0 (Orion) here. You can easily install prefect using:```bashpip install prefect</p>
+<p>We will use Prefect 2.0 (Orion) here. You can easily install prefect using:<code>bashpip install prefect</code></p>
 
-<pre><code>
-We will add Prefect to a Python script containing our code. I will continue with the Keras code from the previous post, although the method is identical for other Scikit-Learn packages. Essentially, we obtain the prior code including all MLflow-related information and convert it into functions as our pipeline steps. Converting the python functions to Prefect steps and flow is as easily as wrapping the function using `@task` and `@flow` decorators. In our case, the code for training the model might look as follows:
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We will add Prefect to a Python script containing our code. I will continue with the Keras code from the previous post, although the method is identical for other Scikit-Learn packages. Essentially, we obtain the prior code including all MLflow-related information and convert it into functions as our pipeline steps. Converting the python functions to Prefect steps and flow is as easily as wrapping the function using <code>@task</code> and <code>@flow</code> decorators. In our case, the code for training the model might look as follows:</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">nltk</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s1">'./corpora'</span><span class="p">):</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"NLTK_DATA"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"./corpora"</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">nltk</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s1">'stopwords'</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">stopwords</span>
+<span class="kn">from</span> <span class="nn">nltk.stem.porter</span> <span class="kn">import</span> <span class="n">PorterStemmer</span>
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="kn">from</span> <span class="nn">tensorflow.keras.preprocessing.text</span> <span class="kn">import</span> <span class="n">Tokenizer</span>
+<span class="kn">from</span> <span class="nn">tensorflow.keras.preprocessing.sequence</span> <span class="kn">import</span> <span class="n">pad_sequences</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">import</span> <span class="nn">mlflow</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">from</span> <span class="nn">prefect</span> <span class="kn">import</span> <span class="n">flow</span><span class="p">,</span> <span class="n">task</span>
 
-```python
-import numpy as np
-import pandas as pd
-import os
-import nltk
-import re
-if os.path.exists('./corpora'):
-    os.environ["NLTK_DATA"] = "./corpora"
-else:
-    nltk.download('stopwords')
-from nltk.corpus import stopwords
-from nltk.stem.porter import PorterStemmer
-import tensorflow as tf
-from tensorflow.keras.preprocessing.text import Tokenizer
-from tensorflow.keras.preprocessing.sequence import pad_sequences
-from sklearn.model_selection import train_test_split
-import mlflow
-import pickle
-from prefect import flow, task
+<span class="c1">## data loading</span>
+<span class="nd">@task</span>
+<span class="k">def</span> <span class="nf">read_data</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">'Womens Clothing E-Commerce Reviews.csv'</span><span class="p">):</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="n">index_col</span> <span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Data loaded.</span><span class="se">\n\n</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">data</span>
 
-## data loading
-@task
-def read_data(filename='Womens Clothing E-Commerce Reviews.csv'):
-    data = pd.read_csv(filename,index_col =[0])
-    print("Data loaded.\n\n")
-    return data
+<span class="c1">## preprocess text</span>
+<span class="nd">@task</span>
+<span class="k">def</span> <span class="nf">preprocess_data</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="c1">#check if data/corpus is created before or not</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s1">'data/corpus_y.pickle'</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Preprocessed data not found. Creating new data. </span><span class="se">\n\n</span><span class="s2">"</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="o">~</span><span class="n">data</span><span class="p">[</span><span class="s1">'Review Text'</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()]</span>  <span class="c1">#Dropping columns which don't have any review</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">data</span><span class="p">[[</span><span class="s1">'Review Text'</span><span class="p">]]</span>
+        <span class="n">X</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">))</span>
 
-## preprocess text
-@task
-def preprocess_data(data):
-    #check if data/corpus is created before or not
-    if not os.path.exists('data/corpus_y.pickle'):
-        print("Preprocessed data not found. Creating new data. \n\n")
-        data = data[~data['Review Text'].isnull()]  #Dropping columns which don't have any review
-        X = data[['Review Text']]
-        X.index = np.arange(len(X))
+        <span class="n">y</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">'Recommended IND'</span><span class="p">]</span>
 
-        y = data['Recommended IND']
+        <span class="n">corpus</span> <span class="o">=</span><span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)):</span>
+            <span class="n">review</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">'[^a-zA-z]'</span><span class="p">,</span><span class="s1">' '</span><span class="p">,</span><span class="n">X</span><span class="p">[</span><span class="s1">'Review Text'</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">review</span> <span class="o">=</span> <span class="n">review</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+            <span class="n">review</span> <span class="o">=</span> <span class="n">review</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+            <span class="n">ps</span> <span class="o">=</span> <span class="n">PorterStemmer</span><span class="p">()</span>
+            <span class="n">review</span> <span class="o">=</span><span class="p">[</span><span class="n">ps</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">review</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="s1">'english'</span><span class="p">))]</span>
+            <span class="n">review</span> <span class="o">=</span><span class="s1">' '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">review</span><span class="p">)</span>
+            <span class="n">corpus</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">review</span><span class="p">)</span>
 
-        corpus =[]
-        for i in range(len(X)):
-            review = re.sub('[^a-zA-z]',' ',X['Review Text'][i])
-            review = review.lower()
-            review = review.split()
-            ps = PorterStemmer()
-            review =[ps.stem(i) for i in review if not i in set(stopwords.words('english'))]
-            review =' '.join(review)
-            corpus.append(review)
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'data/corpus_y.pickle'</span><span class="p">,</span> <span class="s1">'wb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
+            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">((</span><span class="n">corpus</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">handle</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Preprocessed data found. Loading data. </span><span class="se">\n\n</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'data/corpus_y.pickle'</span><span class="p">,</span> <span class="s1">'rb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
+            <span class="n">corpus</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
 
-        with open('data/corpus_y.pickle', 'wb') as handle:
-            pickle.dump((corpus, y), handle)
-    else:
-        print("Preprocessed data found. Loading data. \n\n")
-        with open('data/corpus_y.pickle', 'rb') as handle:
-            corpus, y = pickle.load(handle)
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Data preprocessed.</span><span class="se">\n\n</span><span class="s2">"</span><span class="p">)</span>
 
-    print("Data preprocessed.\n\n")
+    <span class="k">return</span> <span class="n">corpus</span><span class="p">,</span> <span class="n">y</span>
 
-    return corpus, y
+<span class="c1">## tokenization and dataset creation</span>
+<span class="nd">@task</span>
+<span class="k">def</span> <span class="nf">create_dataset</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">Tokenizer</span><span class="p">(</span><span class="n">num_words</span> <span class="o">=</span> <span class="mi">3000</span><span class="p">)</span>
+    <span class="n">tokenizer</span><span class="o">.</span><span class="n">fit_on_texts</span><span class="p">(</span><span class="n">corpus</span><span class="p">)</span>
 
-## tokenization and dataset creation
-@task
-def create_dataset(corpus, y, test_size=0.2, random_state=0):
-    tokenizer = Tokenizer(num_words = 3000)
-    tokenizer.fit_on_texts(corpus)
+    <span class="n">sequences</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">texts_to_sequences</span><span class="p">(</span><span class="n">corpus</span><span class="p">)</span>
+    <span class="n">padded</span> <span class="o">=</span> <span class="n">pad_sequences</span><span class="p">(</span><span class="n">sequences</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s1">'post'</span><span class="p">)</span>
 
-    sequences = tokenizer.texts_to_sequences(corpus)
-    padded = pad_sequences(sequences, padding='post')
+    <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">padded</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span> <span class="o">=</span> <span class="mf">0.20</span><span class="p">,</span> <span class="n">random_state</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
 
-    X_train, X_test, y_train, y_test = train_test_split(padded, y, test_size = 0.20, random_state = 0)
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Dataset created.</span><span class="se">\n\n</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">tokenizer</span>
 
-    print("Dataset created.\n\n")
-    return X_train, X_test, y_train, y_test, tokenizer
+<span class="c1"># mlflow.tensorflow.autolog()</span>
+<span class="nd">@task</span>
+<span class="k">def</span> <span class="nf">train_model</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">embedding_dim</span><span class="p">,</span> <span class="n">batch_size</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="mi">32</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">128</span><span class="p">],</span> <span class="p">[</span><span class="mi">32</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">128</span><span class="p">]):</span>
+        <span class="k">with</span> <span class="n">mlflow</span><span class="o">.</span><span class="n">start_run</span><span class="p">():</span>
+            <span class="c1">## model definition</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Sequential</span><span class="p">([</span>
+                <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Embedding</span><span class="p">(</span><span class="mi">3000</span><span class="p">,</span> <span class="n">embedding_dim</span><span class="p">),</span>
+                <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">GlobalAveragePooling1D</span><span class="p">(),</span>
+                <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'relu'</span><span class="p">),</span>
+                <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'sigmoid'</span><span class="p">)</span>
+            <span class="p">])</span>
 
-# mlflow.tensorflow.autolog()
-@task
-def model_training(X_train, y_train, X_test, y_test, tokenizer):
-    for embedding_dim, batch_size in zip([32, 64, 128], [32, 64, 128]):
-        with mlflow.start_run():
-            ## model definition
-            model = tf.keras.Sequential([
-                tf.keras.layers.Embedding(3000, embedding_dim),
-                tf.keras.layers.GlobalAveragePooling1D(),
-                tf.keras.layers.Dense(6, activation='relu'),
-                tf.keras.layers.Dense(1, activation='sigmoid')
-            ])
+            <span class="c1">## training</span>
+            <span class="n">num_epochs</span> <span class="o">=</span> <span class="mi">50</span>
+            <span class="n">callback</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">callbacks</span><span class="o">.</span><span class="n">EarlyStopping</span><span class="p">(</span>
+                <span class="n">monitor</span><span class="o">=</span><span class="s2">"val_loss"</span><span class="p">,</span>
+                <span class="n">min_delta</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                <span class="n">patience</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                <span class="n">mode</span><span class="o">=</span><span class="s2">"auto"</span><span class="p">,</span>
+                <span class="n">baseline</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">restore_best_weights</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="p">)</span>
 
-            ## training
-            num_epochs = 50
-            callback = tf.keras.callbacks.EarlyStopping(
-                monitor="val_loss",
-                min_delta=0,
-                patience=2,
-                verbose=0,
-                mode="auto",
-                baseline=None,
-                restore_best_weights=False,
-            )
+            <span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s1">'binary_crossentropy'</span><span class="p">,</span><span class="n">optimizer</span><span class="o">=</span><span class="s1">'adam'</span><span class="p">,</span><span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">'accuracy'</span><span class="p">])</span>
 
-            model.compile(loss='binary_crossentropy',optimizer='adam',metrics=['accuracy'])
+            <span class="n">mlflow</span><span class="o">.</span><span class="n">set_tag</span><span class="p">(</span><span class="s2">"developer"</span><span class="p">,</span> <span class="s2">"Isaac"</span><span class="p">)</span>
+            <span class="n">mlflow</span><span class="o">.</span><span class="n">set_tag</span><span class="p">(</span><span class="s2">"algorithm"</span><span class="p">,</span> <span class="s2">"Deep Learning"</span><span class="p">)</span>
+            <span class="n">mlflow</span><span class="o">.</span><span class="n">log_param</span><span class="p">(</span><span class="s2">"train-data"</span><span class="p">,</span> <span class="s2">"Womens Clothing E-Commerce Reviews"</span><span class="p">)</span>
+            <span class="n">mlflow</span><span class="o">.</span><span class="n">log_param</span><span class="p">(</span><span class="s2">"embedding-dim"</span><span class="p">,</span> <span class="n">embedding_dim</span><span class="p">)</span>
 
-            mlflow.set_tag("developer", "Isaac")
-            mlflow.set_tag("algorithm", "Deep Learning")
-            mlflow.log_param("train-data", "Womens Clothing E-Commerce Reviews")
-            mlflow.log_param("embedding-dim", embedding_dim)
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"Fit model on training data"</span><span class="p">)</span>
+            <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span>
+                <span class="n">X_train</span><span class="p">,</span>
+                <span class="n">y_train</span><span class="p">,</span>
+                <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+                <span class="n">epochs</span><span class="o">=</span><span class="n">num_epochs</span><span class="p">,</span>
+                <span class="n">callbacks</span><span class="o">=</span><span class="n">callback</span><span class="p">,</span>
+                <span class="c1"># We pass some validation for</span>
+                <span class="c1"># monitoring validation loss and metrics</span>
+                <span class="c1"># at the end of each epoch</span>
+                <span class="n">validation_data</span><span class="o">=</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">),</span>
+            <span class="p">)</span>
 
-            print("Fit model on training data")
-            model.fit(
-                X_train,
-                y_train,
-                batch_size=batch_size,
-                epochs=num_epochs,
-                callbacks=callback,
-                # We pass some validation for
-                # monitoring validation loss and metrics
-                # at the end of each epoch
-                validation_data=(X_test, y_test),
-            )
+            <span class="c1">## save model and tokenizer</span>
+            <span class="c1"># model.save('models/model_dl.h5')</span>
+            <span class="n">mlflow</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">log_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">'models/model_dl'</span><span class="p">)</span>
 
-            ## save model and tokenizer
-            # model.save('models/model_dl.h5')
-            mlflow.keras.log_model(model, 'models/model_dl')
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'models/tf_tokenizer.pickle'</span><span class="p">,</span> <span class="s1">'wb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
+                <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">tokenizer</span><span class="p">,</span> <span class="n">handle</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="n">pickle</span><span class="o">.</span><span class="n">HIGHEST_PROTOCOL</span><span class="p">)</span>
 
-            with open('models/tf_tokenizer.pickle', 'wb') as handle:
-                pickle.dump(tokenizer, handle, protocol=pickle.HIGHEST_PROTOCOL)
+            <span class="n">mlflow</span><span class="o">.</span><span class="n">log_artifact</span><span class="p">(</span><span class="n">local_path</span><span class="o">=</span><span class="s2">"models/tf_tokenizer.pickle"</span><span class="p">,</span> <span class="n">artifact_path</span><span class="o">=</span><span class="s2">"tokenizer_pickle"</span><span class="p">)</span>
 
-            mlflow.log_artifact(local_path="models/tf_tokenizer.pickle", artifact_path="tokenizer_pickle")
+            <span class="c1"># Evaluate the model on the test data using `evaluate`</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"Evaluate on test data"</span><span class="p">)</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"test loss, test acc:"</span><span class="p">,</span> <span class="n">results</span><span class="p">)</span>
+            <span class="n">mlflow</span><span class="o">.</span><span class="n">log_metric</span><span class="p">(</span><span class="s2">"loss"</span><span class="p">,</span> <span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">mlflow</span><span class="o">.</span><span class="n">log_metric</span><span class="p">(</span><span class="s2">"accuracy"</span><span class="p">,</span> <span class="n">results</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 
-            # Evaluate the model on the test data using `evaluate`
-            print("Evaluate on test data")
-            results = model.evaluate(X_test, y_test, batch_size=128)
-            print("test loss, test acc:", results)
-            mlflow.log_metric("loss", results[0])
-            mlflow.log_metric("accuracy", results[1])
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Model training completed.</span><span class="se">\n\n</span><span class="s2">"</span><span class="p">)</span>
 
-    print("Model training completed.\n\n")
+<span class="nd">@flow</span>
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">tracking_uri</span> <span class="o">=</span> <span class="s2">"sqlite:///mlflow.db"</span>
+    <span class="n">model_name</span> <span class="o">=</span> <span class="s2">"customer-sentiment-analysis"</span>
+    <span class="n">mlflow</span><span class="o">.</span><span class="n">set_tracking_uri</span><span class="p">(</span><span class="n">tracking_uri</span><span class="p">)</span>
+    <span class="n">mlflow</span><span class="o">.</span><span class="n">set_experiment</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
 
-@flow
-def main():
-    tracking_uri = "sqlite:///mlflow.db"
-    model_name = "customer-sentiment-analysis"
-    mlflow.set_tracking_uri(tracking_uri)
-    mlflow.set_experiment(model_name)
+    <span class="n">data</span> <span class="o">=</span> <span class="n">read_data</span><span class="p">()</span>
+    <span class="n">corpus</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">preprocess_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">create_dataset</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="n">model_training</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">)</span>
 
-    data = read_data()
-    corpus, y = preprocess_data(data)
-    X_train, X_test, y_train, y_test, tokenizer = create_dataset(corpus, y)
-    model_training(X_train, y_train, X_test, y_test, tokenizer)
-
-if __name__ == '__main__':
-    main()</code></pre>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">'__main__'</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
 <p>When you trained the mode, you can go to MLflow UI and decide if you want to change the model in the <code>Production</code> stage or not. Then you can easily load the model in the <code>Production</code> stage using a code snippet like this and evaluate it as you wish (maybe creating another pipeline for that):</p>
 <div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mlflow.tracking</span> <span class="kn">import</span> <span class="n">MlflowClient</span>
 

@@ -178,9 +178,8 @@ In the second post of this series, we will convert the code from the previous p
 <p>We begin with Prefect and demonstrate how to utilize it locally and on Google Cloud. The same is then performed using ZenML.</p>
 <p>But why do our machine learning services need a pipeline? The ZenML manual describes it in detail [<a href="https://github.com/zenml-io/zenbytes">source</a>]:</p>
 <blockquote>
-<p>As an ML practitioner, you are probably familiar with building ML models using Scikit-learn, PyTorch, TensorFlow, or similar. An <strong><a href="https://docs.zenml.io/developer-guide/steps-and-pipelines">ML Pipeline</a></strong> is simply an extension, including other steps you would typically do before or after building a model, like data acquisition, preprocessing, model deployment, or monitoring. The ML pipeline essentially defines a step-by-step procedure of your work as an ML practitioner. Defining ML pipelines explicitly in code is great because:<br>&gt;</p>
+<p>As an ML practitioner, you are probably familiar with building ML models using Scikit-learn, PyTorch, TensorFlow, or similar. An <strong><a href="https://docs.zenml.io/developer-guide/steps-and-pipelines">ML Pipeline</a></strong> is simply an extension, including other steps you would typically do before or after building a model, like data acquisition, preprocessing, model deployment, or monitoring. The ML pipeline essentially defines a step-by-step procedure of your work as an ML practitioner. Defining ML pipelines explicitly in code is great because:<br>&gt; - We can easily rerun all of our work, not just the model, eliminating bugs and making our models easier to reproduce.</p>
 <ul>
-<li>We can easily rerun all of our work, not just the model, eliminating bugs and making our models easier to reproduce.</li>
 <li>Data and models can be versioned and tracked, so we can see at a glance which dataset a model was trained on and how it compares to other models.</li>
 <li>If the entire pipeline is coded up, we can automate many operational tasks, like retraining and redeploying models when the underlying problem or data changes or rolling out new and improved models with CI/CD workflows.</li>
 </ul>
@@ -227,7 +226,7 @@ Failure can occur in even unforeseen ways. For example, inbound data is flawed, 
 </h1>
 <blockquote>
 <p>Prefect is air traffic control for the modern data stack. Monitor, coordinate, and orchestrate dataflows between and across your applications. Build pipelines, deploy them anywhere, and configure them remotely. You might just love your workflows again.
-If you move data, you probably need the following functionality:<br>&gt; &gt; - schedules</p>
+If you move data, you probably need the following functionality:<br>&gt; - schedules</p>
 <ul>
 <li>retries</li>
 <li>logging</li>
@@ -463,16 +462,14 @@ That's why Prefect 2.0 offers all this functionality and more!</p>
 <blockquote>
 <p>Calling a task function from within a flow, using the default task settings, executes the function sequentially. Execution of the task function blocks execution of the flow until the task completes. This means, by default, calling multiple tasks in a flow causes them to run in order. <br>
 However, that's not the only way to run tasks! <br>
-You can use the <code>.submit()</code> method on a task function to submit the task to a task runner. Using a task runner enables you to control whether tasks run sequentially, concurrently, or if you want to take advantage of a parallel or distributed execution libraries such as Dask or Ray. <br></p>
-<p>Prefect currently provides the following built-in task runners:<br>&gt;</p>
+You can use the <code>.submit()</code> method on a task function to submit the task to a task runner. Using a task runner enables you to control whether tasks run sequentially, concurrently, or if you want to take advantage of a parallel or distributed execution libraries such as Dask or Ray. <br>
+Prefect currently provides the following built-in task runners:<br>&gt; - <strong>SequentialTaskRunner</strong> can run tasks sequentially.</p>
 <ul>
-<li>
-<strong>SequentialTaskRunner</strong> can run tasks sequentially.</li>
 <li>
 <strong>ConcurrentTaskRunner</strong> can run tasks concurrently, allowing tasks to switch when blocking on IO. Tasks will be submitted to a thread pool maintained by anyio. <br>
 </li>
 </ul>
-<p>In addition, the following Prefect-developed task runners for parallel or distributed task execution may be installed as Prefect Collections.</p>
+<p>In addition, the following Prefect-developed task runners for parallel or distributed task execution may be installed as Prefect Collections. <br></p>
 <ul>
 <li>
 <strong>DaskTaskRunner</strong> can run tasks requiring parallel execution using dask.distributed.</li>

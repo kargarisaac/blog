@@ -9,14 +9,14 @@
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Machine learning workflow orchestration using Prefect." />
 <meta property="og:description" content="Machine learning workflow orchestration using Prefect." />
-<link rel="canonical" href="https://kargarisaac.github.io/blog/mlops/2022/08/09/machine-learning-workflow-orchestration-prefect-parta.html" />
-<meta property="og:url" content="https://kargarisaac.github.io/blog/mlops/2022/08/09/machine-learning-workflow-orchestration-prefect-parta.html" />
+<link rel="canonical" href="https://kargarisaac.github.io/blog/mlops/2022/08/09/machine-learning-workflow-orchestration-prefect.html" />
+<meta property="og:url" content="https://kargarisaac.github.io/blog/mlops/2022/08/09/machine-learning-workflow-orchestration-prefect.html" />
 <meta property="og:site_name" content="Isaac Kargar" />
 <meta property="og:image" content="https://kargarisaac.github.io/blog/images/some_folder/your_image.png" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2022-08-09T00:00:00-05:00" />
 <script type="application/ld+json">
-{"datePublished":"2022-08-09T00:00:00-05:00","dateModified":"2022-08-09T00:00:00-05:00","image":"https://kargarisaac.github.io/blog/images/some_folder/your_image.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://kargarisaac.github.io/blog/mlops/2022/08/09/machine-learning-workflow-orchestration-prefect-parta.html"},"description":"Machine learning workflow orchestration using Prefect.","@type":"BlogPosting","url":"https://kargarisaac.github.io/blog/mlops/2022/08/09/machine-learning-workflow-orchestration-prefect-parta.html","headline":"MLOps project - part 2a: Machine Learning Workflow Orchestration using Prefect","@context":"https://schema.org"}</script>
+{"datePublished":"2022-08-09T00:00:00-05:00","dateModified":"2022-08-09T00:00:00-05:00","image":"https://kargarisaac.github.io/blog/images/some_folder/your_image.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://kargarisaac.github.io/blog/mlops/2022/08/09/machine-learning-workflow-orchestration-prefect.html"},"description":"Machine learning workflow orchestration using Prefect.","@type":"BlogPosting","url":"https://kargarisaac.github.io/blog/mlops/2022/08/09/machine-learning-workflow-orchestration-prefect.html","headline":"MLOps project - part 2a: Machine Learning Workflow Orchestration using Prefect","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/blog/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://kargarisaac.github.io/blog/feed.xml" title="Isaac Kargar" /><!-- the google_analytics_id gets auto inserted from the config file -->
 
@@ -31,14 +31,14 @@
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Machine learning workflow orchestration using Prefect." />
 <meta property="og:description" content="Machine learning workflow orchestration using Prefect." />
-<link rel="canonical" href="https://kargarisaac.github.io/blog/mlops/2022/08/09/machine-learning-workflow-orchestration-prefect-parta.html" />
-<meta property="og:url" content="https://kargarisaac.github.io/blog/mlops/2022/08/09/machine-learning-workflow-orchestration-prefect-parta.html" />
+<link rel="canonical" href="https://kargarisaac.github.io/blog/mlops/2022/08/09/machine-learning-workflow-orchestration-prefect.html" />
+<meta property="og:url" content="https://kargarisaac.github.io/blog/mlops/2022/08/09/machine-learning-workflow-orchestration-prefect.html" />
 <meta property="og:site_name" content="Isaac Kargar" />
 <meta property="og:image" content="https://kargarisaac.github.io/blog/images/some_folder/your_image.png" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2022-08-09T00:00:00-05:00" />
 <script type="application/ld+json">
-{"datePublished":"2022-08-09T00:00:00-05:00","dateModified":"2022-08-09T00:00:00-05:00","image":"https://kargarisaac.github.io/blog/images/some_folder/your_image.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://kargarisaac.github.io/blog/mlops/2022/08/09/machine-learning-workflow-orchestration-prefect-parta.html"},"description":"Machine learning workflow orchestration using Prefect.","@type":"BlogPosting","url":"https://kargarisaac.github.io/blog/mlops/2022/08/09/machine-learning-workflow-orchestration-prefect-parta.html","headline":"MLOps project - part 2a: Machine Learning Workflow Orchestration using Prefect","@context":"https://schema.org"}</script>
+{"datePublished":"2022-08-09T00:00:00-05:00","dateModified":"2022-08-09T00:00:00-05:00","image":"https://kargarisaac.github.io/blog/images/some_folder/your_image.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://kargarisaac.github.io/blog/mlops/2022/08/09/machine-learning-workflow-orchestration-prefect.html"},"description":"Machine learning workflow orchestration using Prefect.","@type":"BlogPosting","url":"https://kargarisaac.github.io/blog/mlops/2022/08/09/machine-learning-workflow-orchestration-prefect.html","headline":"MLOps project - part 2a: Machine Learning Workflow Orchestration using Prefect","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 <link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
@@ -121,7 +121,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      9 min read
+      12 min read
     
 </span></p>
 
@@ -132,19 +132,19 @@ window.onload = wrap_img;
         <div class="pb-5 d-flex flex-wrap flex-justify-end">
           <div class="px-2">
 
-    <a href="https://github.com/kargarisaac/blog/tree/master/_notebooks/2022-08-09-machine-learning-workflow-orchestration-prefect-parta.ipynb" role="button" target="_blank">
+    <a href="https://github.com/kargarisaac/blog/tree/master/_notebooks/2022-08-09-machine-learning-workflow-orchestration-prefect.ipynb" role="button" target="_blank">
 <img class="notebook-badge-image" src="/blog/assets/badges/github.svg" alt="View On GitHub">
     </a>
 </div>
 
           <div class="px-2">
-    <a href="https://mybinder.org/v2/gh/kargarisaac/blog/master?filepath=_notebooks%2F2022-08-09-machine-learning-workflow-orchestration-prefect-parta.ipynb" target="_blank">
+    <a href="https://mybinder.org/v2/gh/kargarisaac/blog/master?filepath=_notebooks%2F2022-08-09-machine-learning-workflow-orchestration-prefect.ipynb" target="_blank">
         <img class="notebook-badge-image" src="/blog/assets/badges/binder.svg" alt="Open In Binder"/>
     </a>
 </div>
 
           <div class="px-2">
-    <a href="https://colab.research.google.com/github/kargarisaac/blog/blob/master/_notebooks/2022-08-09-machine-learning-workflow-orchestration-prefect-parta.ipynb" target="_blank">
+    <a href="https://colab.research.google.com/github/kargarisaac/blog/blob/master/_notebooks/2022-08-09-machine-learning-workflow-orchestration-prefect.ipynb" target="_blank">
         <img class="notebook-badge-image" src="/blog/assets/badges/colab.svg" alt="Open In Colab"/>
     </a>
 </div>
@@ -158,7 +158,7 @@ window.onload = wrap_img;
 #################################################
 ### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
 #################################################
-# file to edit: _notebooks/2022-08-09-machine-learning-workflow-orchestration-prefect-parta.ipynb
+# file to edit: _notebooks/2022-08-09-machine-learning-workflow-orchestration-prefect.ipynb
 -->
 
 <div class="container" id="notebook-container">
@@ -178,8 +178,9 @@ In the second post of this series, we will convert the code from the previous p
 <p>We begin with Prefect and demonstrate how to utilize it locally and on Google Cloud. The same is then performed using ZenML.</p>
 <p>But why do our machine learning services need a pipeline? The ZenML manual describes it in detail [<a href="https://github.com/zenml-io/zenbytes">source</a>]:</p>
 <blockquote>
-<p>As an ML practitioner, you are probably familiar with building ML models using Scikit-learn, PyTorch, TensorFlow, or similar. An <strong><a href="https://docs.zenml.io/developer-guide/steps-and-pipelines">ML Pipeline</a></strong> is simply an extension, including other steps you would typically do before or after building a model, like data acquisition, preprocessing, model deployment, or monitoring. The ML pipeline essentially defines a step-by-step procedure of your work as an ML practitioner. Defining ML pipelines explicitly in code is great because: <br>&gt; - We can easily rerun all of our work, not just the model, eliminating bugs and making our models easier to reproduce.</p>
+<p>As an ML practitioner, you are probably familiar with building ML models using Scikit-learn, PyTorch, TensorFlow, or similar. An <strong><a href="https://docs.zenml.io/developer-guide/steps-and-pipelines">ML Pipeline</a></strong> is simply an extension, including other steps you would typically do before or after building a model, like data acquisition, preprocessing, model deployment, or monitoring. The ML pipeline essentially defines a step-by-step procedure of your work as an ML practitioner. Defining ML pipelines explicitly in code is great because:&gt;</p>
 <ul>
+<li>We can easily rerun all of our work, not just the model, eliminating bugs and making our models easier to reproduce.</li>
 <li>Data and models can be versioned and tracked, so we can see at a glance which dataset a model was trained on and how it compares to other models.</li>
 <li>If the entire pipeline is coded up, we can automate many operational tasks, like retraining and redeploying models when the underlying problem or data changes or rolling out new and improved models with CI/CD workflows.</li>
 </ul>
@@ -191,7 +192,7 @@ In the second post of this series, we will convert the code from the previous p
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>We may have extensive preprocessing that we do not want to repeat every time we train a model, such as in the last blog post where we generated the 'corpus' list.
+<p>We may have extensive preprocessing that we do not want to repeat every time we train a model, such as in the last blog post where we generated the <code>corpus</code> list.
 We may also need to compare the performance of different models, or wish to deploy the model and monitor data and model performance. Here, ML pipelines come into play, allowing us to specify our workflows as a series of modular processes that can subsequently be combined.</p>
 <p>Additionally, we may have a machine learning pipeline that we would like to execute every week. We can put it on a timetable, and if the machine learning model fails or the incoming data fails, we can analyze and resolve the issues.</p>
 <p>Let's consider a standard machine learning pipeline:</p>
@@ -226,8 +227,9 @@ Failure can occur in even unforeseen ways. For example, inbound data is flawed, 
 </h1>
 <blockquote>
 <p>Prefect is air traffic control for the modern data stack. Monitor, coordinate, and orchestrate dataflows between and across your applications. Build pipelines, deploy them anywhere, and configure them remotely. You might just love your workflows again.
-If you move data, you probably need the following functionality:&gt; - schedules&gt; - retries</p>
+If you move data, you probably need the following functionality:&gt;&gt; - schedules</p>
 <ul>
+<li>retries</li>
 <li>logging</li>
 <li>caching</li>
 <li>notifications</li>
@@ -238,6 +240,14 @@ If you move data, you probably need the following functionality:&gt; - schedules
 That's why Prefect 2.0 offers all this functionality and more!</p>
 </blockquote>
 <p>We will use Prefect 2.0 (Orion) here. You can easily install prefect using:<code>pip install prefect</code></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>I install Prefect <code>2.0.4</code>. I see that the API is changing so quickly and you need to use the same version if you want to follow along.</p>
 
 </div>
 </div>
@@ -453,8 +463,13 @@ That's why Prefect 2.0 offers all this functionality and more!</p>
 <blockquote>
 <p>Calling a task function from within a flow, using the default task settings, executes the function sequentially. Execution of the task function blocks execution of the flow until the task completes. This means, by default, calling multiple tasks in a flow causes them to run in order. <br>
 However, that's not the only way to run tasks! <br>
-You can use the <code>.submit()</code> method on a task function to submit the task to a task runner. Using a task runner enables you to control whether tasks run sequentially, concurrently, or if you want to take advantage of a parallel or distributed execution libraries such as Dask or Ray.<br>
-Prefect currently provides the following built-in task runners:&gt; - <strong>SequentialTaskRunner</strong> can run tasks sequentially.&gt; - <strong>ConcurrentTaskRunner</strong> can run tasks concurrently, allowing tasks to switch when blocking on IO. Tasks will be submitted to a thread pool maintained by anyio. <br></p>
+You can use the <code>.submit()</code> method on a task function to submit the task to a task runner. Using a task runner enables you to control whether tasks run sequentially, concurrently, or if you want to take advantage of a parallel or distributed execution libraries such as Dask or Ray.</p>
+<p>Prefect currently provides the following built-in task runners:&gt;&gt; - <strong>SequentialTaskRunner</strong> can run tasks sequentially.</p>
+<ul>
+<li>
+<strong>ConcurrentTaskRunner</strong> can run tasks concurrently, allowing tasks to switch when blocking on IO. Tasks will be submitted to a thread pool maintained by anyio. <br>
+</li>
+</ul>
 <p>In addition, the following Prefect-developed task runners for parallel or distributed task execution may be installed as Prefect Collections.</p>
 <ul>
 <li>
@@ -497,6 +512,55 @@ Prefect currently provides the following built-in task runners:&gt; - <strong>Se
 </div>
 </div>
 </div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>After conducting some study, I discovered that connecting Prefect to a Cloud service such as GCP was not straightforward. I asked in their slack channel, but didn't get clear answers to my misunderstandings. They mostly refer me to docs and using Prefect Cloud, which I'm not interested. I want everything on GCP to be centralized in one place.</p>
+<p>Therefore, I believe the easiest method would be to perform the identical tasks (as above) on a Virtual Machine on GCP. You can also interface with BigQuery, Storage, and Secret Manager via <a href="https://prefecthq.github.io/prefect-gcp/">'prefect-gcp'</a>. Their GCP deployment is likewise not particularly complete. It explains only connection to Google Cloud Storage. Check it out <a href="https://discourse.prefect.io/t/how-to-deploy-prefect-2-0-flows-to-gcp/1251">here</a>. It is also possible to run Prefect in Docker and Kubernetes. Check it out <a href="https://docs.prefect.io/tutorials/_kubernetes-flow-runner/">here</a>. Maybe a VM for Prefect Orion and from there running flow on Kubernetes and storing artifacts and data on GCS is the scalable solution. If you know a good solution, let me know.</p>
+<p>Check <a href="https://gist.github.com/TylerWanner/0b4b00f4701dae6ad0a98978efe01966">this gist</a> if you are interested in provisioning Prefect server on GCP using Terraform. It is just deploying on a VM again.</p>
+<p>Additionally, you may view the following videos to learn how to use Prefect on a VM on AWS:
+
+</p>
+<center>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/ComkSIAB0k4" frameborder="0" allowfullscreen=""></iframe>
+</center>
+
+<center>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/xw9JfaWPPps" frameborder="0" allowfullscreen=""></iframe>
+</center>
+
+<center>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/oDSf0ThKsso" frameborder="0" allowfullscreen=""></iframe>
+</center>
+
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>There are a few unanswered questions in my thoughts that I would like to resolve, such as:</p>
+<ul>
+<li>
+<p>If a task in a flow, such as training, requires GPU, should we construct a VM with GPU and run the flow on it? Should I rent the VM for the entire month for just a few of hours of training if I want a monthly schedule? Isn't this significantly more expensive than GCP or AWS serverless services?</p>
+</li>
+<li>
+<p>Is it possible to use a VM to run a Prefect server and a GPU-equipped VM which will be launched a couple of hours every month to run the flow and tasks?</p>
+</li>
+<li>
+<p>Is it possible for Prefect on GCP to have a serverless architecture?</p>
+</li>
+<li>
+<p>What about running Prefect Orion on a cheap VM and run flows on Kubernetes and store data on GCS?</p>
+</li>
+</ul>
+<p>I am aware that all of the aforementioned are achievable with some effort, but I do not know if Prefect offers any solutions to make them easier. In any case, I decided not to continue with Prefect on the Cloud for the time being because I did not find it scalable on my primary Cloud provider (GCP). I will investigate additional tools similar to ZenML to determine how they can assist me find the answers to my questions. In the following blog post, I'll explore ZenML.</p>
+<p><strong>Note</strong>: I will update this post when I learn more about Prefect deployment on Cloud.</p>
+
+</div>
+</div>
+</div>
 </div>
 
 
@@ -509,7 +573,7 @@ Prefect currently provides the following built-in task runners:&gt; - <strong>Se
         theme="github-light"
         crossorigin="anonymous"
         async>
-</script><a class="u-url" href="/blog/mlops/2022/08/09/machine-learning-workflow-orchestration-prefect-parta.html" hidden></a>
+</script><a class="u-url" href="/blog/mlops/2022/08/09/machine-learning-workflow-orchestration-prefect.html" hidden></a>
 </article>
       </div>
     </main><footer class="site-footer h-card">

@@ -175,7 +175,7 @@ window.onload = wrap_img;
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>In the previous blog post, we learned how to use MLflow to train a model and track experiments.
 In the second post of this series, we will convert the code from the previous phase into a machine learning pipeline. I'll demonstrate how to complete the task using two popular tools: Prefect and ZenML. There are several incredible tools that we cannot include in this article, such as Flyte, Kale, Aro, etc.</p>
-<p>We begin with Prefect and demonstrate how to utilize it locally and on Google Cloud. The same is then performed using ZenML.</p>
+<p>We begin with Prefect in this post and ZenML in the next one.</p>
 <p>But why do our machine learning services need a pipeline? The ZenML manual describes it in detail [<a href="https://github.com/zenml-io/zenbytes">source</a>]:</p>
 <blockquote>
 <p>As an ML practitioner, you are probably familiar with building ML models using Scikit-learn, PyTorch, TensorFlow, or similar. An <strong><a href="https://docs.zenml.io/developer-guide/steps-and-pipelines">ML Pipeline</a></strong> is simply an extension, including other steps you would typically do before or after building a model, like data acquisition, preprocessing, model deployment, or monitoring. The ML pipeline essentially defines a step-by-step procedure of your work as an ML practitioner. Defining ML pipelines explicitly in code is great because:&gt; + We can easily rerun all of our work, not just the model, eliminating bugs and making our models easier to reproduce.</p>
@@ -213,7 +213,7 @@ Failure can occur in even unforeseen ways. For example, inbound data is flawed, 
 <p>All of these will aid the organization and its developers in completing their tasks and locating issues more quickly, allowing them to devote their attention to something more vital.</p>
 <p>Great! let's see how we can do it in practice. Our pipeline would be something like the following:</p>
 <p><img src="/blog/images/copied_from_nb/images/workflow-orchestration/5.png" alt=""></p>
-<p>First, let's see how Prefect can help us.</p>
+<p>Let's see how Prefect can help us.</p>
 
 </div>
 </div>

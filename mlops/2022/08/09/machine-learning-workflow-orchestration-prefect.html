@@ -121,7 +121,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      12 min read
+      18 min read
     
 </span></p>
 
@@ -214,6 +214,7 @@ Failure can occur in even unforeseen ways. For example, inbound data is flawed, 
 <p>All of these will aid the organization and its developers in completing their tasks and locating issues more quickly, allowing them to devote their attention to something more vital.</p>
 <p>Great! let's see how we can do it in practice. Our pipeline would be something like the following:</p>
 <p><img src="/blog/images/copied_from_nb/images/workflow-orchestration/5.png" alt=""></p>
+<p>For this project, we don't really need the pipeline, but I just want to show how we can create one. Based on the use case, it may be usefull to have a pipeline. For example, if you have a data pipeline that you want to execute it periodically or want to have a pipeline to train your machine learning model. Here I just want to show how you can do it, if you need it in a project.</p>
 <p>Let's see how Prefect can help us.</p>
 
 </div>
@@ -252,7 +253,166 @@ That's why Prefect 2.0 offers all this functionality and more!</p>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<p>Prefect has some concepts that we try to introduce some. You can check the documentation for more details:</p>
+<ul>
+<li>
+<p><strong><a href="https://docs.prefect.io/concepts/flows/">flow</a></strong>: Flows are like functions. They can take inputs, perform work, and return an output. In fact, you can turn any function into a Prefect flow by adding the <code>@flow</code> decorator. When a function becomes a flow, its behavior changes, giving it the following advantages:</p>
+<ul>
+<li>State transitions are reported to the API, allowing observation of flow execution.</li>
+<li>Input arguments types can be validated.</li>
+<li>Retries can be performed on failure.</li>
+<li>Timeouts can be enforced to prevent unintentional, long-running workflows.</li>
+</ul>
+</li>
+<li>
+<p><strong><a href="https://docs.prefect.io/concepts/tasks/">task</a></strong>: Tasks are functions: they can take inputs, perform work, and return an output. A Prefect task can do almost anything a Python function can do. Use the <code>@task</code> decorator to designate a function as a task. Calling the task from within a flow function creates a new task run</p>
+</li>
+<li>
+<p><strong><a href="https://docs.prefect.io/concepts/infrastructure/">Infrastructure</a></strong>: Users may specify an infrastructure block when creating a deployment. This block will be used to specify infrastructure for flow runs created by the deployment at runtime. Infrastructure can only be used with a deployment. When you run a flow directly by calling the flow yourself, you are responsible for the environment in which the flow executes. Infrastructure is attached to a deployment and is propagated to flow runs created for that deployment. Infrastructure is deserialized by the agent and it has two jobs:</p>
+<ul>
+<li>Create execution environment infrastructure for the flow run.</li>
+<li>
+<p>Run a Python command to start the prefect.engine in the infrastructure, which retrieves the flow from storage and executes the flow.</p>
+</li>
+<li>
+<p>Infrastructure is specific to the environments in which flows will run. Prefect currently provides the following infrastructure types:</p>
+<ul>
+<li>
+<em><a href="https://docs.prefect.io/api-ref/prefect/infrastructure/#prefect.infrastructure.process.Process">Process</a></em> runs flows in a local subprocess.</li>
+<li>
+<em><a href="https://docs.prefect.io/api-ref/prefect/infrastructure/#prefect.infrastructure.docker.DockerContainer">DockerContainer</a></em> runs flows in a Docker container.</li>
+<li>
+<em><a href="https://docs.prefect.io/api-ref/prefect/infrastructure/#prefect.infrastructure.kubernetes.KubernetesJob">KubernetesJob</a></em> runs flows in a Kubernetes Job.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><a href="https://docs.prefect.io/concepts/task-runners/">task runner</a></strong>: Task runners enable you to engage specific executors for Prefect tasks, such as for concurrent, parallel, or distributed execution of tasks. Task runners are not required for task execution. If you call a task function directly, the task executes as a regular Python function, without a task runner, and produces whatever result is returned by the function.</p>
+<ul>
+<li>
+<p>Prefect currently provides the following built-in task runners:</p>
+<ul>
+<li>
+<em>SequentialTaskRunner</em> can run tasks sequentially.</li>
+<li>
+<em>ConcurrentTaskRunner</em> can run tasks concurrently, allowing tasks to switch when blocking on IO. Tasks will be submitted to a thread pool maintained by anyio.</li>
+</ul>
+</li>
+<li>
+<p>In addition, the following Prefect-developed task runners for parallel or distributed task execution may be installed as Prefect Collections.</p>
+<ul>
+<li>
+<em>DaskTaskRunner</em> can run tasks requiring parallel execution using dask.distributed.</li>
+<li>
+<em>RayTaskRunner</em> can run tasks requiring parallel execution using Ray.</li>
+</ul>
+</li>
+<li>
+<p>In our case, I don't want to use this features and just want to run tasks sequentially, which is the default setting.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><a href="https://docs.prefect.io/concepts/deployments/">Deployments</a></strong>: A deployment is a server-side concept that encapsulates a flow, allowing it to be scheduled and triggered via API. The deployment stores metadata about where your flow's code is stored and how your flow should be run.</p>
+<ul>
+<li>
+<p>All Prefect flow runs are tracked by the API. The API does not require prior registration of flows. With Prefect, you can call a flow locally or on a remote environment and it will be tracked.</p>
+</li>
+<li>
+<p>Creating a deployment for a Prefect workflow means packaging workflow code, settings, and infrastructure configuration so that the workflow can be managed via the Prefect API and run remotely by a Prefect agent.</p>
+</li>
+<li>
+<p>When creating a deployment, a user must answer two basic questions:</p>
+<ul>
+<li>What instructions does the agent need to set up an execution environment for my workflow? For example, a workflow may have Python requirements, unique Kubernetes settings, or Docker networking configuration.</li>
+<li>Where and how can the agent access the flow code?</li>
+</ul>
+</li>
+<li>
+<p>A deployment additionally enables you to:</p>
+<ul>
+<li>Schedule flow runs</li>
+<li>Assign tags for filtering flow runs on work queues and in the Prefect UI</li>
+<li>Assign custom parameter values for flow runs based on the deployment</li>
+<li>Create ad-hoc flow runs from the API or Prefect UI</li>
+<li>Upload flow files to a defined storage location for retrieval at run time</li>
+</ul>
+</li>
+<li>Deployments can package your flow code and pass the manifest to the API — either Prefect Cloud or a local Prefect Orion server run with prefect orion start.</li>
+<li>Here, I just run Prefect locally and do not do any deployment on Docker or Kubernetes or Cloud. I will discuss the possible options to run prefect on Cloud later.</li>
+</ul>
+</li>
+<li>
+<p><strong><a href="https://docs.prefect.io/concepts/storage/">Storage</a></strong>: Storage lets you configure how flow code for deployments is persisted and retrieved by Prefect agents. Anytime you build a deployment, a storage block is used to upload the entire directory containing your workflow code (along with supporting files) to its configured location. This helps ensure portability of your relative imports, configuration files, and more.</p>
+<ul>
+<li>
+<p>Current options for deployment storage blocks include:</p>
+<ul>
+<li>
+<em>Local File System</em>   Store data in a run's local file system.</li>
+<li>
+<em>Remote File System</em>  Store data in a any filesystem supported by fsspec.</li>
+<li>
+<em>AWS S3 Storage</em>  Store data in an AWS S3 bucket.</li>
+<li>
+<em>Google Cloud Storage</em>    Store data in a Google Cloud Platform (GCP) Cloud Storage bucket.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><a href="https://docs.prefect.io/concepts/work-queues/">Work Queues and Agents</a></strong>: Work queues and agents bridge the Prefect Orion orchestration environment with a user’s execution environment. Work queues define the work to be done and agents poll a specific work queue for new work.</p>
+<ul>
+<li>You create a work queue on the server. Work queues collect scheduled runs for deployments that match their filter criteria.</li>
+<li>You run an agent in the execution environment. Agents poll a specific work queue for new flow runs, take scheduled flow runs from the server, and deploy them for execution</li>
+<li>
+<p>Work queues organize work that agents can pick up to execute. Work queue configuration determines what work will be picked up.</p>
+</li>
+<li>
+<p>Work queues contain scheduled runs from any deployments that match the queue criteria. Criteria is based on deployment tags — all runs for deployments that have the tags defined on the queue will be picked up.</p>
+</li>
+<li>
+<p>These criteria can be modified at any time, and agent processes requesting work for a specific queue will only see matching flow runs.</p>
+</li>
+<li>
+<p>Agent processes are lightweight polling services that get scheduled work from a work queue and deploy the corresponding flow runs.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><a href="https://docs.prefect.io/concepts/schedules/">Schedules</a></strong>: Schedules tell the Prefect API how to create new flow runs for you automatically on a specified cadence.</p>
+<ul>
+<li>You can add a schedule to any flow deployment. The Prefect Scheduler service periodically reviews every deployment and creates new flow runs according to the schedule configured for the deployment.</li>
+<li>
+<p>Prefect supports several types of schedules that cover a wide range of use cases and offer a large degree of customization:</p>
+<ul>
+<li>
+<em>Cron</em> is most appropriate for users who are already familiar with cron from previous use.</li>
+<li>
+<em>Interval</em> is best suited for deployments that need to run at some consistent cadence that isn't related to absolute time.</li>
+<li>
+<em>RRule</em> is best suited for deployments that rely on calendar logic for simple recurring schedules, irregular intervals, exclusions, or day-of-month adjustments.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <p>We will add Prefect to a Python script containing our code. I will continue with the Keras code from the previous post, although the method is identical for other Scikit-Learn packages. Essentially, we obtain the prior code including all MLflow-related information and convert it into functions as our pipeline steps. Converting the python functions to Prefect steps and flow is as easily as wrapping the function using <code>@task</code> and <code>@flow</code> decorators. In our case, the code for training the model might look as follows:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">os</span>
@@ -271,16 +431,27 @@ That's why Prefect 2.0 offers all this functionality and more!</p>
 <span class="kn">import</span> <span class="nn">mlflow</span>
 <span class="kn">import</span> <span class="nn">pickle</span>
 <span class="kn">from</span> <span class="nn">prefect</span> <span class="kn">import</span> <span class="n">flow</span><span class="p">,</span> <span class="n">task</span>
+<span class="kn">from</span> <span class="nn">prefect.task_runners</span> <span class="kn">import</span> <span class="n">SequentialTaskRunner</span>
 
 <span class="c1">## data loading</span>
-<span class="nd">@task</span>
+<span class="nd">@task</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">"read data"</span><span class="p">,</span> 
+    <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">"data"</span><span class="p">],</span> 
+    <span class="n">retries</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> 
+    <span class="n">retry_delay_seconds</span><span class="o">=</span><span class="mi">60</span>
+<span class="p">)</span>
 <span class="k">def</span> <span class="nf">read_data</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">'Womens Clothing E-Commerce Reviews.csv'</span><span class="p">):</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="n">index_col</span> <span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">"Data loaded.</span><span class="se">\n\n</span><span class="s2">"</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">data</span>
 
 <span class="c1">## preprocess text</span>
-<span class="nd">@task</span>
+<span class="nd">@task</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">"preprocess data"</span><span class="p">,</span> 
+    <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">"data"</span><span class="p">],</span> 
+    <span class="n">retries</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> 
+    <span class="n">retry_delay_seconds</span><span class="o">=</span><span class="mi">60</span>
+<span class="p">)</span>
 <span class="k">def</span> <span class="nf">preprocess_data</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
     <span class="c1">#check if data/corpus is created before or not</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s1">'data/corpus_y.pickle'</span><span class="p">):</span>
@@ -313,7 +484,12 @@ That's why Prefect 2.0 offers all this functionality and more!</p>
     <span class="k">return</span> <span class="n">corpus</span><span class="p">,</span> <span class="n">y</span>
 
 <span class="c1">## tokenization and dataset creation</span>
-<span class="nd">@task</span>
+<span class="nd">@task</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">"create dataset"</span><span class="p">,</span> 
+    <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">"data"</span><span class="p">],</span> 
+    <span class="n">retries</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> 
+    <span class="n">retry_delay_seconds</span><span class="o">=</span><span class="mi">60</span>
+<span class="p">)</span>
 <span class="k">def</span> <span class="nf">create_dataset</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">Tokenizer</span><span class="p">(</span><span class="n">num_words</span> <span class="o">=</span> <span class="mi">3000</span><span class="p">)</span>
     <span class="n">tokenizer</span><span class="o">.</span><span class="n">fit_on_texts</span><span class="p">(</span><span class="n">corpus</span><span class="p">)</span>
@@ -327,7 +503,12 @@ That's why Prefect 2.0 offers all this functionality and more!</p>
     <span class="k">return</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">tokenizer</span>
 
 <span class="c1"># mlflow.tensorflow.autolog()</span>
-<span class="nd">@task</span>
+<span class="nd">@task</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">"tran model"</span><span class="p">,</span> 
+    <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">"model"</span><span class="p">],</span> 
+    <span class="n">retries</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> 
+    <span class="n">retry_delay_seconds</span><span class="o">=</span><span class="mi">60</span>
+<span class="p">)</span>
 <span class="k">def</span> <span class="nf">train_model</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">embedding_dim</span><span class="p">,</span> <span class="n">batch_size</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="mi">32</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">128</span><span class="p">],</span> <span class="p">[</span><span class="mi">32</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">128</span><span class="p">]):</span>
         <span class="k">with</span> <span class="n">mlflow</span><span class="o">.</span><span class="n">start_run</span><span class="p">():</span>
@@ -389,7 +570,11 @@ That's why Prefect 2.0 offers all this functionality and more!</p>
 
     <span class="nb">print</span><span class="p">(</span><span class="s2">"Model training completed.</span><span class="se">\n\n</span><span class="s2">"</span><span class="p">)</span>
 
-<span class="nd">@flow</span>
+<span class="nd">@flow</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">"Sentiment-Analysis-Flow"</span><span class="p">,</span>
+    <span class="n">description</span><span class="o">=</span><span class="s2">"A flow to run the pipeline for the customer sentiment analysis"</span><span class="p">,</span>
+    <span class="n">task_runner</span><span class="o">=</span><span class="n">SequentialTaskRunner</span><span class="p">()</span>
+<span class="p">)</span>
 <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
     <span class="n">tracking_uri</span> <span class="o">=</span> <span class="s2">"sqlite:///mlflow.db"</span>
     <span class="n">model_name</span> <span class="o">=</span> <span class="s2">"customer-sentiment-analysis"</span>
@@ -404,7 +589,21 @@ That's why Prefect 2.0 offers all this functionality and more!</p>
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">'__main__'</span><span class="p">:</span>
     <span class="n">main</span><span class="p">()</span>
 </pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <p>When you trained the mode, you can go to MLflow UI and decide if you want to change the model in the <code>Production</code> stage or not. Then you can easily load the model in the <code>Production</code> stage using a code snippet like this and evaluate it as you wish (maybe creating another pipeline for that):</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mlflow.tracking</span> <span class="kn">import</span> <span class="n">MlflowClient</span>
 
 <span class="k">def</span> <span class="nf">get_best_model</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="n">client</span><span class="p">):</span>
@@ -448,15 +647,15 @@ That's why Prefect 2.0 offers all this functionality and more!</p>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>With wrapping the functions into Prefect, you will get more logs, which helps to observe and debug the pipeline. You can also set number of retries for some tasks using <code>@task(retries=3)</code>, in case something happens and the task cannot be completed.</p>
-<p>You can then run the following command to see the Prefect UI dashboard:</p>
+<p>With wrapping the functions into Prefect, you will get more logs, which helps to observe and debug the pipeline. 
+You can then run the following command to see the Prefect UI dashboard:</p>
 <div class="highlight"><pre><span></span>prefect orion start
 </pre></div>
 <p>For our code, here is the screenshot:</p>
 <p><img src="/blog/images/copied_from_nb/images/workflow-orchestration/4.png" alt="">
 <!-- *[source](https://www.youtube.com/watch?v=eKzCjNXoCTc&list=PL3MmuxUbc_hIUISrluw_A7wDSmfOhErJK&index=22)* --></p>
 <p>You can see the logs for different tasks and the flow for our code. You can also get much more information from the dashboard. So don't hesitate to play around.</p>
-<p>There are a lot of interesting features in Prefect. I really like the concurrency, parallelization, and the async support. There is also a concept of task runner in Prefect [<a href="https://docs.prefect.io/concepts/task-runners/">source</a>]:</p>
+<p>There are a lot of interesting features in Prefect. I really like the concurrency, parallelization, and the async support.</p>
 
 </div>
 </div>
@@ -464,49 +663,7 @@ That's why Prefect 2.0 offers all this functionality and more!</p>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<blockquote>
-<p>Calling a task function from within a flow, using the default task settings, executes the function sequentially. Execution of the task function blocks execution of the flow until the task completes. This means, by default, calling multiple tasks in a flow causes them to run in order. <br>
-However, that's not the only way to run tasks! <br>
-You can use the <code>.submit()</code> method on a task function to submit the task to a task runner. Using a task runner enables you to control whether tasks run sequentially, concurrently, or if you want to take advantage of a parallel or distributed execution libraries such as Dask or Ray.</p>
-</blockquote>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<blockquote>
-<p>Prefect currently provides the following built-in task runners:<br>&gt; + <strong>SequentialTaskRunner</strong> can run tasks sequentially.</p>
-<ul>
-<li>
-<strong>ConcurrentTaskRunner</strong> can run tasks concurrently, allowing tasks to switch when blocking on IO. Tasks will be submitted to a thread pool maintained by anyio.</li>
-</ul>
-</blockquote>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<blockquote>
-<p>In addition, the following Prefect-developed task runners for parallel or distributed task execution may be installed as 
-Prefect Collections:<br>&gt; + <strong>DaskTaskRunner</strong> can run tasks requiring parallel execution using dask.distributed.</p>
-<ul>
-<li>
-<strong>RayTaskRunner</strong> can run tasks requiring parallel execution using Ray.</li>
-</ul>
-</blockquote>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>In our case, I don't want to use this features and just want to run tasks sequentially, which is the default setting.</p>
-<p>After doing all of these steps locally, we can also deploy Prefect on Cloud. I will show how to do deployment and scheduling and maybe more in the next blog post. That's enough for this blog post. Hope it was useful.</p>
+<p>You can check the following videos to learn more about Prefect:</p>
 
 </div>
 </div>
@@ -535,9 +692,30 @@ Prefect Collections:<br>&gt; + <strong>DaskTaskRunner</strong> can run tasks req
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>After conducting some study, I discovered that connecting Prefect to a Cloud service such as GCP was not straightforward. I asked in their slack channel, but didn't get clear answers to my misunderstandings. They mostly refer me to docs and using Prefect Cloud, which I'm not interested. I want everything on GCP to be centralized in one place.</p>
-<p>Therefore, I believe the easiest method would be to perform the identical tasks (as above) on a Virtual Machine on GCP. You can also interface with BigQuery, Storage, and Secret Manager via <a href="https://prefecthq.github.io/prefect-gcp/">'prefect-gcp'</a>. Their GCP deployment <a href="https://discourse.prefect.io/t/how-to-deploy-prefect-2-0-flows-to-gcp/1251">example</a> is also not particularly complete. It explains only connection to Google Cloud Storage. It is also possible to run Prefect in <a href="https://docs.prefect.io/tutorials/_kubernetes-flow-runner/">Docker and Kubernetes</a>. Maybe a VM for Prefect Orion and from there running flow on Kubernetes and storing artifacts and data on GCS is the scalable solution. If you know a good solution, let me know.</p>
-<p>Check <a href="https://gist.github.com/TylerWanner/0b4b00f4701dae6ad0a98978efe01966">this gist</a> if you are interested in provisioning Prefect server on GCP using Terraform. It is just deploying on a VM again.</p>
+<p>I wrote about another orchestration tool, AirFlow, before. You can find it <a href="https://kargarisaac.github.io/blog/data%20engineering/mlops/2022/01/25/data-engineering-w2.html">here</a>. Prefect is a really good alternative for that. It's much simpler and doesn't have all the complexities of using and debugging AirFlow. I highly recommend it for data workflows and ETL.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>As I mentioned at the beginning of the post, we don't really need Prefect in this project and I will not deploy it on Cloud. But I discuss how I think it can be used on a Cloud like GCP.</p>
+<p>The Prefect community in their slack suggested to use the Prefect Cloud if you really want to use it on Cloud, but I'm not interested in that solution, as I want to have everything on one Cloud like GCP.</p>
+<p>One way to use Prefect on Cloud would be easily to have a VM and run Prefect there. Based on the tasks and how much computation they need, you can use more powerfull VMs like a VM with a GPU. In this case, if you want to have a schedule and want to do it using Prefect, I think you have to have the VM and Prefect running all the time, which would be costly if you have a VM with GPU. However, this would be OK for data pipelines and ETL. 
+Check <a href="https://gist.github.com/TylerWanner/0b4b00f4701dae6ad0a98978efe01966">this gist</a> if you are interested in provisioning Prefect server on GCP using Terraform. It is just deploying on a VM again.</p>
+<p>For flows that need GPU, one solution might be to have one VM to run Prefect Orion and one VM with GPU for running the flow. You can check <a href="https://cloud.google.com/compute/docs/instances/stop-start-instance#api_1">this page</a> to start and stop a VM using API. you can containerize your flow and use the VM to run it. You can also use Cloud Run and Cloud Function to run the flow and be triggered by the VM running the server. Note that Cloud Run and Cloud Function have some limitations in time and resources. VM might give you more flexibility.</p>
+<p>The other solution would be to have Prefect flows on a VM with any spec you want and use Google Workflows to trigger it. In this case, you will not use Prefect scheduling. You can check <a href="https://cloud.google.com/blog/topics/developers-practitioners/long-running-containers-workflows-and-compute-engine">here</a> and <a href="https://medium.com/google-cloud/long-running-job-with-cloud-workflows-38b57bea74a5">here</a> to learn more.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>You can also interface with BigQuery, Storage, and Secret Manager via <a href="https://prefecthq.github.io/prefect-gcp/">'prefect-gcp'</a>.</p>
+<p>The more scalable solution that most big companies with structured data teams do is to run the flow on <a href="https://docs.prefect.io/tutorials/_kubernetes-flow-runner/">Docker and Kubernetes</a>.</p>
+<p>I also see that in Prefect 1.0, they have a solution to run the flow on VertexAI, which is the Google's serverless and managed service for machine learning. you can run the flow on VertexAI and configure the machine you use. After the flow is finished, the machine will turn off. But this feature is not ready for Prefect 2.0 yet and will be added soon.</p>
 <p>Additionally, you may view the following videos to learn how to use Prefect on a VM on AWS:
 
 </p>
@@ -560,22 +738,7 @@ Prefect Collections:<br>&gt; + <strong>DaskTaskRunner</strong> can run tasks req
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>There are a few unanswered questions in my thoughts that I would like to resolve, such as:</p>
-<ul>
-<li>
-<p>If a task in a flow, such as training, requires GPU, should we construct a VM with GPU and run the flow on it? Should I rent the VM for the entire month for just a few of hours of training if I want a monthly schedule? Isn't this significantly more expensive than GCP or AWS serverless services?</p>
-</li>
-<li>
-<p>Is it possible to use a VM to run a Prefect server and a GPU-equipped VM which will be launched a couple of hours every month to run the flow and tasks?</p>
-</li>
-<li>
-<p>Is it possible for Prefect on GCP to have a serverless architecture?</p>
-</li>
-<li>
-<p>What about running Prefect Orion on a cheap VM and run flows on Kubernetes and store data on GCS?</p>
-</li>
-</ul>
-<p>I am aware that all of the aforementioned are achievable with some effort, but I do not know if Prefect offers any solutions to make them easier. In any case, I decided not to continue with Prefect on the Cloud for the time being because I did not find it scalable on my primary Cloud provider (GCP). I will investigate additional tools similar to ZenML to determine how they can assist me find the answers to my questions. In the following blog post, I'll explore ZenML.</p>
+<p>That's it for this post. We will check ZenML in our next blog post.</p>
 <p><strong>Note</strong>: I will update this post when I learn more about Prefect deployment on Cloud.</p>
 
 </div>

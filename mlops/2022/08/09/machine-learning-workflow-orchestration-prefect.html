@@ -226,18 +226,20 @@ Failure can occur in even unforeseen ways. For example, inbound data is flawed, 
 <h1 id="Prefect">
 <a class="anchor" href="#Prefect" aria-hidden="true"><span class="octicon octicon-link"></span></a>Prefect<a class="anchor-link" href="#Prefect"> </a>
 </h1>
-<blockquote>
-<p>Prefect is air traffic control for the modern data stack. Monitor, coordinate, and orchestrate dataflows between and across your applications. Build pipelines, deploy them anywhere, and configure them remotely. You might just love your workflows again. If you move data, you probably need the following functionality:&gt; + schedules&gt; + retries</p>
+<p>Prefect is air traffic control for the modern data stack. Monitor, coordinate, and orchestrate dataflows between and across your applications. Build pipelines, deploy them anywhere, and configure them remotely. You might just love your workflows again. If you move data, you probably need the following functionality:</p>
 <ul>
+<li>schedules</li>
+<li>retries</li>
 <li>logging</li>
 <li>caching</li>
 <li>notifications</li>
 <li>observability</li>
 </ul>
-<p>Implementing all of these features for your dataflows is a huge pain that takes a lot of time — time that could be better used for functional code.
-That's why Prefect 2.0 offers all this functionality and more!</p>
-</blockquote>
-<p>We will use Prefect 2.0 (Orion) here. You can easily install prefect using:<code>pip install prefect</code></p>
+<p>Implementing all of these features for your dataflows is a huge pain that takes a lot of time — time that could be better used for functional code.</p>
+<p>That's why Prefect 2.0 offers all this functionality and more!</p>
+<p>We will use Prefect 2.0 (Orion) here. You can easily install prefect using:</p>
+
+<pre><code>pip install prefect</code></pre>
 
 </div>
 </div>
@@ -713,7 +715,7 @@ Check <a href="https://gist.github.com/TylerWanner/0b4b00f4701dae6ad0a98978efe01
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>You can also interface with BigQuery, Storage, and Secret Manager via <a href="https://prefecthq.github.io/prefect-gcp/">'prefect-gcp'</a>.</p>
+<p>You can also interface with BigQuery, Storage, and Secret Manager via <code>prefect-gcp</code>.</p>
 <p>The more scalable solution that most big companies with structured data teams do is to run the flow on <a href="https://docs.prefect.io/tutorials/_kubernetes-flow-runner/">Docker and Kubernetes</a>.</p>
 <p>I also see that in Prefect 1.0, they have a solution to run the flow on VertexAI, which is the Google's serverless and managed service for machine learning. you can run the flow on VertexAI and configure the machine you use. After the flow is finished, the machine will turn off. But this feature is not ready for Prefect 2.0 yet and will be added soon.</p>
 <p>Additionally, you may view the following videos to learn how to use Prefect on a VM on AWS:

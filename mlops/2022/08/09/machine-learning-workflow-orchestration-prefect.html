@@ -16,7 +16,7 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2022-08-09T00:00:00-05:00" />
 <script type="application/ld+json">
-{"datePublished":"2022-08-09T00:00:00-05:00","dateModified":"2022-08-09T00:00:00-05:00","image":"https://kargarisaac.github.io/blog/images/some_folder/your_image.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://kargarisaac.github.io/blog/mlops/2022/08/09/machine-learning-workflow-orchestration-prefect.html"},"description":"Machine learning workflow orchestration using Prefect.","@type":"BlogPosting","url":"https://kargarisaac.github.io/blog/mlops/2022/08/09/machine-learning-workflow-orchestration-prefect.html","headline":"MLOps project - part 2a: Machine Learning Workflow Orchestration using Prefect","@context":"https://schema.org"}</script>
+{"headline":"MLOps project - part 2a: Machine Learning Workflow Orchestration using Prefect","dateModified":"2022-08-09T00:00:00-05:00","datePublished":"2022-08-09T00:00:00-05:00","description":"Machine learning workflow orchestration using Prefect.","image":"https://kargarisaac.github.io/blog/images/some_folder/your_image.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://kargarisaac.github.io/blog/mlops/2022/08/09/machine-learning-workflow-orchestration-prefect.html"},"@type":"BlogPosting","url":"https://kargarisaac.github.io/blog/mlops/2022/08/09/machine-learning-workflow-orchestration-prefect.html","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/blog/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://kargarisaac.github.io/blog/feed.xml" title="Isaac Kargar" /><!-- the google_analytics_id gets auto inserted from the config file -->
 
@@ -38,7 +38,7 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2022-08-09T00:00:00-05:00" />
 <script type="application/ld+json">
-{"datePublished":"2022-08-09T00:00:00-05:00","dateModified":"2022-08-09T00:00:00-05:00","image":"https://kargarisaac.github.io/blog/images/some_folder/your_image.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://kargarisaac.github.io/blog/mlops/2022/08/09/machine-learning-workflow-orchestration-prefect.html"},"description":"Machine learning workflow orchestration using Prefect.","@type":"BlogPosting","url":"https://kargarisaac.github.io/blog/mlops/2022/08/09/machine-learning-workflow-orchestration-prefect.html","headline":"MLOps project - part 2a: Machine Learning Workflow Orchestration using Prefect","@context":"https://schema.org"}</script>
+{"headline":"MLOps project - part 2a: Machine Learning Workflow Orchestration using Prefect","dateModified":"2022-08-09T00:00:00-05:00","datePublished":"2022-08-09T00:00:00-05:00","description":"Machine learning workflow orchestration using Prefect.","image":"https://kargarisaac.github.io/blog/images/some_folder/your_image.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://kargarisaac.github.io/blog/mlops/2022/08/09/machine-learning-workflow-orchestration-prefect.html"},"@type":"BlogPosting","url":"https://kargarisaac.github.io/blog/mlops/2022/08/09/machine-learning-workflow-orchestration-prefect.html","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 <link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
@@ -214,7 +214,7 @@ Failure can occur in even unforeseen ways. For example, inbound data is flawed, 
 <p>All of these will aid the organization and its developers in completing their tasks and locating issues more quickly, allowing them to devote their attention to something more vital.</p>
 <p>Great! let's see how we can do it in practice. Our pipeline would be something like the following:</p>
 <p><img src="/blog/images/copied_from_nb/images/workflow-orchestration/5.png" alt=""></p>
-<p>For this project, we don't really need the pipeline, but I just want to show how we can create one. Based on the use case, it may be usefull to have a pipeline. For example, if you have a data pipeline that you want to execute it periodically or want to have a pipeline to train your machine learning model. Here I just want to show how you can do it, if you need it in a project.</p>
+<p>For this project, we don't really need the pipeline, but I just want to show how we can create one. Based on the use case, it may be useful to have a pipeline. For example, if you have a data pipeline that you want to execute periodically or want to have a pipeline to train your machine learning model. Here I just want to show how you can do it if you need it in a project.</p>
 <p>Let's see how Prefect can help us.</p>
 
 </div>
@@ -235,9 +235,9 @@ Failure can occur in even unforeseen ways. For example, inbound data is flawed, 
 <li>notifications</li>
 <li>observability</li>
 </ul>
-<p>Implementing all of these features for your dataflows is a a lot of work and takes a lot of time — time that could be better used for functional code.</p>
+<p>Implementing all of these features for your dataflows is a lot of work and takes a lot of time — time that could be better used for functional code.</p>
 <p>Prefect 2.0 offers all this functionality and more!</p>
-<p>You can easily install prefect using:</p>
+<p>You can easily install Prefect using:</p>
 
 <pre><code>pip install prefect</code></pre>
 
@@ -255,7 +255,7 @@ Failure can occur in even unforeseen ways. For example, inbound data is flawed, 
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Prefect has some concepts that we try to introduce some. You can check the documentation for more details. Here are a small intro for som eof them from Prefect documentation:</p>
+<p>Prefect has some concepts that we try to introduce. You can check the documentation for more details. Here is a small intro for some of them from Prefect documentation:</p>
 <ul>
 <li>
 <p><strong><a href="https://docs.prefect.io/concepts/flows/">flow</a></strong>: Flows are like functions. They can take inputs, perform work, and return an output. In fact, you can turn any function into a Prefect flow by adding the <code>@flow</code> decorator. When a function becomes a flow, its behavior changes, giving it the following advantages:</p>
@@ -311,7 +311,7 @@ Failure can occur in even unforeseen ways. For example, inbound data is flawed, 
 </ul>
 </li>
 <li>
-<p>In our case, I don't want to use this features and just want to run tasks sequentially, which is the default setting.</p>
+<p>In our case, I don't want to use these features and just want to run tasks sequentially, which is the default setting.</p>
 </li>
 </ul>
 </li>
@@ -319,7 +319,7 @@ Failure can occur in even unforeseen ways. For example, inbound data is flawed, 
 <p><strong><a href="https://docs.prefect.io/concepts/deployments/">Deployments</a></strong>: A deployment is a server-side concept that encapsulates a flow, allowing it to be scheduled and triggered via API. The deployment stores metadata about where your flow's code is stored and how your flow should be run.</p>
 <ul>
 <li>
-<p>All Prefect flow runs are tracked by the API. The API does not require prior registration of flows. With Prefect, you can call a flow locally or on a remote environment and it will be tracked.</p>
+<p>All Prefect flow runs are tracked by the API. The API does not require prior registration of flows. With Prefect, you can call a flow locally or in a remote environment, which will be tracked.</p>
 </li>
 <li>
 <p>Creating a deployment for a Prefect workflow means packaging workflow code, settings, and infrastructure configuration so that the workflow can be managed via the Prefect API and run remotely by a Prefect agent.</p>
@@ -342,7 +342,7 @@ Failure can occur in even unforeseen ways. For example, inbound data is flawed, 
 </ul>
 </li>
 <li>Deployments can package your flow code and pass the manifest to the API — either Prefect Cloud or a local Prefect Orion server run with prefect orion start.</li>
-<li>Here, I just run Prefect locally and do not do any deployment on Docker or Kubernetes or Cloud. I will discuss the possible options to run prefect on Cloud later.</li>
+<li>Here, I just run Prefect locally and do not do any deployment on Docker or Kubernetes or Cloud. I will discuss the possible options to run Prefect on Cloud later.</li>
 </ul>
 </li>
 <li>
@@ -364,7 +364,7 @@ Failure can occur in even unforeseen ways. For example, inbound data is flawed, 
 </ul>
 </li>
 <li>
-<p><strong><a href="https://docs.prefect.io/concepts/work-queues/">Work Queues and Agents</a></strong>: Work queues and agents bridge the Prefect Orion orchestration environment with a user’s execution environment. Work queues define the work to be done and agents poll a specific work queue for new work.</p>
+<p><strong><a href="https://docs.prefect.io/concepts/work-queues/">Work Queues and Agents</a></strong>: Work queues and agents bridge the Prefect Orion orchestration environment with a user’s execution environment. Work queues define the work to be done, and agents poll a specific work queue for new work.</p>
 <ul>
 <li>You create a work queue on the server. Work queues collect scheduled runs for deployments that match their filter criteria.</li>
 <li>You run an agent in the execution environment. Agents poll a specific work queue for new flow runs, take scheduled flow runs from the server, and deploy them for execution</li>
@@ -407,7 +407,7 @@ Failure can occur in even unforeseen ways. For example, inbound data is flawed, 
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>We will add Prefect to a Python script containing our code. I will continue with the Keras code from the previous post, although the method is identical for other Scikit-Learn packages. Essentially, we obtain the prior code including all MLflow-related information and convert it into functions as our pipeline steps. Converting the python functions to Prefect steps and flow is as easily as wrapping the function using <code>@task</code> and <code>@flow</code> decorators. In our case, the code for training the model might look as follows:</p>
+<p>We will add Prefect to a Python script containing our code. I will continue with the Keras code from the previous post, although the method is identical for other Scikit-Learn packages. Essentially, we obtain the prior code, including all MLflow-related information, and convert it into functions as our pipeline steps. Converting the python functions to Prefect steps and flow is as easy as wrapping the function using <code>@task</code> and <code>@flow</code> decorators. In our case, the code for training the model might look as follows:</p>
 
 </div>
 </div>
@@ -656,7 +656,7 @@ You can then run the following command to see the Prefect UI dashboard:</p>
 <p>For our code, here is the screenshot:</p>
 <p><img src="/blog/images/copied_from_nb/images/workflow-orchestration/4.png" alt="">
 <!-- *[source](https://www.youtube.com/watch?v=eKzCjNXoCTc&list=PL3MmuxUbc_hIUISrluw_A7wDSmfOhErJK&index=22)* --></p>
-<p>You can see the logs for different tasks and the flow for our code. You can also get much more information from the dashboard. So don't hesitate to play around.</p>
+<p>You can see the logs for different tasks and the flow of our code. You can also get much more information from the dashboard. So don't hesitate to play around.</p>
 <p>There are a lot of interesting features in Prefect. I really like the concurrency, parallelization, and the async support.</p>
 
 </div>

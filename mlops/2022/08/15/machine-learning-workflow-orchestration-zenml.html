@@ -16,7 +16,7 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2022-08-15T00:00:00-05:00" />
 <script type="application/ld+json">
-{"datePublished":"2022-08-15T00:00:00-05:00","dateModified":"2022-08-15T00:00:00-05:00","image":"https://kargarisaac.github.io/blog/images/some_folder/your_image.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://kargarisaac.github.io/blog/mlops/2022/08/15/machine-learning-workflow-orchestration-zenml.html"},"description":"Machine learning workflow orchestration using ZenML.","@type":"BlogPosting","url":"https://kargarisaac.github.io/blog/mlops/2022/08/15/machine-learning-workflow-orchestration-zenml.html","headline":"MLOps project - part 2b: Machine Learning Workflow Orchestration using ZenML","@context":"https://schema.org"}</script>
+{"headline":"MLOps project - part 2b: Machine Learning Workflow Orchestration using ZenML","dateModified":"2022-08-15T00:00:00-05:00","datePublished":"2022-08-15T00:00:00-05:00","description":"Machine learning workflow orchestration using ZenML.","image":"https://kargarisaac.github.io/blog/images/some_folder/your_image.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://kargarisaac.github.io/blog/mlops/2022/08/15/machine-learning-workflow-orchestration-zenml.html"},"@type":"BlogPosting","url":"https://kargarisaac.github.io/blog/mlops/2022/08/15/machine-learning-workflow-orchestration-zenml.html","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/blog/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://kargarisaac.github.io/blog/feed.xml" title="Isaac Kargar" /><!-- the google_analytics_id gets auto inserted from the config file -->
 
@@ -38,7 +38,7 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2022-08-15T00:00:00-05:00" />
 <script type="application/ld+json">
-{"datePublished":"2022-08-15T00:00:00-05:00","dateModified":"2022-08-15T00:00:00-05:00","image":"https://kargarisaac.github.io/blog/images/some_folder/your_image.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://kargarisaac.github.io/blog/mlops/2022/08/15/machine-learning-workflow-orchestration-zenml.html"},"description":"Machine learning workflow orchestration using ZenML.","@type":"BlogPosting","url":"https://kargarisaac.github.io/blog/mlops/2022/08/15/machine-learning-workflow-orchestration-zenml.html","headline":"MLOps project - part 2b: Machine Learning Workflow Orchestration using ZenML","@context":"https://schema.org"}</script>
+{"headline":"MLOps project - part 2b: Machine Learning Workflow Orchestration using ZenML","dateModified":"2022-08-15T00:00:00-05:00","datePublished":"2022-08-15T00:00:00-05:00","description":"Machine learning workflow orchestration using ZenML.","image":"https://kargarisaac.github.io/blog/images/some_folder/your_image.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://kargarisaac.github.io/blog/mlops/2022/08/15/machine-learning-workflow-orchestration-zenml.html"},"@type":"BlogPosting","url":"https://kargarisaac.github.io/blog/mlops/2022/08/15/machine-learning-workflow-orchestration-zenml.html","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 <link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
@@ -121,7 +121,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      1 min read
+      16 min read
     
 </span></p>
 
@@ -173,10 +173,774 @@ window.onload = wrap_img;
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<p>In the <a href="https://kargarisaac.github.io/blog/mlops/2022/08/09/machine-learning-workflow-orchestration-prefect.html">previous blog post</a>, we discussed how to use Prefect as a workflow orchestration in our MLOps project. In this blog post, we will see how ZenML can help us to do the same job and maybe other stuff too. Let's get started.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="ZenML">
 <a class="anchor" href="#ZenML" aria-hidden="true"><span class="octicon octicon-link"></span></a>ZenML<a class="anchor-link" href="#ZenML"> </a>
 </h1>
-<p><a href="https://github.com/zenml-io/zenml/">ZenML</a> is an excellent tool for this task, as it is straightforward and intuitive to use and has <a href="https://docs.zenml.io/mlops-stacks/integrations">integrations</a> with most of the advanced MLOps tools we will want to use later. Make sure you have ZenML installed (via <code>pip install zenml</code>). Let's run some commands to make sure you start with a fresh ML stack. You can ignore the details for now, as we will learn about it in more detail in a later chapter.</p>
+<p>If you are a ML engineer or data scientist shipping models to production and jumbling a plethora of tools. It helps to do data, code, and models versioning. It also helps replicating production pipelines and monitoring models in production.</p>
+<p><img src="/blog/images/copied_from_nb/images/workflow-orchestration/zenml.gif" alt="">
+<em><a href="https://docs.zenml.io/getting-started/introduction">source</a></em></p>
+<blockquote>
+<p>ZenML is an extensible, open-source MLOps framework for creating portable, production-ready MLOps pipelines. It's built for data scientists, ML Engineers, and MLOps Developers to collaborate as they develop to production. ZenML has simple, flexible syntax, is cloud- and tool-agnostic, and has interfaces/abstractions that are catered towards ML workflows. ZenML brings together all your favorite tools in one place so you can tailor your workflow to cater your needs.</p>
+</blockquote>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let's first get familiar with some of the ZenML's concepts briefly:</p>
+<p><strong>Pipelines and Steps</strong>: ZenML follows a pipeline-based workflow. A pipeline consist of a series of steps, organized in any order that makes sense for your use case. You can have multiple pipelines for different purposes. For example, a training pipeline to train and evaluate models and an inference pipeline to serve the model. We can use decorators such as <code>@step</code> and <code>@pipeline</code> to define steps and pipelines in ZenML.</p>
+<p><strong>Stacks, Components, and Stores</strong>: A Stack is the configuration of the underlying infrastructure and choices around how your pipeline will be run. For example, you can choose to run your pipeline locally or on the cloud by changing the stack you use.</p>
+<p>In any Stack, there must be at least three basic Stack Components -</p>
+<ul>
+<li>
+<em>Orchestrator</em>: An Orchestrator is the workhorse that coordinates all the steps to run in a pipeline.  </li>
+<li>
+<em>Artifact Store</em>: An Artifact Store is a component that houses all data that pass through the pipeline. Data in the artifact store are called artifacts.</li>
+<li>
+<em>Metadata Store</em>: A Metadata Store keeps track of all the bits of extraneous data from a pipeline run. It allows you to fetch specific steps from your pipeline run and their output artifacts in a post-execution workflow.</li>
+</ul>
+<p>ZenML has also some other stack components which can help us to scale up our stack to run elsewhere, for example on a cloud with powerful GPUs for training or CPU's for deployment. You can check <a href="https://docs.zenml.io/mlops-stacks/categories">here</a> for the full list of these stack components.</p>
+<p>with ZenML, we can easily switch our stack from running on a local machine to running on the cloud with a single CLI command.
+Our code (steps and pipelines) stay the same. The only change is in the stack and its components. This is amazing!</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let's get back to our example and apply ZenML! In the previous blog post, we saw our simple pipeline:</p>
+<p><img src="/blog/images/copied_from_nb/images/workflow-orchestration/5.png" alt=""></p>
+<p>Your ML workflows may actually be a lot more complex. The performance of various models will need to be compared, they will need to be deployed in a production environment, and there may be extensive preprocessing that you do not want to repeat every time you train a model. In this situation, ML pipelines are useful since they let us describe our workflows as a series of interchangeable modules.</p>
+<p><a href="https://docs.zenml.io/developer-guide/steps-and-pipelines/caching">ZenML's caching function</a>, which is turned on by default, is another strong feature. As long as the inputs, outputs, and parameters of steps and pipelines are tracked and versioned automatically by ZenML, the pipeline's steps won't be repeated when the pipeline is performed again. This drastically shortens the development period. You can enable/disable it for the whole pipeline or individual steps.</p>
+<p>In our ML process, all of the artifacts are automatically stored in an Artifact Store. By default, this is just a location in your local file system, but we can enable ZenML to store this information in a cloud bucket instead, such as an Amazon S3 or Google Cloud storage bucket.</p>
+<p>ZenML automatically stores Metadata, such as the location of the item in a Metadata Store, together with the artifact itself. By default, this is a SQLite database on your local computer, but we could just as easily replace it with a cloud service.</p>
+<p>Any MLOps stack's foundation is made up of artifact stores, metadata stores, and orchestrators since they allow us to save, distribute, and reproduce our work. Without them, it's simple to lose sight of the specific steps taken to develop our present ML pipelines.</p>
+<p>When invoking <code>pipeline.run()</code>, the Orchestrator specifies how and where each pipeline step will be carried out.</p>
+<p>Let's now define each of the steps as a ZenML <strong><a href="https://docs.zenml.io/developer-guide/steps-and-pipelines#step">Pipeline Step</a></strong> simply by having several functions with ZenML's <code>@step</code> <a href="https://realpython.com/primer-on-python-decorators/">Python decorator</a> decorator.
+We can also use ZenML's <code>@pipeline</code> decorator to connect all of the steps into an ML pipeline.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>One thing that I spent some time was the input and output type definition for steps. Especially custom types like the tokenizer. We need to tell ZenML somehow about this custom type. There is a solution of rthat called <code>Materializer</code> in ZenML. You can see the defined custom materializer for our TensorFlow Tokenizer and how to use it in the following code.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">TokenizerMaterializer</span><span class="p">(</span><span class="n">BaseMaterializer</span><span class="p">):</span>
+    <span class="n">ASSOCIATED_TYPES</span> <span class="o">=</span> <span class="p">(</span><span class="n">Tokenizer</span><span class="p">,)</span>
+    <span class="n">ASSOCIATED_ARTIFACT_TYPES</span> <span class="o">=</span> <span class="p">(</span><span class="n">DataArtifact</span><span class="p">,)</span>
+
+    <span class="k">def</span> <span class="nf">handle_input</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_type</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">Tokenizer</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tokenizer</span><span class="p">:</span>
+        <span class="sd">"""Read from artifact store"""</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">handle_input</span><span class="p">(</span><span class="n">data_type</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">fileio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">artifact</span><span class="o">.</span><span class="n">uri</span><span class="p">,</span> <span class="s1">'tokenizer.pickle'</span><span class="p">),</span> <span class="s1">'rb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tokenizer</span>
+
+    <span class="k">def</span> <span class="nf">handle_return</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">:</span> <span class="n">Tokenizer</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">"""Write to artifact store"""</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">handle_return</span><span class="p">(</span><span class="n">tokenizer</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">fileio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">artifact</span><span class="o">.</span><span class="n">uri</span><span class="p">,</span> <span class="s1">'tokenizer.pickle'</span><span class="p">),</span> <span class="s1">'wb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">tokenizer</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="n">pickle</span><span class="o">.</span><span class="n">HIGHEST_PROTOCOL</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>You then need to pass it to the step via <code>.with_return_materializers({"tokenizer": TokenizerMaterializer})</code> in the pipeline definition. You will see this in a few moment.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>In addition, we need to integrate MLflow in ZenML. It is a bit different from how we did it with Prefect. First you need to install the integration:</p>
+<div class="highlight"><pre><span></span>zenml integration install mlflow
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>MLflow can handle various ML lifecycle steps, such as experiment tracking, code packaging, model deployment, and more. We will focus on the <a href="https://mlflow.org/docs/latest/tracking.html">MLflow Tracking</a> component in this lesson, but we will learn about other MLflow features in later posts.</p>
+<p>First, install MLflow ZenML integration:</p>
+<div class="highlight"><pre><span></span>zenml integration install mlflow -y
+</pre></div>
+<p>Then, by adding an <code>@enable_mlflow</code> decorator on top of the function, ZenML then automatically initializes MLflow and we can log what we want.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>to run our MLflow pipelines with ZenML, we first need to add MLflow into our ZenML MLOps stack. We first register a new experiment tracker with ZenML and then add it to our current stack. To set the <code>tracking_uri</code> for MLflow in ZenML, you need to do it as follows, which is a bit different from what we did before and how you do it with pure MLflow. Also, it seems setting the experiment name in ZenML 0.13 is not possible and it uses a default name which is the name of the function you use for training. We will see it in a few moments. In the documents, it says you can pass it to the decorator, but in the new version I get an error. I hope they add it in the future versions.</p>
+<div class="highlight"><pre><span></span><span class="c1"># Register the MLflow experiment tracker</span>
+zenml experiment-tracker register mlflow_tracker --flavor<span class="o">=</span>mlflow --tracking_uri<span class="o">=</span><span class="s2">"sqlite:///mlflow.db"</span>
+
+<span class="c1"># Add the MLflow experiment tracker into our default stack</span>
+zenml stack update default -e mlflow_tracker
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>and run mlflow UI using the following command:</p>
+<div class="highlight"><pre><span></span>mlflow ui --backend-store-uri sqlite:///mlflow.db
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Note that when you use <code>@enable_mlflow</code> decorator for a step, it will be one single run and you cannot have multiple runs in that step. If you want to test different set of hyperparameters and do hyperparameter search, you need to call the step multiple times. The other problem you may face is that you cannot pass parameters to a step if it is not the result of a previous step. You can do the same trick as <a href="https://github.com/zenml-io/zenbytes/blob/main/2-1_Experiment_Tracking.ipynb">this example</a>.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">nltk</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s1">'./corpora'</span><span class="p">):</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"NLTK_DATA"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"./corpora"</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">nltk</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s1">'stopwords'</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">stopwords</span>
+<span class="kn">from</span> <span class="nn">nltk.stem.porter</span> <span class="kn">import</span> <span class="n">PorterStemmer</span>
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="kn">from</span> <span class="nn">tensorflow.keras.preprocessing.text</span> <span class="kn">import</span> <span class="n">Tokenizer</span>
+<span class="kn">from</span> <span class="nn">tensorflow.keras.preprocessing.sequence</span> <span class="kn">import</span> <span class="n">pad_sequences</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">import</span> <span class="nn">mlflow</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">from</span> <span class="nn">zenml.steps</span> <span class="kn">import</span> <span class="n">step</span><span class="p">,</span> <span class="n">Output</span>
+<span class="kn">from</span> <span class="nn">zenml.pipelines</span> <span class="kn">import</span> <span class="n">pipeline</span>
+<span class="kn">from</span> <span class="nn">zenml.artifacts</span> <span class="kn">import</span> <span class="n">DataArtifact</span>
+<span class="kn">from</span> <span class="nn">zenml.io</span> <span class="kn">import</span> <span class="n">fileio</span>
+<span class="kn">from</span> <span class="nn">zenml.materializers.base_materializer</span> <span class="kn">import</span> <span class="n">BaseMaterializer</span>
+<span class="kn">from</span> <span class="nn">zenml.integrations.mlflow.mlflow_step_decorator</span> <span class="kn">import</span> <span class="n">enable_mlflow</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Type</span>
+
+
+<span class="n">DATA_PATH</span> <span class="o">=</span> <span class="s2">"data/Womens Clothing E-Commerce Reviews.csv"</span>
+
+
+<span class="k">class</span> <span class="nc">TokenizerMaterializer</span><span class="p">(</span><span class="n">BaseMaterializer</span><span class="p">):</span>
+    <span class="n">ASSOCIATED_TYPES</span> <span class="o">=</span> <span class="p">(</span><span class="n">Tokenizer</span><span class="p">,)</span>
+    <span class="n">ASSOCIATED_ARTIFACT_TYPES</span> <span class="o">=</span> <span class="p">(</span><span class="n">DataArtifact</span><span class="p">,)</span>
+
+    <span class="k">def</span> <span class="nf">handle_input</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_type</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">Tokenizer</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tokenizer</span><span class="p">:</span>
+        <span class="sd">"""Read from artifact store"""</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">handle_input</span><span class="p">(</span><span class="n">data_type</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">fileio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">artifact</span><span class="o">.</span><span class="n">uri</span><span class="p">,</span> <span class="s1">'tokenizer.pickle'</span><span class="p">),</span> <span class="s1">'rb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tokenizer</span>
+
+    <span class="k">def</span> <span class="nf">handle_return</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">:</span> <span class="n">Tokenizer</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">"""Write to artifact store"""</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">handle_return</span><span class="p">(</span><span class="n">tokenizer</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">fileio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">artifact</span><span class="o">.</span><span class="n">uri</span><span class="p">,</span> <span class="s1">'tokenizer.pickle'</span><span class="p">),</span> <span class="s1">'wb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">tokenizer</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="n">pickle</span><span class="o">.</span><span class="n">HIGHEST_PROTOCOL</span><span class="p">)</span>
+
+
+<span class="c1">## data loading</span>
+<span class="nd">@step</span>
+<span class="k">def</span> <span class="nf">read_data</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">DATA_PATH</span><span class="p">,</span> <span class="n">index_col</span> <span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Data loaded.</span><span class="se">\n\n</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">data</span>
+
+<span class="c1">## preprocess text</span>
+<span class="nd">@step</span>
+<span class="k">def</span> <span class="nf">preprocess_data</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Output</span><span class="p">(</span><span class="n">corpus</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+    <span class="c1">#check if data/corpus is created before or not</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s1">'data/corpus_y.pickle'</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Preprocessed data not found. Creating new data. </span><span class="se">\n\n</span><span class="s2">"</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="o">~</span><span class="n">data</span><span class="p">[</span><span class="s1">'Review Text'</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()]</span>  <span class="c1">#Dropping columns which don't have any review</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">data</span><span class="p">[[</span><span class="s1">'Review Text'</span><span class="p">]]</span>
+        <span class="n">X</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">))</span>
+
+        <span class="n">y</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">'Recommended IND'</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+        <span class="n">corpus</span> <span class="o">=</span><span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)):</span>
+            <span class="n">review</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">'[^a-zA-z]'</span><span class="p">,</span><span class="s1">' '</span><span class="p">,</span><span class="n">X</span><span class="p">[</span><span class="s1">'Review Text'</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">review</span> <span class="o">=</span> <span class="n">review</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+            <span class="n">review</span> <span class="o">=</span> <span class="n">review</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+            <span class="n">ps</span> <span class="o">=</span> <span class="n">PorterStemmer</span><span class="p">()</span>
+            <span class="n">review</span> <span class="o">=</span><span class="p">[</span><span class="n">ps</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">review</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="s1">'english'</span><span class="p">))]</span>
+            <span class="n">review</span> <span class="o">=</span><span class="s1">' '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">review</span><span class="p">)</span>
+            <span class="n">corpus</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">review</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'data/corpus_y.pickle'</span><span class="p">,</span> <span class="s1">'wb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
+            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">((</span><span class="n">corpus</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">handle</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Preprocessed data found. Loading data. </span><span class="se">\n\n</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'data/corpus_y.pickle'</span><span class="p">,</span> <span class="s1">'rb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
+            <span class="n">corpus</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Data preprocessed.</span><span class="se">\n\n</span><span class="s2">"</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">corpus</span><span class="p">,</span> <span class="n">y</span>
+
+<span class="c1">## tokenization and dataset creation</span>
+<span class="nd">@step</span>
+<span class="k">def</span> <span class="nf">create_dataset</span><span class="p">(</span>
+    <span class="n">corpus</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> 
+    <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Output</span><span class="p">(</span><span class="n">X_train</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">X_test</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y_train</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y_test</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">tokenizer</span><span class="o">=</span><span class="n">Tokenizer</span><span class="p">):</span>
+
+    <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">Tokenizer</span><span class="p">(</span><span class="n">num_words</span> <span class="o">=</span> <span class="mi">3000</span><span class="p">)</span>
+    <span class="n">tokenizer</span><span class="o">.</span><span class="n">fit_on_texts</span><span class="p">(</span><span class="n">corpus</span><span class="p">)</span>
+
+    <span class="n">sequences</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">texts_to_sequences</span><span class="p">(</span><span class="n">corpus</span><span class="p">)</span>
+    <span class="n">padded</span> <span class="o">=</span> <span class="n">pad_sequences</span><span class="p">(</span><span class="n">sequences</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s1">'post'</span><span class="p">)</span>
+
+    <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">padded</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span> <span class="o">=</span> <span class="mi">42</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Dataset created.</span><span class="se">\n\n</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">tokenizer</span>
+
+
+<span class="k">def</span> <span class="nf">build_dl_pipeline</span><span class="p">(</span><span class="n">hyperparams</span><span class="p">):</span>
+    <span class="nd">@enable_mlflow</span><span class="p">(</span><span class="n">nested</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="nd">@step</span><span class="p">(</span><span class="n">enable_cache</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">train_model</span><span class="p">(</span>
+        <span class="n">X_train</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> 
+        <span class="n">y_train</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> 
+        <span class="n">X_test</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> 
+        <span class="n">y_test</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> 
+        <span class="n">tokenizer</span><span class="p">:</span> <span class="n">Tokenizer</span>
+        <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+
+        <span class="n">mlflow</span><span class="o">.</span><span class="n">tensorflow</span><span class="o">.</span><span class="n">autolog</span><span class="p">()</span>
+
+        <span class="n">embedding_dim</span> <span class="o">=</span> <span class="n">hyperparams</span><span class="p">[</span><span class="s1">'embedding_dim'</span><span class="p">]</span>
+        <span class="n">batch_size</span> <span class="o">=</span> <span class="n">hyperparams</span><span class="p">[</span><span class="s1">'batch_size'</span><span class="p">]</span>
+
+        <span class="c1"># model definition</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Sequential</span><span class="p">([</span>
+            <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Embedding</span><span class="p">(</span><span class="mi">3000</span><span class="p">,</span> <span class="n">embedding_dim</span><span class="p">),</span>
+            <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">GlobalAveragePooling1D</span><span class="p">(),</span>
+            <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'relu'</span><span class="p">),</span>
+            <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'sigmoid'</span><span class="p">)</span>
+        <span class="p">])</span>
+
+        <span class="c1">## training</span>
+        <span class="n">num_epochs</span> <span class="o">=</span> <span class="mi">50</span>
+        <span class="n">callback</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">callbacks</span><span class="o">.</span><span class="n">EarlyStopping</span><span class="p">(</span>
+            <span class="n">monitor</span><span class="o">=</span><span class="s2">"val_loss"</span><span class="p">,</span>
+            <span class="n">min_delta</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">patience</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">mode</span><span class="o">=</span><span class="s2">"auto"</span><span class="p">,</span>
+            <span class="n">baseline</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">restore_best_weights</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s1">'binary_crossentropy'</span><span class="p">,</span><span class="n">optimizer</span><span class="o">=</span><span class="s1">'adam'</span><span class="p">,</span><span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">'accuracy'</span><span class="p">])</span>
+
+        <span class="n">mlflow</span><span class="o">.</span><span class="n">set_tag</span><span class="p">(</span><span class="s2">"developer"</span><span class="p">,</span> <span class="s2">"Isaac"</span><span class="p">)</span>
+        <span class="n">mlflow</span><span class="o">.</span><span class="n">set_tag</span><span class="p">(</span><span class="s2">"algorithm"</span><span class="p">,</span> <span class="s2">"Deep Learning"</span><span class="p">)</span>
+        <span class="n">mlflow</span><span class="o">.</span><span class="n">log_param</span><span class="p">(</span><span class="s2">"train-data"</span><span class="p">,</span> <span class="s2">"Womens Clothing E-Commerce Reviews"</span><span class="p">)</span>
+        <span class="n">mlflow</span><span class="o">.</span><span class="n">log_param</span><span class="p">(</span><span class="s2">"embedding-dim"</span><span class="p">,</span> <span class="n">embedding_dim</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Fit model on training data"</span><span class="p">)</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span>
+            <span class="n">X_train</span><span class="p">,</span>
+            <span class="n">y_train</span><span class="p">,</span>
+            <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+            <span class="n">epochs</span><span class="o">=</span><span class="n">num_epochs</span><span class="p">,</span>
+            <span class="n">callbacks</span><span class="o">=</span><span class="n">callback</span><span class="p">,</span>
+            <span class="c1"># We pass some validation for</span>
+            <span class="c1"># monitoring validation loss and metrics</span>
+            <span class="c1"># at the end of each epoch</span>
+            <span class="n">validation_data</span><span class="o">=</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="c1">## save model and tokenizer</span>
+        <span class="n">mlflow</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">log_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">'models/model_dl'</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'tokenizer_pickle/tf_tokenizer.pickle'</span><span class="p">,</span> <span class="s1">'wb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
+            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">tokenizer</span><span class="p">,</span> <span class="n">handle</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="n">pickle</span><span class="o">.</span><span class="n">HIGHEST_PROTOCOL</span><span class="p">)</span>
+
+        <span class="n">mlflow</span><span class="o">.</span><span class="n">log_artifact</span><span class="p">(</span><span class="n">local_path</span><span class="o">=</span><span class="s2">"tokenizer_pickle/tf_tokenizer.pickle"</span><span class="p">,</span> <span class="n">artifact_path</span><span class="o">=</span><span class="s2">"tokenizer_pickle"</span><span class="p">)</span>
+
+        <span class="c1"># Evaluate the model on the test data using `evaluate`</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Evaluate on test data"</span><span class="p">)</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"test loss, test acc:"</span><span class="p">,</span> <span class="n">results</span><span class="p">)</span>
+        <span class="n">mlflow</span><span class="o">.</span><span class="n">log_metric</span><span class="p">(</span><span class="s2">"loss"</span><span class="p">,</span> <span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">mlflow</span><span class="o">.</span><span class="n">log_metric</span><span class="p">(</span><span class="s2">"accuracy"</span><span class="p">,</span> <span class="n">results</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Model training completed.</span><span class="se">\n\n</span><span class="s2">"</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">training_pipeline</span><span class="p">(</span>
+        <span class="n">reading_data</span><span class="o">=</span><span class="n">read_data</span><span class="p">(),</span>
+        <span class="n">preprocessing_data</span><span class="o">=</span><span class="n">preprocess_data</span><span class="p">(),</span>
+        <span class="n">creating_dataset</span><span class="o">=</span><span class="n">create_dataset</span><span class="p">()</span><span class="o">.</span><span class="n">with_return_materializers</span><span class="p">({</span><span class="s2">"tokenizer"</span><span class="p">:</span> <span class="n">TokenizerMaterializer</span><span class="p">}),</span>
+        <span class="n">training_model</span><span class="o">=</span><span class="n">train_model</span><span class="p">(),</span>
+    <span class="p">)</span>
+
+
+<span class="nd">@pipeline</span>
+<span class="k">def</span> <span class="nf">training_pipeline</span><span class="p">(</span>
+    <span class="n">reading_data</span><span class="p">,</span>
+    <span class="n">preprocessing_data</span><span class="p">,</span>
+    <span class="n">creating_dataset</span><span class="p">,</span>
+    <span class="n">training_model</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">reading_data</span><span class="p">()</span>
+    <span class="n">corpus</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">preprocessing_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">creating_dataset</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="n">training_model</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">'__main__'</span><span class="p">:</span>
+
+    <span class="k">for</span> <span class="n">embedding_dim</span><span class="p">,</span> <span class="n">batch_size</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="mi">32</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">128</span><span class="p">],</span> <span class="p">[</span><span class="mi">32</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">128</span><span class="p">]):</span>
+        <span class="n">hyperparams</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">'embedding_dim'</span><span class="p">:</span> <span class="n">embedding_dim</span><span class="p">,</span>
+            <span class="s1">'batch_size'</span><span class="p">:</span> <span class="n">batch_size</span>
+        <span class="p">}</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">hyperparams</span><span class="p">)</span>
+        <span class="n">build_dl_pipeline</span><span class="p">(</span><span class="n">hyperparams</span><span class="o">=</span><span class="n">hyperparams</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The above will run the training for different set of hyperparameters and do the experiment tracking using MLflow locally.</p>
+<p>Now let's see how to deploy this pipeline on Cloud. I will do it on GCP here, but other clouds are almost the same.</p>
+<p>You can have a simple MLOps stack ready for running your machine learning workloads. To do this, you can follow the steps <a href="https://github.com/zenml-io/mlops-stacks/tree/main/vertex-ai">here</a>. It sets up the following resources:</p>
+<ul>
+<li>A Vertex AI enabled workspace as an <a href="https://docs.zenml.io/mlops-stacks/orchestrators">orchestrator</a> that you can submit your pipelines to.</li>
+<li>A service account with all the necessary permissions needed to execute your pipelines.</li>
+<li>A GCS bucket as an <a href="https://docs.zenml.io/mlops-stacks/artifact-stores">artifact store</a>, which can be used to store all your ML artifacts like the model, checkpoints, etc. </li>
+<li>A CloudSQL instance as a <a href="https://docs.zenml.io/mlops-stacks/metadata-stores">metadata store</a> that is essential to track all your metadata and its location in your artifact store.  </li>
+<li>A Container Registry repository as <a href="https://docs.zenml.io/mlops-stacks/container-registries">container registry</a> for hosting your docker images.</li>
+<li>A <a href="https://docs.zenml.io/mlops-stacks/secrets-managers">secrets manager</a> enabled for storing your secrets. </li>
+<li>An optional MLflow Tracking server deployed on a GKE cluster as an <a href="https://docs.zenml.io/mlops-stacks/experiment-trackers">experiment tracker</a>. </li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Note that the terraform will create the required service account and enable required APIs on GCP.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<ol>
+<li>
+<p>create new project on GCP</p>
+</li>
+<li>
+<p>set project in gcloud cli</p>
+</li>
+</ol>
+<div class="highlight"><pre><span></span>gcloud config <span class="nb">set</span> project &lt;new project id&gt;
+</pre></div>
+<!-- 3. enable following apis:
+
+```bash
+gcloud services enable secretmanager.googleapis.com
+gcloud services enable aiplatform.googleapis.com
+gcloud services enable compute.googleapis.com
+gcloud services enable containerregistry.googleapis.com
+gcloud services enable cloudresourcemanager.googleapis.com
+gcloud services enable container.googleapis.com
+``` -->
+
+<ol>
+<li>pull zenml vertex-ai recipe  </li>
+</ol>
+<div class="highlight"><pre><span></span>zenml stack recipe pull vertex-ai
+</pre></div>
+<ol>
+<li>
+<p>Customize your deployment by editing the default values in the <code>locals.tf</code> file like <code>project_id</code>, <code>region</code>, <code>gcs</code> name, <code>prefix</code>?.</p>
+</li>
+<li>
+<p>Add your secret information like keys and passwords into the <code>values.tfvars.json</code> file which is not committed and only exists locally.</p>
+</li>
+<li>
+<p>deploy using zenml</p>
+</li>
+</ol>
+<div class="highlight"><pre><span></span>zenml stack recipe deploy vertex-ai
+</pre></div>
+<ol>
+<li>create the ZenML stack. You may need to install gcp integration using <code>zenml integration install gcp</code> too.</li>
+</ol>
+<div class="highlight"><pre><span></span>zenml stack import vertex-ai zenml_stack_recipes/vertex-ai/vertex_stack_2022-08-26T07_02.yml
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>And to destroy the deployed infrastructure:</p>
+<div class="highlight"><pre><span></span>zenml stack recipe destroy vertex-ai
+zenml stack recipe clean
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Then use <code>zenml stack list</code> to see the list of stacks. If the new created stack (<code>vertex-ai</code>) is not active, use <code>zenml stack set vertex-ai</code> to activate it.</p>
+<p><img src="/blog/images/copied_from_nb/images/workflow-orchestration/6.png" alt=""></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>You then should be able to run your pipeline. Note that you may need to do <code>python &lt;path-to-python-env&gt;\Scripts\pywin32_postinstall.py -install</code> if you see any error related to that. Make sure you have docker installed and running.</p>
+<p>The other point that you need to take care of is the requirements for your code on the cloud. One way is to create a <code>requirements.txt</code> file in your repo and set the path to it in your code. Check <a href="https://docs.zenml.io/developer-guide/advanced-usage/docker#how-to-install-additional-pip-dependencies">here</a> to learn more.</p>
+<div class="highlight"><pre><span></span><span class="o">.</span>
+<span class="o">.</span>
+<span class="o">.</span>
+<span class="n">docker_config</span> <span class="o">=</span> <span class="n">DockerConfiguration</span><span class="p">(</span><span class="n">requirements</span><span class="o">=</span><span class="s2">"./requirements.txt"</span><span class="p">)</span>
+<span class="o">.</span>
+<span class="o">.</span>
+<span class="o">.</span>
+<span class="nd">@pipeline</span><span class="p">(</span><span class="n">docker_configuration</span><span class="o">=</span><span class="n">docker_config</span><span class="p">)</span>
+<span class="o">.</span>
+<span class="o">.</span>
+<span class="o">.</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The whole code would be like this:</p>
+<div class="highlight"><pre><span></span><span class="c1"># train_dl_zenml.py file</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">nltk</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s1">'./corpora'</span><span class="p">):</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"NLTK_DATA"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"./corpora"</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">nltk</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s1">'stopwords'</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">stopwords</span>
+<span class="kn">from</span> <span class="nn">nltk.stem.porter</span> <span class="kn">import</span> <span class="n">PorterStemmer</span>
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="kn">from</span> <span class="nn">tensorflow.keras.preprocessing.text</span> <span class="kn">import</span> <span class="n">Tokenizer</span>
+<span class="kn">from</span> <span class="nn">tensorflow.keras.preprocessing.sequence</span> <span class="kn">import</span> <span class="n">pad_sequences</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">import</span> <span class="nn">mlflow</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">from</span> <span class="nn">zenml.steps</span> <span class="kn">import</span> <span class="n">step</span><span class="p">,</span> <span class="n">Output</span>
+<span class="kn">from</span> <span class="nn">zenml.pipelines</span> <span class="kn">import</span> <span class="n">pipeline</span>
+<span class="kn">from</span> <span class="nn">zenml.artifacts</span> <span class="kn">import</span> <span class="n">DataArtifact</span>
+<span class="kn">from</span> <span class="nn">zenml.io</span> <span class="kn">import</span> <span class="n">fileio</span>
+<span class="kn">from</span> <span class="nn">zenml.materializers.base_materializer</span> <span class="kn">import</span> <span class="n">BaseMaterializer</span>
+<span class="kn">from</span> <span class="nn">zenml.integrations.mlflow.mlflow_step_decorator</span> <span class="kn">import</span> <span class="n">enable_mlflow</span>
+<span class="kn">from</span> <span class="nn">zenml.config.docker_configuration</span> <span class="kn">import</span> <span class="n">DockerConfiguration</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Type</span>
+
+
+<span class="n">DATA_PATH</span> <span class="o">=</span> <span class="s2">"data/Womens Clothing E-Commerce Reviews.csv"</span>
+<span class="n">docker_config</span> <span class="o">=</span> <span class="n">DockerConfiguration</span><span class="p">(</span><span class="n">requirements</span><span class="o">=</span><span class="s2">"./requirements.txt"</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">TokenizerMaterializer</span><span class="p">(</span><span class="n">BaseMaterializer</span><span class="p">):</span>
+    <span class="n">ASSOCIATED_TYPES</span> <span class="o">=</span> <span class="p">(</span><span class="n">Tokenizer</span><span class="p">,)</span>
+    <span class="n">ASSOCIATED_ARTIFACT_TYPES</span> <span class="o">=</span> <span class="p">(</span><span class="n">DataArtifact</span><span class="p">,)</span>
+
+    <span class="k">def</span> <span class="nf">handle_input</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_type</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">Tokenizer</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tokenizer</span><span class="p">:</span>
+        <span class="sd">"""Read from artifact store"""</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">handle_input</span><span class="p">(</span><span class="n">data_type</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">fileio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">artifact</span><span class="o">.</span><span class="n">uri</span><span class="p">,</span> <span class="s1">'tokenizer.pickle'</span><span class="p">),</span> <span class="s1">'rb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tokenizer</span>
+
+    <span class="k">def</span> <span class="nf">handle_return</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">:</span> <span class="n">Tokenizer</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">"""Write to artifact store"""</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">handle_return</span><span class="p">(</span><span class="n">tokenizer</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">fileio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">artifact</span><span class="o">.</span><span class="n">uri</span><span class="p">,</span> <span class="s1">'tokenizer.pickle'</span><span class="p">),</span> <span class="s1">'wb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">tokenizer</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="n">pickle</span><span class="o">.</span><span class="n">HIGHEST_PROTOCOL</span><span class="p">)</span>
+
+
+<span class="c1">## data loading</span>
+<span class="nd">@step</span>
+<span class="k">def</span> <span class="nf">read_data</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">DATA_PATH</span><span class="p">,</span> <span class="n">index_col</span> <span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Data loaded.</span><span class="se">\n\n</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">data</span>
+
+<span class="c1">## preprocess text</span>
+<span class="nd">@step</span>
+<span class="k">def</span> <span class="nf">preprocess_data</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Output</span><span class="p">(</span><span class="n">corpus</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+    <span class="c1">#check if data/corpus is created before or not</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s1">'data/corpus_y.pickle'</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Preprocessed data not found. Creating new data. </span><span class="se">\n\n</span><span class="s2">"</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="o">~</span><span class="n">data</span><span class="p">[</span><span class="s1">'Review Text'</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()]</span>  <span class="c1">#Dropping columns which don't have any review</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">data</span><span class="p">[[</span><span class="s1">'Review Text'</span><span class="p">]]</span>
+        <span class="n">X</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">))</span>
+
+        <span class="n">y</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">'Recommended IND'</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+        <span class="n">corpus</span> <span class="o">=</span><span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)):</span>
+            <span class="n">review</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">'[^a-zA-z]'</span><span class="p">,</span><span class="s1">' '</span><span class="p">,</span><span class="n">X</span><span class="p">[</span><span class="s1">'Review Text'</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">review</span> <span class="o">=</span> <span class="n">review</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+            <span class="n">review</span> <span class="o">=</span> <span class="n">review</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+            <span class="n">ps</span> <span class="o">=</span> <span class="n">PorterStemmer</span><span class="p">()</span>
+            <span class="n">review</span> <span class="o">=</span><span class="p">[</span><span class="n">ps</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">review</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="s1">'english'</span><span class="p">))]</span>
+            <span class="n">review</span> <span class="o">=</span><span class="s1">' '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">review</span><span class="p">)</span>
+            <span class="n">corpus</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">review</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'data/corpus_y.pickle'</span><span class="p">,</span> <span class="s1">'wb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
+            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">((</span><span class="n">corpus</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">handle</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Preprocessed data found. Loading data. </span><span class="se">\n\n</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'data/corpus_y.pickle'</span><span class="p">,</span> <span class="s1">'rb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
+            <span class="n">corpus</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Data preprocessed.</span><span class="se">\n\n</span><span class="s2">"</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">corpus</span><span class="p">,</span> <span class="n">y</span>
+
+<span class="c1">## tokenization and dataset creation</span>
+<span class="nd">@step</span>
+<span class="k">def</span> <span class="nf">create_dataset</span><span class="p">(</span>
+    <span class="n">corpus</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> 
+    <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Output</span><span class="p">(</span><span class="n">X_train</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">X_test</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y_train</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y_test</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">tokenizer</span><span class="o">=</span><span class="n">Tokenizer</span><span class="p">):</span>
+
+    <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">Tokenizer</span><span class="p">(</span><span class="n">num_words</span> <span class="o">=</span> <span class="mi">3000</span><span class="p">)</span>
+    <span class="n">tokenizer</span><span class="o">.</span><span class="n">fit_on_texts</span><span class="p">(</span><span class="n">corpus</span><span class="p">)</span>
+
+    <span class="n">sequences</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">texts_to_sequences</span><span class="p">(</span><span class="n">corpus</span><span class="p">)</span>
+    <span class="n">padded</span> <span class="o">=</span> <span class="n">pad_sequences</span><span class="p">(</span><span class="n">sequences</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s1">'post'</span><span class="p">)</span>
+
+    <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">padded</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span> <span class="o">=</span> <span class="mi">42</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Dataset created.</span><span class="se">\n\n</span><span class="s2">"</span><span class="p">)</span>
+    <span class="c1"># return tokenizer</span>
+    <span class="k">return</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">tokenizer</span>
+
+
+<span class="k">def</span> <span class="nf">build_dl_pipeline</span><span class="p">(</span><span class="n">hyperparams</span><span class="p">):</span>
+    <span class="nd">@enable_mlflow</span><span class="p">(</span>
+        <span class="n">nested</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="c1"># experiment_name="customer-sentiment-analysis"</span>
+        <span class="p">)</span>
+    <span class="nd">@step</span><span class="p">(</span><span class="n">enable_cache</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">train_model</span><span class="p">(</span>
+        <span class="n">X_train</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> 
+        <span class="n">y_train</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> 
+        <span class="n">X_test</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> 
+        <span class="n">y_test</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> 
+        <span class="n">tokenizer</span><span class="p">:</span> <span class="n">Tokenizer</span>
+        <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+
+        <span class="n">mlflow</span><span class="o">.</span><span class="n">tensorflow</span><span class="o">.</span><span class="n">autolog</span><span class="p">()</span>
+
+        <span class="n">embedding_dim</span> <span class="o">=</span> <span class="n">hyperparams</span><span class="p">[</span><span class="s1">'embedding_dim'</span><span class="p">]</span>
+        <span class="n">batch_size</span> <span class="o">=</span> <span class="n">hyperparams</span><span class="p">[</span><span class="s1">'batch_size'</span><span class="p">]</span>
+
+        <span class="c1"># model definition</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Sequential</span><span class="p">([</span>
+            <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Embedding</span><span class="p">(</span><span class="mi">3000</span><span class="p">,</span> <span class="n">embedding_dim</span><span class="p">),</span>
+            <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">GlobalAveragePooling1D</span><span class="p">(),</span>
+            <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'relu'</span><span class="p">),</span>
+            <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'sigmoid'</span><span class="p">)</span>
+        <span class="p">])</span>
+
+        <span class="c1">## training</span>
+        <span class="n">num_epochs</span> <span class="o">=</span> <span class="mi">50</span>
+        <span class="n">callback</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">callbacks</span><span class="o">.</span><span class="n">EarlyStopping</span><span class="p">(</span>
+            <span class="n">monitor</span><span class="o">=</span><span class="s2">"val_loss"</span><span class="p">,</span>
+            <span class="n">min_delta</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">patience</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">mode</span><span class="o">=</span><span class="s2">"auto"</span><span class="p">,</span>
+            <span class="n">baseline</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">restore_best_weights</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s1">'binary_crossentropy'</span><span class="p">,</span><span class="n">optimizer</span><span class="o">=</span><span class="s1">'adam'</span><span class="p">,</span><span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">'accuracy'</span><span class="p">])</span>
+
+        <span class="n">mlflow</span><span class="o">.</span><span class="n">set_tag</span><span class="p">(</span><span class="s2">"developer"</span><span class="p">,</span> <span class="s2">"Isaac"</span><span class="p">)</span>
+        <span class="n">mlflow</span><span class="o">.</span><span class="n">set_tag</span><span class="p">(</span><span class="s2">"algorithm"</span><span class="p">,</span> <span class="s2">"Deep Learning"</span><span class="p">)</span>
+        <span class="n">mlflow</span><span class="o">.</span><span class="n">log_param</span><span class="p">(</span><span class="s2">"train-data"</span><span class="p">,</span> <span class="s2">"Womens Clothing E-Commerce Reviews"</span><span class="p">)</span>
+        <span class="n">mlflow</span><span class="o">.</span><span class="n">log_param</span><span class="p">(</span><span class="s2">"embedding-dim"</span><span class="p">,</span> <span class="n">embedding_dim</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Fit model on training data"</span><span class="p">)</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span>
+            <span class="n">X_train</span><span class="p">,</span>
+            <span class="n">y_train</span><span class="p">,</span>
+            <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+            <span class="n">epochs</span><span class="o">=</span><span class="n">num_epochs</span><span class="p">,</span>
+            <span class="n">callbacks</span><span class="o">=</span><span class="n">callback</span><span class="p">,</span>
+            <span class="c1"># We pass some validation for</span>
+            <span class="c1"># monitoring validation loss and metrics</span>
+            <span class="c1"># at the end of each epoch</span>
+            <span class="n">validation_data</span><span class="o">=</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="c1">## save model and tokenizer</span>
+        <span class="n">mlflow</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">log_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">'models/model_dl'</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'tokenizer_pickle/tf_tokenizer.pickle'</span><span class="p">,</span> <span class="s1">'wb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
+            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">tokenizer</span><span class="p">,</span> <span class="n">handle</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="n">pickle</span><span class="o">.</span><span class="n">HIGHEST_PROTOCOL</span><span class="p">)</span>
+
+        <span class="n">mlflow</span><span class="o">.</span><span class="n">log_artifact</span><span class="p">(</span><span class="n">local_path</span><span class="o">=</span><span class="s2">"tokenizer_pickle/tf_tokenizer.pickle"</span><span class="p">,</span> <span class="n">artifact_path</span><span class="o">=</span><span class="s2">"tokenizer_pickle"</span><span class="p">)</span>
+
+        <span class="c1"># Evaluate the model on the test data using `evaluate`</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Evaluate on test data"</span><span class="p">)</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"test loss, test acc:"</span><span class="p">,</span> <span class="n">results</span><span class="p">)</span>
+        <span class="n">mlflow</span><span class="o">.</span><span class="n">log_metric</span><span class="p">(</span><span class="s2">"loss"</span><span class="p">,</span> <span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">mlflow</span><span class="o">.</span><span class="n">log_metric</span><span class="p">(</span><span class="s2">"accuracy"</span><span class="p">,</span> <span class="n">results</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Model training completed.</span><span class="se">\n\n</span><span class="s2">"</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">training_pipeline</span><span class="p">(</span>
+        <span class="n">reading_data</span><span class="o">=</span><span class="n">read_data</span><span class="p">(),</span>
+        <span class="n">preprocessing_data</span><span class="o">=</span><span class="n">preprocess_data</span><span class="p">(),</span>
+        <span class="n">creating_dataset</span><span class="o">=</span><span class="n">create_dataset</span><span class="p">()</span><span class="o">.</span><span class="n">with_return_materializers</span><span class="p">({</span><span class="s2">"tokenizer"</span><span class="p">:</span> <span class="n">TokenizerMaterializer</span><span class="p">}),</span>
+        <span class="n">training_model</span><span class="o">=</span><span class="n">train_model</span><span class="p">(),</span>
+    <span class="p">)</span>
+
+
+<span class="nd">@pipeline</span><span class="p">(</span><span class="n">docker_configuration</span><span class="o">=</span><span class="n">docker_config</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">training_pipeline</span><span class="p">(</span>
+    <span class="n">reading_data</span><span class="p">,</span>
+    <span class="n">preprocessing_data</span><span class="p">,</span>
+    <span class="n">creating_dataset</span><span class="p">,</span>
+    <span class="n">training_model</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">reading_data</span><span class="p">()</span>
+    <span class="n">corpus</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">preprocessing_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">creating_dataset</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="n">training_model</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">'__main__'</span><span class="p">:</span>
+
+    <span class="k">for</span> <span class="n">embedding_dim</span><span class="p">,</span> <span class="n">batch_size</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="mi">32</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">128</span><span class="p">],</span> <span class="p">[</span><span class="mi">32</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">128</span><span class="p">]):</span>
+        <span class="n">hyperparams</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">'embedding_dim'</span><span class="p">:</span> <span class="n">embedding_dim</span><span class="p">,</span>
+            <span class="s1">'batch_size'</span><span class="p">:</span> <span class="n">batch_size</span>
+        <span class="p">}</span>
+        <span class="n">build_dl_pipeline</span><span class="p">(</span><span class="n">hyperparams</span><span class="o">=</span><span class="n">hyperparams</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Then you can run your pipeline:</p>
+<div class="highlight"><pre><span></span>python train_dl_zenml.py
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>If you see an error and problem, here are some tips:</p>
+<ul>
+<li>there would be a folder in <code>C:\Users\&lt;user&gt;\AppData\Roaming\zenml</code> if you are on windows. You can use <code>zenml clean</code> yo remove it. If it needs permission, you can remove it manualy.</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>To see the MLflow UI, you can ...</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Here are some resources I used:</p>
+<p><a href="https://github.com/zenml-io/mlops-stacks/tree/main/vertex-ai">https://github.com/zenml-io/mlops-stacks/tree/main/vertex-ai</a></p>
+<p><a href="https://github.com/zenml-io/zenml/blob/main/examples/vertex_ai_orchestration/run.py">https://github.com/zenml-io/zenml/blob/main/examples/vertex_ai_orchestration/run.py</a>
+
+</p>
+<center>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/watch?v=qgvmvexGv_c" frameborder="0" allowfullscreen=""></iframe>
+</center>
+
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>As the final thought, I must admit that I loved ZenML. It's much more than defining a machine learning pipeline and helps you integrate different MLOps tools in your stack. It makes all the steps and MLOps tools easy to use. I decided to continue using it in this project and also in SUPPLYZ.eu stack.</p>
 
 </div>
 </div>

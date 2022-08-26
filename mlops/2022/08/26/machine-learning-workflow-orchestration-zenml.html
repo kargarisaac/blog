@@ -155,7 +155,7 @@ window.onload = wrap_img;
     <ul class="section-nav">
 <li class="toc-entry toc-h1"><a href="#ZenML">ZenML </a>
 <ul>
-<li class="toc-entry toc-h2"><a href="#ZenML-on-Local-development-Environment">ZenML on Local development Environment </a></li>
+<li class="toc-entry toc-h2"><a href="#ZenML-on-Local-Development-Environment">ZenML on Local Development Environment </a></li>
 <li class="toc-entry toc-h2"><a href="#ZenML-on-GCP">ZenML on GCP </a></li>
 </ul>
 </li>
@@ -232,8 +232,8 @@ Our code (steps and pipelines) stay the same. The only change is in the stack an
 <p>ZenML automatically stores Metadata, such as the location of the item in a Metadata Store, together with the artifact itself. By default, this is a SQLite database on your local computer, but we could just as easily replace it with a cloud service.</p>
 <p>Any MLOps stack's foundation is made up of artifact stores, metadata stores, and orchestrators since they allow us to save, distribute, and reproduce our work. Without them, it's simple to lose sight of the specific steps taken to develop our present ML pipelines.</p>
 <p>When invoking <code>pipeline.run()</code>, the Orchestrator specifies how and where each pipeline step will be carried out.</p>
-<h2 id="ZenML-on-Local-development-Environment">
-<a class="anchor" href="#ZenML-on-Local-development-Environment" aria-hidden="true"><span class="octicon octicon-link"></span></a>ZenML on Local development Environment<a class="anchor-link" href="#ZenML-on-Local-development-Environment"> </a>
+<h2 id="ZenML-on-Local-Development-Environment">
+<a class="anchor" href="#ZenML-on-Local-Development-Environment" aria-hidden="true"><span class="octicon octicon-link"></span></a>ZenML on Local Development Environment<a class="anchor-link" href="#ZenML-on-Local-Development-Environment"> </a>
 </h2>
 <p>Let's now define each of the steps as a ZenML <strong><a href="https://docs.zenml.io/developer-guide/steps-and-pipelines#step">Pipeline Step</a></strong> simply by having several functions with ZenML's <code>@step</code> <a href="https://realpython.com/primer-on-python-decorators/">Python decorator</a> decorator.
 We can also use ZenML's <code>@pipeline</code> decorator to connect all of the steps into an ML pipeline.</p>
@@ -587,33 +587,22 @@ zenml stack update default -e mlflow_tracker
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<ol>
+<ul>
 <li>
 <p>create new project on GCP</p>
 </li>
 <li>
 <p>set project in gcloud cli</p>
 </li>
-</ol>
+</ul>
 <div class="highlight"><pre><span></span>gcloud config <span class="nb">set</span> project &lt;new project id&gt;
 </pre></div>
-<!-- 3. enable following apis:
-
-```bash
-gcloud services enable secretmanager.googleapis.com
-gcloud services enable aiplatform.googleapis.com
-gcloud services enable compute.googleapis.com
-gcloud services enable containerregistry.googleapis.com
-gcloud services enable cloudresourcemanager.googleapis.com
-gcloud services enable container.googleapis.com
-``` -->
-
-<ol>
+<ul>
 <li>pull zenml vertex-ai recipe  </li>
-</ol>
+</ul>
 <div class="highlight"><pre><span></span>zenml stack recipe pull vertex-ai
 </pre></div>
-<ol>
+<ul>
 <li>
 <p>Customize your deployment by editing the default values in the <code>locals.tf</code> file like <code>project_id</code>, <code>region</code>, <code>gcs</code> name, <code>prefix</code>?.</p>
 </li>
@@ -623,12 +612,12 @@ gcloud services enable container.googleapis.com
 <li>
 <p>deploy using zenml</p>
 </li>
-</ol>
+</ul>
 <div class="highlight"><pre><span></span>zenml stack recipe deploy vertex-ai
 </pre></div>
-<ol>
+<ul>
 <li>create the ZenML stack. You may need to install gcp integration using <code>zenml integration install gcp</code> too.</li>
-</ol>
+</ul>
 <div class="highlight"><pre><span></span>zenml stack import vertex-ai zenml_stack_recipes/vertex-ai/vertex_stack_2022-08-26T07_02.yml
 </pre></div>
 
@@ -638,7 +627,9 @@ gcloud services enable container.googleapis.com
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>And to destroy the deployed infrastructure:</p>
+<ul>
+<li>And to destroy the deployed infrastructure:</li>
+</ul>
 <div class="highlight"><pre><span></span>zenml stack recipe destroy vertex-ai
 zenml stack recipe clean
 </pre></div>
@@ -672,6 +663,14 @@ zenml stack recipe clean
 <span class="o">.</span>
 <span class="o">.</span>
 </pre></div>
+<p>Here is the content of the <code>requirements.txt</code> file:</p>
+
+<pre><code>nltk==3.7
+tensorflow==2.9.1
+mlflow==1.25.1
+zenml==0.13.0
+scikit-learn
+pickle</code></pre>
 
 </div>
 </div>

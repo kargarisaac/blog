@@ -927,6 +927,16 @@ pickle</code></pre>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<p>To run the pipeline based on a schedule, I will containerize my code and deploy it as a Cloud Run microservice and then will trigger it using <a href="https://cloud.google.com/scheduler">Google Cloud Scheduler</a>.</p>
+<p><img src="/blog/images/copied_from_nb/images/workflow-orchestration/8.png" alt=""></p>
+<p>The scheduler will trigger the cloud run service to start running the pipeline on the <code>vertex-ai</code> stack on the provisioned infrastructure on GCP.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <p>Here are some resources I used:</p>
 <ul>
 <li>

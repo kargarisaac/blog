@@ -121,7 +121,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      16 min read
+      17 min read
     
 </span></p>
 
@@ -227,16 +227,17 @@ Our code (steps and pipelines) stay the same. The only change is in the stack an
 <p>Let's get back to our example and apply ZenML! In the previous blog post, we saw our simple pipeline:</p>
 <p><img src="/blog/images/copied_from_nb/images/workflow-orchestration/5.png" alt=""></p>
 <p>Your ML workflows may actually be a lot more complex. The performance of various models will need to be compared, they will need to be deployed in a production environment, and there may be extensive preprocessing that you do not want to repeat every time you train a model. In this situation, ML pipelines are useful since they let us describe our workflows as a series of interchangeable modules.</p>
-<p><a href="https://docs.zenml.io/developer-guide/steps-and-pipelines/caching">ZenML's caching function</a>, which is turned on by default, is another strong feature. As long as the inputs, outputs, and parameters of steps and pipelines are tracked and versioned automatically by ZenML, the pipeline's steps won't be repeated when the pipeline is performed again. This drastically shortens the development period. You can enable/disable it for the whole pipeline or individual steps.</p>
+<p><a href="https://docs.zenml.io/developer-guide/steps-and-pipelines/caching">ZenML's caching function</a>, which is turned on by default, is another strong feature which I liked. As long as the inputs, outputs, and parameters of steps and pipelines are tracked and versioned automatically by ZenML, the pipeline's steps won't be repeated when the pipeline is performed again. This drastically shortens the development period. You can enable/disable it for the whole pipeline or individual steps.</p>
+<p>Any MLOps stack's foundation is made up of artifact stores, metadata stores, and orchestrators since they allow us to save, distribute, and reproduce our work. Without them, it's simple to lose sight of the specific steps taken to develop our present ML pipelines.</p>
 <p>In our ML process, all of the artifacts are automatically stored in an Artifact Store. By default, this is just a location in your local file system, but we can enable ZenML to store this information in a cloud bucket instead, such as an Amazon S3 or Google Cloud storage bucket.</p>
 <p>ZenML automatically stores Metadata, such as the location of the item in a Metadata Store, together with the artifact itself. By default, this is a SQLite database on your local computer, but we could just as easily replace it with a cloud service.</p>
-<p>Any MLOps stack's foundation is made up of artifact stores, metadata stores, and orchestrators since they allow us to save, distribute, and reproduce our work. Without them, it's simple to lose sight of the specific steps taken to develop our present ML pipelines.</p>
-<p>When invoking <code>pipeline.run()</code>, the Orchestrator specifies how and where each pipeline step will be carried out.</p>
+<p>The orchestrator, which manages your machine learning pipelines, is a crucial part of any MLOps architecture. The orchestrator offers a setting that is ready to carry out the pipeline's steps in order to accomplish this. Additionally, it ensures that the pipeline's steps are only carried only once all of its inputs, which are the results of earlier processes, have been made available.</p>
+<p>Let's start adding ZenML to our code in a local development environment.</p>
 <h2 id="ZenML-on-Local-Development-Environment">
 <a class="anchor" href="#ZenML-on-Local-Development-Environment" aria-hidden="true"><span class="octicon octicon-link"></span></a>ZenML on Local Development Environment<a class="anchor-link" href="#ZenML-on-Local-Development-Environment"> </a>
 </h2>
-<p>Let's now define each of the steps as a ZenML <strong><a href="https://docs.zenml.io/developer-guide/steps-and-pipelines#step">Pipeline Step</a></strong> simply by having several functions with ZenML's <code>@step</code> <a href="https://realpython.com/primer-on-python-decorators/">Python decorator</a> decorator.
-We can also use ZenML's <code>@pipeline</code> decorator to connect all of the steps into an ML pipeline.</p>
+<p>First, we need to define each of the steps as a ZenML <strong><a href="https://docs.zenml.io/developer-guide/steps-and-pipelines#step">Pipeline Step</a></strong> simply by having several functions with ZenML's <code>@step</code> <a href="https://realpython.com/primer-on-python-decorators/">Python decorator</a> decorator.
+We can also use ZenML's <code>@pipeline</code> decorator to define a pipeline and connect all of the steps into an ML pipeline.</p>
 
 </div>
 </div>
@@ -284,21 +285,11 @@ We can also use ZenML's <code>@pipeline</code> decorator to connect all of the s
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>In addition, we need to integrate MLflow in ZenML. It is a bit different from how we did it with Prefect. First you need to install the integration:</p>
-<div class="highlight"><pre><span></span>zenml integration install mlflow
-</pre></div>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>MLflow can handle various ML lifecycle steps, such as experiment tracking, code packaging, model deployment, and more. We will focus on the <a href="https://mlflow.org/docs/latest/tracking.html">MLflow Tracking</a> component in this lesson, but we will learn about other MLflow features in later posts.</p>
+<p>In addition, we need to integrate MLflow in ZenML. It is a bit different from how we did it with Prefect. MLflow can handle various ML lifecycle steps, such as experiment tracking, code packaging, model deployment, and more. We will focus on the <a href="https://mlflow.org/docs/latest/tracking.html">MLflow Tracking</a> component in this lesson, but we will learn about other MLflow features in later posts.</p>
 <p>First, install MLflow ZenML integration:</p>
 <div class="highlight"><pre><span></span>zenml integration install mlflow -y
 </pre></div>
-<p>Then, by adding an <code>@enable_mlflow</code> decorator on top of the function, ZenML then automatically initializes MLflow and we can log what we want.</p>
+<p>Then, by adding an <code>@enable_mlflow</code> decorator on top of the function, ZenML then automatically initializes MLflow and we can log what we want. You can also use MLflow without this decorator and in a normal way, like what we did in the previous post.</p>
 
 </div>
 </div>
@@ -320,17 +311,8 @@ zenml stack update default -e mlflow_tracker
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>and run mlflow UI using the following command:</p>
-<div class="highlight"><pre><span></span>mlflow ui --backend-store-uri sqlite:///mlflow.db
-</pre></div>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
 <p>Note that when you use <code>@enable_mlflow</code> decorator for a step, it will be one single run and you cannot have multiple runs in that step. If you want to test different set of hyperparameters and do hyperparameter search, you need to call the step multiple times. The other problem you may face is that you cannot pass parameters to a step if it is not the result of a previous step. You can do the same trick as <a href="https://github.com/zenml-io/zenbytes/blob/main/2-1_Experiment_Tracking.ipynb">this example</a>.</p>
+<p>Our final code would be like the following:</p>
 
 </div>
 </div>
@@ -338,7 +320,9 @@ zenml stack update default -e mlflow_tracker
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight"><pre><span></span><span class="c1"># train_dl_zenml.py file</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">nltk</span>
@@ -557,7 +541,22 @@ zenml stack update default -e mlflow_tracker
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<p>You can then run the code using:</p>
+<div class="highlight"><pre><span></span>python train_dl_zenml.py
+</pre></div>
 <p>The above will run the training for different set of hyperparameters and do the experiment tracking using MLflow locally.</p>
+<p>And run mlflow UI using the following command:</p>
+<div class="highlight"><pre><span></span>mlflow ui --backend-store-uri sqlite:///mlflow.db
+</pre></div>
+<p>Here is the result of training for different set of hyperparameters on MLflow UI:</p>
+<p><img src="/blog/images/copied_from_nb/images/workflow-orchestration/7.png" alt=""></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="ZenML-on-GCP">
 <a class="anchor" href="#ZenML-on-GCP" aria-hidden="true"><span class="octicon octicon-link"></span></a>ZenML on GCP<a class="anchor-link" href="#ZenML-on-GCP"> </a>
 </h2>
@@ -580,16 +579,10 @@ zenml stack update default -e mlflow_tracker
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Note that the terraform will create the required service account and enable required APIs on GCP.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
+<p>Follow the steps below to build the infrastructure for running your pipeline on GCP using vertex-aiL</p>
 <ul>
 <li>
-<p>create new project on GCP</p>
+<p>create a new project on GCP</p>
 </li>
 <li>
 <p>set project in gcloud cli</p>
@@ -628,7 +621,7 @@ zenml stack update default -e mlflow_tracker
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <ul>
-<li>And to destroy the deployed infrastructure:</li>
+<li>you can destroy the deployed infrastructure using:</li>
 </ul>
 <div class="highlight"><pre><span></span>zenml stack recipe destroy vertex-ai
 zenml stack recipe clean
@@ -678,7 +671,7 @@ pickle</code></pre>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>The whole code would be like this:</p>
+<p>Our final code would be like this:</p>
 <div class="highlight"><pre><span></span><span class="c1"># train_dl_zenml.py file</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -935,14 +928,20 @@ pickle</code></pre>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Here are some resources I used:</p>
+<ul>
+<li>
 <p><a href="https://github.com/zenml-io/mlops-stacks/tree/main/vertex-ai">https://github.com/zenml-io/mlops-stacks/tree/main/vertex-ai</a></p>
+</li>
+<li>
 <p><a href="https://github.com/zenml-io/zenml/blob/main/examples/vertex_ai_orchestration/run.py">https://github.com/zenml-io/zenml/blob/main/examples/vertex_ai_orchestration/run.py</a>
 
 </p>
 <center>
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/watch?v=qgvmvexGv_c" frameborder="0" allowfullscreen=""></iframe>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/qgvmvexGv_c" frameborder="0" allowfullscreen=""></iframe>
 </center>
 
+</li>
+</ul>
 
 </div>
 </div>

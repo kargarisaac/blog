@@ -45,10 +45,6 @@
 <lastmod>2022-08-01T00:00:00-05:00</lastmod>
 </url>
 <url>
-<loc>https://kargarisaac.github.io/blog/mlops/2022/08/03/machine-learning-model-deployment.html</loc>
-<lastmod>2022-08-03T00:00:00-05:00</lastmod>
-</url>
-<url>
 <loc>https://kargarisaac.github.io/blog/mlops/2022/08/03/machine-learning-model-monitoring.html</loc>
 <lastmod>2022-08-03T00:00:00-05:00</lastmod>
 </url>
@@ -63,6 +59,10 @@
 <url>
 <loc>https://kargarisaac.github.io/blog/mlops/2022/08/26/machine-learning-workflow-orchestration-zenml.html</loc>
 <lastmod>2022-08-26T00:00:00-05:00</lastmod>
+</url>
+<url>
+<loc>https://kargarisaac.github.io/blog/mlops/2022/08/28/machine-learning-model-deployment.html</loc>
+<lastmod>2022-08-28T00:00:00-05:00</lastmod>
 </url>
 <url>
 <loc>https://kargarisaac.github.io/blog/about/</loc>

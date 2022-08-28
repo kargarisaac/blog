@@ -121,7 +121,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      17 min read
+      18 min read
     
 </span></p>
 
@@ -236,7 +236,14 @@ Our code (steps and pipelines) stay the same. The only change is in the stack an
 <h2 id="ZenML-on-Local-Development-Environment">
 <a class="anchor" href="#ZenML-on-Local-Development-Environment" aria-hidden="true"><span class="octicon octicon-link"></span></a>ZenML on Local Development Environment<a class="anchor-link" href="#ZenML-on-Local-Development-Environment"> </a>
 </h2>
-<p>First, we need to define each of the steps as a ZenML <strong><a href="https://docs.zenml.io/developer-guide/steps-and-pipelines#step">Pipeline Step</a></strong> simply by having several functions with ZenML's <code>@step</code> <a href="https://realpython.com/primer-on-python-decorators/">Python decorator</a> decorator.
+<p>You first need to install ZenML:</p>
+<div class="highlight"><pre><span></span>pip install zenml
+pip install <span class="s2">"zenml[stacks]==0.13.0"</span>
+</pre></div>
+<p>Once the installation is completed, you can go ahead and create your first ZenML repository for your project:</p>
+<div class="highlight"><pre><span></span>zenml init
+</pre></div>
+<p>Then, we need to define each of the steps as a ZenML <strong><a href="https://docs.zenml.io/developer-guide/steps-and-pipelines#step">Pipeline Step</a></strong> simply by having several functions with ZenML's <code>@step</code> <a href="https://realpython.com/primer-on-python-decorators/">Python decorator</a> decorator.
 We can also use ZenML's <code>@pipeline</code> decorator to define a pipeline and connect all of the steps into an ML pipeline.</p>
 
 </div>
@@ -561,7 +568,7 @@ zenml stack update default -e mlflow_tracker
 <a class="anchor" href="#ZenML-on-GCP" aria-hidden="true"><span class="octicon octicon-link"></span></a>ZenML on GCP<a class="anchor-link" href="#ZenML-on-GCP"> </a>
 </h2>
 <p>Now let's see how to deploy this pipeline on Cloud. I will do it on GCP here, but other clouds are almost the same.</p>
-<p>You can have a simple MLOps stack ready for running your machine learning workloads. To do this, you can follow the steps <a href="https://github.com/zenml-io/mlops-stacks/tree/main/vertex-ai">here</a>. It sets up the following resources:</p>
+<p>You can have a simple MLOps stack ready for running your machine learning workloads. To do this, you can follow the steps <a href="https://github.com/zenml-io/mlops-stacks/tree/main/vertex-ai">here</a>. It uses <a href="https://www.terraform.io/">terraform</a> and sets up the following resources:</p>
 <ul>
 <li>A Vertex AI enabled workspace as an <a href="https://docs.zenml.io/mlops-stacks/orchestrators">orchestrator</a> that you can submit your pipelines to.</li>
 <li>A service account with all the necessary permissions needed to execute your pipelines.</li>
@@ -613,6 +620,19 @@ zenml stack update default -e mlflow_tracker
 </ul>
 <div class="highlight"><pre><span></span>zenml stack import vertex-ai zenml_stack_recipes/vertex-ai/vertex_stack_2022-08-26T07_02.yml
 </pre></div>
+<ul>
+<li>You should now create a secret for the CloudSQL instance that will allow ZenML to connect to it. Use the following command:</li>
+</ul>
+<div class="highlight"><pre><span></span>zenml secrets-manager secret register gcp_mysql_secret --schema<span class="o">=</span>mysql --user<span class="o">=</span>&lt;DB_USER&gt; --password<span class="o">=</span>&lt;PWD&gt; <span class="se">\</span>
+  --ssl_ca<span class="o">=</span>@&lt;/PATH/TO/DOWNLOADED/SERVER-CERT&gt; <span class="se">\</span>
+  --ssl_cert<span class="o">=</span>@&lt;/PATH/TO/DOWNLOADED/CLIENT-CERT&gt; <span class="se">\</span>
+  --ssl_key<span class="o">=</span>@&lt;/PATH/TO/DOWNLOADED/CLIENT-KEY&gt;
+</pre></div>
+<p>The values for the username and password can be obtained by running the following commands inside your recipe directory. (run them inside the folder with <code>.tf</code> files)</p>
+<div class="highlight"><pre><span></span>terraform output metadata-db-username
+terraform output metadata-db-password
+</pre></div>
+<p>For the certificates, visit the Google Cloud Console to <a href="https://cloud.google.com/sql/docs/mysql/configure-ssl-instance#:~:text=Cloud%20SQL%20Instances-,To%20open%20the%20Overview%20page%20of%20an%20instance%2C%20click%20the,Click%20Create%20client%20certificate.">create a certificate and download the files</a> to your system.</p>
 
 </div>
 </div>
@@ -626,6 +646,17 @@ zenml stack update default -e mlflow_tracker
 <div class="highlight"><pre><span></span>zenml stack recipe destroy vertex-ai
 zenml stack recipe clean
 </pre></div>
+<ul>
+<li>you can also delete the stack using:</li>
+</ul>
+<div class="highlight"><pre><span></span>zenml stack delete &lt;STACK_NAME&gt;
+</pre></div>
+<ul>
+<li>you can also delete compnents by:</li>
+</ul>
+<div class="highlight"><pre><span></span>zenml &lt;STACK_COMPONENT&gt; delete &lt;STACK_COMPONENT_NAME&gt;
+</pre></div>
+<p><strong>Note</strong>: If you provisioned infrastructure related to the stack, make sure to deprovision it using <code>zenml stack down --force</code> before unregistering the stack.</p>
 
 </div>
 </div>
@@ -642,12 +673,19 @@ zenml stack recipe clean
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>You then should be able to run your pipeline. Note that you may need to do <code>python &lt;path-to-python-env&gt;\Scripts\pywin32_postinstall.py -install</code> if you see any error related to that. Make sure you have docker installed and running.</p>
+<p>You then should be able to run your pipeline. Note that you may need to do <code>python &lt;path-to-python-env&gt;\Scripts\pywin32_postinstall.py -install</code> if you see any error related to that. Also, make sure you have docker installed and running.</p>
 <p>The other point that you need to take care of is the requirements for your code on the cloud. One way is to create a <code>requirements.txt</code> file in your repo and set the path to it in your code. Check <a href="https://docs.zenml.io/developer-guide/advanced-usage/docker#how-to-install-additional-pip-dependencies">here</a> to learn more.</p>
 <div class="highlight"><pre><span></span><span class="o">.</span>
 <span class="o">.</span>
 <span class="o">.</span>
-<span class="n">docker_config</span> <span class="o">=</span> <span class="n">DockerConfiguration</span><span class="p">(</span><span class="n">requirements</span><span class="o">=</span><span class="s2">"./requirements.txt"</span><span class="p">)</span>
+<span class="n">docker_config</span> <span class="o">=</span> <span class="n">DockerConfiguration</span><span class="p">(</span>
+    <span class="n">requirements</span><span class="o">=</span><span class="p">[</span>
+        <span class="s2">"nltk"</span><span class="p">,</span>
+        <span class="s2">"tensorflow==2.9.1"</span><span class="p">,</span>
+        <span class="s2">"scikit-learn"</span>
+    <span class="p">],</span>
+    <span class="n">dockerignore</span><span class="o">=</span><span class="s2">"./.dockerignore"</span>
+<span class="p">)</span>
 <span class="o">.</span>
 <span class="o">.</span>
 <span class="o">.</span>
@@ -656,14 +694,26 @@ zenml stack recipe clean
 <span class="o">.</span>
 <span class="o">.</span>
 </pre></div>
-<p>Here is the content of the <code>requirements.txt</code> file:</p>
 
-<pre><code>nltk==3.7
-tensorflow==2.9.1
-mlflow==1.25.1
-zenml==0.13.0
-scikit-learn
-pickle</code></pre>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>You can also config hardware requirements for each step using the <code>@step</code> decorator as follows:</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">zenml.steps</span> <span class="kn">import</span> <span class="n">step</span><span class="p">,</span> <span class="n">ResourceConfiguration</span>
+
+<span class="nd">@step</span><span class="p">(</span><span class="n">resource_configuration</span><span class="o">=</span><span class="n">ResourceConfiguration</span><span class="p">(</span><span class="n">cpu_count</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">gpu_count</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">memory</span><span class="o">=</span><span class="s2">"16GB"</span><span class="p">))</span>
+<span class="k">def</span> <span class="nf">my_step</span><span class="p">(</span><span class="o">...</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="o">...</span><span class="p">:</span>
+    <span class="o">...</span>
+</pre></div>
+<p>And here are the attributes of the <code>ResourceConfiguration</code>:</p>
+<div class="highlight"><pre><span></span><span class="n">Attributes</span><span class="p">:</span>
+    <span class="n">cpu_count</span><span class="p">:</span> <span class="n">The</span> <span class="n">amount</span> <span class="n">of</span> <span class="n">CPU</span> <span class="n">cores</span> <span class="n">that</span> <span class="n">should</span> <span class="n">be</span> <span class="n">configured</span><span class="o">.</span>
+    <span class="n">gpu_count</span><span class="p">:</span> <span class="n">The</span> <span class="n">amount</span> <span class="n">of</span> <span class="n">GPUs</span> <span class="n">that</span> <span class="n">should</span> <span class="n">be</span> <span class="n">configured</span><span class="o">.</span>
+    <span class="n">memory</span><span class="p">:</span> <span class="n">The</span> <span class="n">amount</span> <span class="n">of</span> <span class="n">memory</span> <span class="n">that</span> <span class="n">should</span> <span class="n">be</span> <span class="n">configured</span><span class="o">.</span>
+</pre></div>
 
 </div>
 </div>
@@ -702,7 +752,14 @@ pickle</code></pre>
 
 
 <span class="n">DATA_PATH</span> <span class="o">=</span> <span class="s2">"data/Womens Clothing E-Commerce Reviews.csv"</span>
-<span class="n">docker_config</span> <span class="o">=</span> <span class="n">DockerConfiguration</span><span class="p">(</span><span class="n">requirements</span><span class="o">=</span><span class="s2">"./requirements.txt"</span><span class="p">)</span>
+<span class="n">docker_config</span> <span class="o">=</span> <span class="n">DockerConfiguration</span><span class="p">(</span>
+    <span class="n">requirements</span><span class="o">=</span><span class="p">[</span>
+        <span class="s2">"nltk"</span><span class="p">,</span>
+        <span class="s2">"tensorflow==2.9.1"</span><span class="p">,</span>
+        <span class="s2">"scikit-learn"</span>
+    <span class="p">],</span>
+    <span class="n">dockerignore</span><span class="o">=</span><span class="s2">"./.dockerignore"</span>
+<span class="p">)</span>
 
 
 <span class="k">class</span> <span class="nc">TokenizerMaterializer</span><span class="p">(</span><span class="n">BaseMaterializer</span><span class="p">):</span>
@@ -912,6 +969,7 @@ pickle</code></pre>
 <ul>
 <li>there would be a folder in <code>C:\Users\&lt;user&gt;\AppData\Roaming\zenml</code> if you are on windows. You can use <code>zenml clean</code> yo remove it. If it needs permission, you can remove it manualy.</li>
 </ul>
+<p>You can do many things with steps. You can read data from different sources like GCS or BigQuery or any other source. You can do data processing and ETL using different tools like Spark. You can train even huge deep learning models using GPU on Vertex.</p>
 
 </div>
 </div>

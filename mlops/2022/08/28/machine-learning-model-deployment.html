@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>MLOps project - part 3a: Machine Learning Model Deployment | Isaac Kargar</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="MLOps project - part 3a: Machine Learning Model Deployment" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Deploying machine learning models in production." />
+<meta property="og:description" content="Deploying machine learning models in production." />
+<link rel="canonical" href="https://kargarisaac.github.io/blog/mlops/2022/08/28/machine-learning-model-deployment.html" />
+<meta property="og:url" content="https://kargarisaac.github.io/blog/mlops/2022/08/28/machine-learning-model-deployment.html" />
+<meta property="og:site_name" content="Isaac Kargar" />
+<meta property="og:image" content="https://kargarisaac.github.io/blog/images/some_folder/your_image.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-08-28T00:00:00-05:00" />
+<script type="application/ld+json">
+{"headline":"MLOps project - part 3a: Machine Learning Model Deployment","dateModified":"2022-08-28T00:00:00-05:00","datePublished":"2022-08-28T00:00:00-05:00","description":"Deploying machine learning models in production.","image":"https://kargarisaac.github.io/blog/images/some_folder/your_image.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://kargarisaac.github.io/blog/mlops/2022/08/28/machine-learning-model-deployment.html"},"@type":"BlogPosting","url":"https://kargarisaac.github.io/blog/mlops/2022/08/28/machine-learning-model-deployment.html","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/blog/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://kargarisaac.github.io/blog/feed.xml" title="Isaac Kargar" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','G-7C8WW0BBJ4','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+<link rel="shortcut icon" type="image/x-icon" href="/blog/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>MLOps project - part 3a: Machine Learning Model Deployment | Isaac Kargar</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="MLOps project - part 3a: Machine Learning Model Deployment" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Deploying machine learning models in production." />
+<meta property="og:description" content="Deploying machine learning models in production." />
+<link rel="canonical" href="https://kargarisaac.github.io/blog/mlops/2022/08/28/machine-learning-model-deployment.html" />
+<meta property="og:url" content="https://kargarisaac.github.io/blog/mlops/2022/08/28/machine-learning-model-deployment.html" />
+<meta property="og:site_name" content="Isaac Kargar" />
+<meta property="og:image" content="https://kargarisaac.github.io/blog/images/some_folder/your_image.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-08-28T00:00:00-05:00" />
+<script type="application/ld+json">
+{"headline":"MLOps project - part 3a: Machine Learning Model Deployment","dateModified":"2022-08-28T00:00:00-05:00","datePublished":"2022-08-28T00:00:00-05:00","description":"Deploying machine learning models in production.","image":"https://kargarisaac.github.io/blog/images/some_folder/your_image.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://kargarisaac.github.io/blog/mlops/2022/08/28/machine-learning-model-deployment.html"},"@type":"BlogPosting","url":"https://kargarisaac.github.io/blog/mlops/2022/08/28/machine-learning-model-deployment.html","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://kargarisaac.github.io/blog/feed.xml" title="Isaac Kargar" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','G-7C8WW0BBJ4','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+    <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/blog/">Isaac Kargar</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/blog/about/">About Me</a><a class="page-link" href="/blog/search/">Search</a><a class="page-link" href="/blog/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">MLOps project - part 3a: Machine Learning Model Deployment</h1><p class="page-description">Deploying machine learning models in production.</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2022-08-28T00:00:00-05:00" itemprop="datePublished">
+        Aug 28, 2022
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      5 min read
+    
+</span></p>
+
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-wrap flex-justify-end">
+          <div class="px-2">
+
+    <a href="https://github.com/kargarisaac/blog/tree/master/_notebooks/2022-08-28-machine-learning-model-deployment.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/blog/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://mybinder.org/v2/gh/kargarisaac/blog/master?filepath=_notebooks%2F2022-08-28-machine-learning-model-deployment.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/blog/assets/badges/binder.svg" alt="Open In Binder"/>
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://colab.research.google.com/github/kargarisaac/blog/blob/master/_notebooks/2022-08-28-machine-learning-model-deployment.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/blog/assets/badges/colab.svg" alt="Open In Colab"/>
+    </a>
+</div>
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+<li class="toc-entry toc-h1"><a href="#Machine-Learning-Model-Deployment">Machine Learning Model Deployment </a>
+<ul>
+<li class="toc-entry toc-h2"><a href="#Batch-or-Offline-Mode">Batch or Offline Mode </a></li>
+<li class="toc-entry toc-h2"><a href="#Online-Deployment">Online Deployment </a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#Web-Service">Web Service </a></li>
+<li class="toc-entry toc-h3"><a href="#Streaming">Streaming </a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-entry toc-h1"><a href="#Model-Deployment-Tools">Model Deployment Tools </a>
+<ul>
+<li class="toc-entry toc-h2"><a href="#Cloud-Run">Cloud Run </a></li>
+<li class="toc-entry toc-h2"><a href="#Vertex-AI">Vertex AI </a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h1"><a href="#KServe-with-ZenML">KServe with ZenML </a></li>
+</ul><!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2022-08-28-machine-learning-model-deployment.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>So far in this series of blog posts, we saw how to do experiment tracking and creating a machine learning pipeline for model training. But what should we do now with the trained mode?! That's right. We have to deploy the model into production. so people can use it and make inference.</p>
+<p>In this blog post we will see what is machine learning model deployment and what are the options that can help us to do it. In the next post, we will deploy our own trained model for customer sentiment analysis in production.</p>
+<p>Let's get started.</p>
+<h1 id="Machine-Learning-Model-Deployment">
+<a class="anchor" href="#Machine-Learning-Model-Deployment" aria-hidden="true"><span class="octicon octicon-link"></span></a>Machine Learning Model Deployment<a class="anchor-link" href="#Machine-Learning-Model-Deployment"> </a>
+</h1>
+<p>There are multiple options for model deployment. First, we need to ask if we want the predictions to be done immediately or if they can wait for an hour, a day, etc.</p>
+<ul>
+<li>In case we can wait a bit, we can go for <strong>batch or offline</strong> deployment. In this case, the model doen't need to be running all the time and we can call it with a batch of data regularly in a time interval.</li>
+<li>In the other case, we need the model predictions as soon as possible and the model should be running all the time. This is called <strong>online</strong> deployment. Online deployment has multiple variants as well:<ul>
+<li>
+<em>Web service</em>: In this case, we deploy our model as a web service and we can send HTTPS requests and get the prediction from that.</li>
+<li>
+<em>Streaming</em>: In this case, there is a stream of events and model is listening to events and reacting to them. </li>
+</ul>
+</li>
+</ul>
+<p><img src="/blog/images/copied_from_nb/images/model-deployment/1.jpg" alt=""></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Batch-or-Offline-Mode">
+<a class="anchor" href="#Batch-or-Offline-Mode" aria-hidden="true"><span class="octicon octicon-link"></span></a>Batch or Offline Mode<a class="anchor-link" href="#Batch-or-Offline-Mode"> </a>
+</h2>
+<p>In this case, we need to apply the model to a batch of data in a time interval. It can be every 10 minutes, every half an hour, every day, every week, etc.</p>
+<p>Usually we have a database with data in it and a job which has the model to pull the data from database and apply the model to the data. It can then save the results of the prediction into another database, so other jobs can use the data for other purposes like a report or dashboard.</p>
+<p><img src="/blog/images/copied_from_nb/images/model-deployment/2.jpg" alt=""></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Online-Deployment">
+<a class="anchor" href="#Online-Deployment" aria-hidden="true"><span class="octicon octicon-link"></span></a>Online Deployment<a class="anchor-link" href="#Online-Deployment"> </a>
+</h2>
+<h3 id="Web-Service">
+<a class="anchor" href="#Web-Service" aria-hidden="true"><span class="octicon octicon-link"></span></a>Web Service<a class="anchor-link" href="#Web-Service"> </a>
+</h3>
+<p>The other common way of deploying models is Web Service which is in the category of Online deployment. In this case you have a web service which has the machine learning model. This service needs to be up and running all the time. It is also possible to use serverless microservices like a service deployed using Cloud Run. There would be a very small delay which needs to be taken into consideration and if it is not acceptable, you need to go for more real-time architectures. This case is more like a one-to-one relationship between client and server.</p>
+<p><img src="/blog/images/copied_from_nb/images/model-deployment/3.jpg" alt=""></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Streaming">
+<a class="anchor" href="#Streaming" aria-hidden="true"><span class="octicon octicon-link"></span></a>Streaming<a class="anchor-link" href="#Streaming"> </a>
+</h3>
+<p>In this case, we have producers and consumers. Producers will push some events into an event stream and multiple services or consumers would read from the stream and react to the events. This more like a one-to-many or many-to-many relationship between producer(s) and consumers. For example, the producer can be a user with an app which interacts with the backend and produces some events. Then this events will go to an stream event and multiple services can do different jobs on those events. The difference with the web service option is that there is no explicit connection between the procuser and consumers here. The producer just pushes an event and some services will process it. The result of these consumers may go to another event stream to be used by some other consumers and services. There is no limit there.</p>
+<p><img src="/blog/images/copied_from_nb/images/model-deployment/4.jpg" alt=""></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Check the following video to learn more about different deployment options:
+
+</p>
+<center>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/JMGe4yIoBRA" frameborder="0" allowfullscreen=""></iframe>
+</center>
+
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Model-Deployment-Tools">
+<a class="anchor" href="#Model-Deployment-Tools" aria-hidden="true"><span class="octicon octicon-link"></span></a>Model Deployment Tools<a class="anchor-link" href="#Model-Deployment-Tools"> </a>
+</h1>
+<p>There are many ways to deploy your model into production. <a href="https://getindata.com/blog/machine-learning-model-serving-tools-comaprison-kserve-seldon-core-bentoml/">This blog post</a> does a nice comparison of three popular tools: <a href="https://www.seldon.io/solutions/open-source-projects/core">Seldon Core</a>, <a href="https://kserve.github.io/website/0.9/">KServe</a>, and <a href="https://www.bentoml.com/">BentoML</a>.</p>
+<p>The comparison is focused on 9 main areas of model serving tools:</p>
+<ul>
+<li>ability to serve models from standard frameworks, including Scikit-Learn, PyTorch, Tensorflow and XGBoost</li>
+<li>ability to serve custom models / models from niche frameworks</li>
+<li>ability to pre-process/post-process data</li>
+<li>impact on the development workflow and existing codebase</li>
+<li>availability of the documentation</li>
+<li>DevOps operability</li>
+<li>autoscaling capabilities</li>
+<li>available interfaces for obtaining predictions</li>
+<li>infrastructure management<blockquote>
+<p><strong>KServe</strong>:KServe (previously, before the 0.7 version was named KFServing) is an open-source, Kubernetes-based tool providing custom abstraction (Kubernetes Custom Resource Definition) to define Machine Learning model serving capabilities. It’s main focus is to hide the underlying complexity of such deployments so that it’s users only need to  focus on the ML-related parts. It supports many advanced features such as autoscaling, scaling-to-zero, canary deployments, automatic request batching as well as many popular ML frameworks out-of-the-box.&gt; <strong>Seldon Core</strong>:Seldon Core is an open source tool developed by Seldon Technologies Ltd, as a building block of the larger (paid) Seldon Deploy solution. It’s similar to KServe in terms of the approach - it provides high level Kubernetes CRD and supports canary deployments, A/B testing as well as Multi-Armed-Bandit deployments. &gt; <strong>BentoML</strong>:BentoML is a Python framework for wrapping the machine learning models into deployable services. It provides a simple object-oriented interface for packaging ML models and creating HTTP(s) services for them. BentoML offers in-depth integration with popular ML frameworks, so that all of the complexity related to packaging the models and their dependencies is hidden. BentoML-packaged models can be deployed in many runtimes, which include plain Kubernetes Clusters, Seldon Core, KServe, Knative as well as cloud-managed, serverless solutions like AWS Lambda, Azure Functions or Google Cloud Run.
+It's really informative and I highly recommend check it out.</p>
+</blockquote>
+</li>
+</ul>
+<p>In this blog post, I show how to deploy our own example, customer sentiment analysis, as a web service. I will do it in three ways: Google Cloud Run, Vertex-AI, and KServe with ZenML.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Cloud-Run">
+<a class="anchor" href="#Cloud-Run" aria-hidden="true"><span class="octicon octicon-link"></span></a>Cloud Run<a class="anchor-link" href="#Cloud-Run"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Vertex-AI">
+<a class="anchor" href="#Vertex-AI" aria-hidden="true"><span class="octicon octicon-link"></span></a>Vertex AI<a class="anchor-link" href="#Vertex-AI"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="KServe-with-ZenML">
+<a class="anchor" href="#KServe-with-ZenML" aria-hidden="true"><span class="octicon octicon-link"></span></a>KServe with ZenML<a class="anchor-link" href="#KServe-with-ZenML"> </a>
+</h1>
+<blockquote>
+<p><a href="https://github.com/kserve/kserve">KServe</a> provides a Kubernetes Custom Resource Definition for serving machine learning (ML) models on arbitrary frameworks. It aims to solve production model serving use cases by providing performant, high abstraction interfaces for common ML frameworks like Tensorflow, XGBoost, ScikitLearn, PyTorch, and ONNX. It encapsulates the complexity of autoscaling, networking, health checking, and server configuration to bring cutting edge serving features like GPU Autoscaling, Scale to Zero, and Canary Rollouts to your ML deployments. It enables a simple, pluggable, and complete story for Production ML Serving including prediction, pre-processing, post-processing and explainability. KServe is being used across various organizations.</p>
+</blockquote>
+<p><img src="/blog/images/copied_from_nb/images/model-deployment/kserve.png" alt="">
+<em><a href="https://github.com/kserve/kserve">source</a></em></p>
+
+</div>
+</div>
+</div>
+</div>
+
+
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="kargarisaac/blog"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/blog/mlops/2022/08/28/machine-learning-model-deployment.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/blog/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/blog/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/blog/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>My posts about Machine Learning</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/kargarisaac" target="_blank" title="kargarisaac"><svg class="svg-icon grey"><use xlink:href="/blog/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://www.linkedin.com/in/eshagh-kargar" target="_blank" title="eshagh-kargar"><svg class="svg-icon grey"><use xlink:href="/blog/assets/minima-social-icons.svg#linkedin"></use></svg></a></li><li><a rel="me" href="https://twitter.com/kargarisaac" target="_blank" title="kargarisaac"><svg class="svg-icon grey"><use xlink:href="/blog/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

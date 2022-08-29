@@ -121,7 +121,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      18 min read
+      19 min read
     
 </span></p>
 
@@ -228,10 +228,6 @@ Our code (steps and pipelines) stay the same. The only change is in the stack an
 <p><img src="/blog/images/copied_from_nb/images/workflow-orchestration/5.png" alt=""></p>
 <p>Your ML workflows may actually be a lot more complex. The performance of various models will need to be compared, they will need to be deployed in a production environment, and there may be extensive preprocessing that you do not want to repeat every time you train a model. In this situation, ML pipelines are useful since they let us describe our workflows as a series of interchangeable modules.</p>
 <p><a href="https://docs.zenml.io/developer-guide/steps-and-pipelines/caching">ZenML's caching function</a>, which is turned on by default, is another strong feature which I liked. As long as the inputs, outputs, and parameters of steps and pipelines are tracked and versioned automatically by ZenML, the pipeline's steps won't be repeated when the pipeline is performed again. This drastically shortens the development period. You can enable/disable it for the whole pipeline or individual steps.</p>
-<p>Any MLOps stack's foundation is made up of artifact stores, metadata stores, and orchestrators since they allow us to save, distribute, and reproduce our work. Without them, it's simple to lose sight of the specific steps taken to develop our present ML pipelines.</p>
-<p>In our ML process, all of the artifacts are automatically stored in an Artifact Store. By default, this is just a location in your local file system, but we can enable ZenML to store this information in a cloud bucket instead, such as an Amazon S3 or Google Cloud storage bucket.</p>
-<p>ZenML automatically stores Metadata, such as the location of the item in a Metadata Store, together with the artifact itself. By default, this is a SQLite database on your local computer, but we could just as easily replace it with a cloud service.</p>
-<p>The orchestrator, which manages your machine learning pipelines, is a crucial part of any MLOps architecture. The orchestrator offers a setting that is ready to carry out the pipeline's steps in order to accomplish this. Additionally, it ensures that the pipeline's steps are only carried only once all of its inputs, which are the results of earlier processes, have been made available.</p>
 <p>Let's start adding ZenML to our code in a local development environment.</p>
 <h2 id="ZenML-on-Local-Development-Environment">
 <a class="anchor" href="#ZenML-on-Local-Development-Environment" aria-hidden="true"><span class="octicon octicon-link"></span></a>ZenML on Local Development Environment<a class="anchor-link" href="#ZenML-on-Local-Development-Environment"> </a>
@@ -311,6 +307,20 @@ zenml experiment-tracker register mlflow_tracker --flavor<span class="o">=</span
 <span class="c1"># Add the MLflow experiment tracker into our default stack</span>
 zenml stack update default -e mlflow_tracker
 </pre></div>
+<p>Our local stack, named <code>Default</code>, would be as the following image:</p>
+<p><img src="/blog/images/copied_from_nb/images/workflow-orchestration/zenml-local.jpg" alt=""></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Any MLOps stack's foundation is made up of artifact stores, metadata stores, and orchestrators since they allow us to save, distribute, and reproduce our work. Without them, it's simple to lose sight of the specific steps taken to develop our present ML pipelines.</p>
+<p>In our ML process, all of the artifacts are automatically stored in an Artifact Store. By default, this is just a location in your local file system, but we can enable ZenML to store this information in a cloud bucket instead, such as an Amazon S3 or Google Cloud storage bucket.</p>
+<p>ZenML automatically stores Metadata, such as the location of the item in a Metadata Store, together with the artifact itself. By default, this is a SQLite database on your local computer, but we could just as easily replace it with a cloud service.</p>
+<p>The orchestrator, which manages your machine learning pipelines, is a crucial part of any MLOps architecture. The orchestrator offers a setting that is ready to carry out the pipeline's steps in order to accomplish this. Additionally, it ensures that the pipeline's steps are only carried only once all of its inputs, which are the results of earlier processes, have been made available.</p>
+<p>In this project, we also added MLFlow as the experiment tracker to our stack.</p>
 
 </div>
 </div>
@@ -657,6 +667,8 @@ zenml stack recipe clean
 <div class="highlight"><pre><span></span>zenml &lt;STACK_COMPONENT&gt; delete &lt;STACK_COMPONENT_NAME&gt;
 </pre></div>
 <p><strong>Note</strong>: If you provisioned infrastructure related to the stack, make sure to deprovision it using <code>zenml stack down --force</code> before unregistering the stack.</p>
+<p>Our stack, named <code>vertex-ai</code>, would be as follows:</p>
+<p><img src="/blog/images/copied_from_nb/images/workflow-orchestration/zenml-cloud.jpg" alt=""></p>
 
 </div>
 </div>

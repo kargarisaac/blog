@@ -248,7 +248,7 @@ We can also use ZenML's <code>@pipeline</code> decorator to define a pipeline an
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>One thing that I spent some time was the input and output type definition for steps. Especially custom types like the tokenizer. We need to tell ZenML somehow about this custom type. There is a solution of rthat called <code>Materializer</code> in ZenML. You can see the defined custom materializer for our TensorFlow Tokenizer and how to use it in the following code.</p>
+<p>One thing that I spent some time was the input and output type definition for steps. Especially custom types like the tokenizer. We need to tell ZenML somehow about this custom type. There is a solution of rthat called <code>Materializer</code> in ZenML. You can see the defined custom materializer for our TensorFlow Tokenizer and how to use it in the following sections in the code.</p>
 
 </div>
 </div>
@@ -256,23 +256,7 @@ We can also use ZenML's <code>@pipeline</code> decorator to define a pipeline an
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">TokenizerMaterializer</span><span class="p">(</span><span class="n">BaseMaterializer</span><span class="p">):</span>
-    <span class="n">ASSOCIATED_TYPES</span> <span class="o">=</span> <span class="p">(</span><span class="n">Tokenizer</span><span class="p">,)</span>
-    <span class="n">ASSOCIATED_ARTIFACT_TYPES</span> <span class="o">=</span> <span class="p">(</span><span class="n">DataArtifact</span><span class="p">,)</span>
-
-    <span class="k">def</span> <span class="nf">handle_input</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_type</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">Tokenizer</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tokenizer</span><span class="p">:</span>
-        <span class="sd">"""Read from artifact store"""</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">handle_input</span><span class="p">(</span><span class="n">data_type</span><span class="p">)</span>
-        <span class="k">with</span> <span class="n">fileio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">artifact</span><span class="o">.</span><span class="n">uri</span><span class="p">,</span> <span class="s1">'tokenizer.pickle'</span><span class="p">),</span> <span class="s1">'rb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">tokenizer</span>
-
-    <span class="k">def</span> <span class="nf">handle_return</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">:</span> <span class="n">Tokenizer</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">"""Write to artifact store"""</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">handle_return</span><span class="p">(</span><span class="n">tokenizer</span><span class="p">)</span>
-        <span class="k">with</span> <span class="n">fileio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">artifact</span><span class="o">.</span><span class="n">uri</span><span class="p">,</span> <span class="s1">'tokenizer.pickle'</span><span class="p">),</span> <span class="s1">'wb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">tokenizer</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="n">pickle</span><span class="o">.</span><span class="n">HIGHEST_PROTOCOL</span><span class="p">)</span>
-</pre></div>
+<p>You need to pass the materializer to the step via <code>.with_return_materializers({"tokenizer": TokenizerMaterializer})</code> in the pipeline definition. You will see this in a few moment.</p>
 
 </div>
 </div>
@@ -280,15 +264,7 @@ We can also use ZenML's <code>@pipeline</code> decorator to define a pipeline an
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>You then need to pass it to the step via <code>.with_return_materializers({"tokenizer": TokenizerMaterializer})</code> in the pipeline definition. You will see this in a few moment.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>In addition, we need to integrate MLflow in ZenML. It is a bit different from how we did it with Prefect. MLflow can handle various ML lifecycle steps, such as experiment tracking, code packaging, model deployment, and more. We will focus on the <a href="https://mlflow.org/docs/latest/tracking.html">MLflow Tracking</a> component in this lesson, but we will learn about other MLflow features in later posts.</p>
+<p>In addition, we need to integrate MLflow in ZenML for experiment tracking. It is a bit different from how we did it with Prefect. MLflow can handle various ML lifecycle steps, such as experiment tracking, code packaging, model deployment, and more. We will focus on the <a href="https://mlflow.org/docs/latest/tracking.html">MLflow Tracking</a> component in this lesson, but we will learn about other MLflow features in later posts.</p>
 <p>First, install MLflow ZenML integration:</p>
 <div class="highlight"><pre><span></span>zenml integration install mlflow -y
 </pre></div>
@@ -307,7 +283,7 @@ zenml experiment-tracker register mlflow_tracker --flavor<span class="o">=</span
 <span class="c1"># Add the MLflow experiment tracker into our default stack</span>
 zenml stack update default -e mlflow_tracker
 </pre></div>
-<p>Our local stack, named <code>Default</code>, would be as the following image:</p>
+<p>After all of the above steps, our local stack, named <code>Default</code>, would be as the following image:</p>
 <p><img src="/blog/images/copied_from_nb/images/workflow-orchestration/zenml-local.jpg" alt=""></p>
 
 </div>
@@ -558,15 +534,15 @@ zenml stack update default -e mlflow_tracker
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>You can then run the code using:</p>
+<p>You can then run the code using the following command, which runs the pipeline on the local stack:</p>
 <div class="highlight"><pre><span></span>python train_dl_zenml.py
 </pre></div>
-<p>The above will run the training for different set of hyperparameters and do the experiment tracking using MLflow locally.</p>
 <p>And run mlflow UI using the following command:</p>
 <div class="highlight"><pre><span></span>mlflow ui --backend-store-uri sqlite:///mlflow.db
 </pre></div>
 <p>Here is the result of training for different set of hyperparameters on MLflow UI:</p>
 <p><img src="/blog/images/copied_from_nb/images/workflow-orchestration/7.png" alt=""></p>
+<p>Running the pipeline on local machine is really easy. But what if we want to run our pipeline on cloud to be able to use powerful computation there? What if our training step needs a powerful GPU? We can easily create a ZenML stack on a cloud environment like Google Cloud and switch the stack to run the pipeline there, without changing our code at all and by just using a single command. That's amazing. Isn't it?!! Let's see how to do this.</p>
 
 </div>
 </div>
@@ -578,7 +554,7 @@ zenml stack update default -e mlflow_tracker
 <a class="anchor" href="#ZenML-on-GCP" aria-hidden="true"><span class="octicon octicon-link"></span></a>ZenML on GCP<a class="anchor-link" href="#ZenML-on-GCP"> </a>
 </h2>
 <p>Now let's see how to deploy this pipeline on Cloud. I will do it on GCP here, but other clouds are almost the same.</p>
-<p>You can have a simple MLOps stack ready for running your machine learning workloads. To do this, you can follow the steps <a href="https://github.com/zenml-io/mlops-stacks/tree/main/vertex-ai">here</a>. It uses <a href="https://www.terraform.io/">terraform</a> and sets up the following resources:</p>
+<p>You can have a simple MLOps stack ready for running your machine learning workloads on GCP. To do this, you can follow the steps <a href="https://github.com/zenml-io/mlops-stacks/tree/main/vertex-ai">here</a>. It uses <a href="https://www.terraform.io/">terraform</a> and sets up the following resources:</p>
 <ul>
 <li>A Vertex AI enabled workspace as an <a href="https://docs.zenml.io/mlops-stacks/orchestrators">orchestrator</a> that you can submit your pipelines to.</li>
 <li>A service account with all the necessary permissions needed to execute your pipelines.</li>
@@ -666,6 +642,14 @@ zenml stack recipe clean
 </ul>
 <div class="highlight"><pre><span></span>zenml &lt;STACK_COMPONENT&gt; delete &lt;STACK_COMPONENT_NAME&gt;
 </pre></div>
+<p>in our case:</p>
+<div class="highlight"><pre><span></span>zenml artifact-store delete gcs_artifact_store
+zenml container-registry delete gcr_container_registry
+zenml metadata-store delete cloudsql_metadata_store
+zenml orchestrator delete vertex_ai_orchestrator
+zenml secrets-manager delete gcp_secrets_manager
+zenml experiment-tracker delete gke_mlflow_experiment_tracker
+</pre></div>
 <p><strong>Note</strong>: If you provisioned infrastructure related to the stack, make sure to deprovision it using <code>zenml stack down --force</code> before unregistering the stack.</p>
 <p>Our stack, named <code>vertex-ai</code>, would be as follows:</p>
 <p><img src="/blog/images/copied_from_nb/images/workflow-orchestration/zenml-cloud.jpg" alt=""></p>
@@ -676,7 +660,8 @@ zenml stack recipe clean
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Then use <code>zenml stack list</code> to see the list of stacks. If the new created stack (<code>vertex-ai</code>) is not active, use <code>zenml stack set vertex-ai</code> to activate it.</p>
+<p>The current MLflow integration in ZenML seems to use a SQLite database hosted on the VM where MLflow runs and there is no remote backend store, only a remote artifact store. If you check your VM instances on Google Cloud Console, you will see a VM running all the time. This can be replaced with a serverless service like Cloud Run and a SQL database can be added for backend store for MLflow. They are working on it and hope to see these additions in the future releases of ZenML.</p>
+<p>Then you can use <code>zenml stack list</code> to see the list of stacks. If the new created stack (<code>vertex-ai</code>) is not active, use <code>zenml stack set vertex-ai</code> to activate it.</p>
 <p><img src="/blog/images/copied_from_nb/images/workflow-orchestration/6.png" alt=""></p>
 
 </div>

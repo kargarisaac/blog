@@ -263,7 +263,11 @@ We can also use ZenML's <code>@pipeline</code> decorator to define a pipeline an
 <div class="highlight"><pre><span></span>zenml integration install mlflow -y
 </pre></div>
 <p>Then, by adding an <code>@enable_mlflow</code> decorator on top of the function, ZenML then automatically initializes MLflow and we can log what we want. We do not do hyperparameter tuning in this post and set the hyperparameters inside the training step. At the time of writing this blog post, which is ZenML 0.13.1, there is no straight way to do hyperparameter tuning in ZenML. If you use the <code>@enable_mlflow</code> decorator, it will consider the whole step as one run. so you cannot have multiple MLflow runs in one single step. You cannot also pass hyperparameters as step arguments as they are not the output of a previous step. The ZenML team is working on this feature and I hope to have this feature soon.</p>
-<p>You can also use MLflow without this decorator and in a normal way, like what we did in the previous post.</p>
+<p>You can also use MLflow without this decorator and in a normal way, like what we did in the previous post. by using the following two lines in the training step:</p>
+<div class="highlight"><pre><span></span><span class="n">mlflow</span><span class="o">.</span><span class="n">set_tracking_uri</span><span class="p">(</span><span class="o">&lt;</span><span class="n">tracking</span> <span class="n">uri</span><span class="o">&gt;</span><span class="p">)</span>
+<span class="n">mlflow</span><span class="o">.</span><span class="n">set_experiment</span><span class="p">(</span><span class="s2">"customer-sentiment-analysis"</span><span class="p">)</span>
+</pre></div>
+<p>You can get the tracking uri by using <code>zenml experiment-tracker describe</code>. In this way, you can use mlflow in the normal way without letting ZenML handling it for you.</p>
 
 </div>
 </div>

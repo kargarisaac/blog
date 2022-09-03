@@ -121,7 +121,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      5 min read
+      9 min read
     
 </span></p>
 
@@ -300,6 +300,199 @@ It's really informative and I highly recommend check it out.</p>
 <h2 id="Cloud-Run">
 <a class="anchor" href="#Cloud-Run" aria-hidden="true"><span class="octicon octicon-link"></span></a>Cloud Run<a class="anchor-link" href="#Cloud-Run"> </a>
 </h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>In the previous posts, we trained the model on Vertex AI on GCP and used MLflow for experiment tracking. MLflow will save model artifacts on GCS. Here we just use those artifacts in our endpoint for prediction. I use a solution here to download the model based on experiment ID and run ID and pass these values as environment variable in the docker file. If you use Cloud Run for deployment, you can also set these variables using cloud commands. Check <a href="https://cloud.google.com/run/docs/configuring/environment-variables#console">here</a> for more information.</p>
+<p>We develop a single endpoint for prediction using FastAPI. To access GCS, one way is to use service account. You can create the service account from Google Console and give it the required access to storage. I give it storage admin role here, but in production, you can give more limited access. Then you need to generate the JSON key file and same it with the name of <code>key.json</code> it in root folder. Be carefull to add this file to your <code>.gitignore</code> file as you don't want to push it into Github.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Here is the code:</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">nltk</span>
+<span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">stopwords</span>
+<span class="kn">from</span> <span class="nn">tensorflow.keras.preprocessing.sequence</span> <span class="kn">import</span> <span class="n">pad_sequences</span>
+<span class="kn">import</span> <span class="nn">mlflow</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">from</span> <span class="nn">google.cloud</span> <span class="kn">import</span> <span class="n">storage</span>
+<span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">stopwords</span>
+<span class="kn">from</span> <span class="nn">nltk.stem.porter</span> <span class="kn">import</span> <span class="n">PorterStemmer</span>
+
+<span class="n">nltk</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s1">'stopwords'</span><span class="p">)</span>
+<span class="n">experiment_id</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">"EXPERIMENT_ID"</span><span class="p">))</span>
+<span class="n">run_id</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">"RUN_ID"</span><span class="p">))</span>
+
+<span class="n">path_on_gcs</span> <span class="o">=</span> <span class="n">experiment_id</span> <span class="o">+</span> <span class="s2">"/"</span> <span class="o">+</span> <span class="n">run_id</span>
+<span class="n">stop_words</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="s1">'english'</span><span class="p">))</span>
+
+
+<span class="c1"># fastapi app</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">(</span>
+    <span class="n">title</span><span class="o">=</span><span class="s2">"Fashion Sentment Analysis REST API"</span><span class="p">,</span>
+    <span class="n">description</span><span class="o">=</span><span class="s2">"This API analyses the review for a fashion product."</span><span class="p">,</span>
+    <span class="n">version</span><span class="o">=</span><span class="s2">"0.0.1"</span><span class="p">,</span>
+    <span class="n">contact</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">"name"</span><span class="p">:</span> <span class="s2">"Isaac Kargar"</span><span class="p">,</span>
+        <span class="s2">"email"</span><span class="p">:</span> <span class="s2">"kargarisaac@yahoo.com"</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">preprocess</span><span class="p">(</span><span class="n">review</span><span class="p">):</span>
+    <span class="n">review_processed</span> <span class="o">=</span> <span class="n">review</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="n">review_processed</span> <span class="o">=</span> <span class="n">review_processed</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+    <span class="n">ps</span> <span class="o">=</span> <span class="n">PorterStemmer</span><span class="p">()</span>
+    <span class="n">review_processed</span> <span class="o">=</span><span class="p">[</span><span class="n">ps</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">review_processed</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="s1">'english'</span><span class="p">))]</span>
+    <span class="n">review_processed</span> <span class="o">=</span><span class="s1">' '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">review_processed</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">review_processed</span>
+
+<span class="k">def</span> <span class="nf">download_mlflow_artifacts</span><span class="p">():</span>
+    <span class="c1"># create storage client</span>
+    <span class="n">storage_client</span> <span class="o">=</span> <span class="n">storage</span><span class="o">.</span><span class="n">Client</span><span class="o">.</span><span class="n">from_service_account_json</span><span class="p">(</span><span class="s1">'key.json'</span><span class="p">)</span>
+    <span class="c1"># storage_client = storage.Client()</span>
+    <span class="c1"># get bucket with name</span>
+    <span class="n">bucket</span> <span class="o">=</span> <span class="n">storage_client</span><span class="o">.</span><span class="n">get_bucket</span><span class="p">(</span><span class="s1">'mlflow-demo-1360'</span><span class="p">)</span>
+    <span class="c1"># get bucket data as blob</span>
+    <span class="n">blobs</span> <span class="o">=</span> <span class="n">bucket</span><span class="o">.</span><span class="n">list_blobs</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="n">path_on_gcs</span><span class="p">)</span> 
+
+    <span class="k">for</span> <span class="n">blob</span> <span class="ow">in</span> <span class="n">blobs</span><span class="p">:</span>
+        <span class="n">blob_name</span> <span class="o">=</span> <span class="n">blob</span><span class="o">.</span><span class="n">name</span> 
+        <span class="n">file_path</span> <span class="o">=</span> <span class="s2">"models/"</span> <span class="o">+</span> <span class="n">blob_name</span>
+        <span class="n">folder_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">folder_path</span><span class="p">)</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">folder_path</span><span class="p">)</span>
+
+        <span class="n">blob</span><span class="o">.</span><span class="n">download_to_filename</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Artifacts downloaded.</span><span class="se">\n\n</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">load_model_tokenizer</span><span class="p">():</span>
+    <span class="n">artifact_folder</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"models/</span><span class="si">{</span><span class="n">path_on_gcs</span><span class="si">}</span><span class="s2">/artifacts"</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">mlflow</span><span class="o">.</span><span class="n">pyfunc</span><span class="o">.</span><span class="n">load_model</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">artifact_folder</span><span class="si">}</span><span class="s2">/models/model_dl"</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">artifact_folder</span><span class="si">}</span><span class="s2">/tokenizer_pickle/tf_tokenizer.pickle"</span><span class="p">,</span> <span class="s1">'rb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
+        <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Model and tokenizer loaded.</span><span class="se">\n\n</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/"</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">root</span><span class="p">():</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">"message"</span><span class="p">:</span> <span class="s2">"Customer review sentiment analysis"</span><span class="p">}</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/predict"</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">get_predict</span><span class="p">(</span><span class="n">review</span><span class="p">:</span> <span class="nb">str</span><span class="p">,):</span>
+    <span class="sd">"""</span>
+<span class="sd">    Reads the list of sensors from the database</span>
+<span class="sd">    """</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">review_processed</span> <span class="o">=</span> <span class="n">preprocess</span><span class="p">(</span><span class="n">review</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">review_processed</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{</span><span class="s2">"message"</span><span class="p">:</span> <span class="s2">"Please enter a valid review - It seems there is no valubale review in the text."</span><span class="p">}</span>
+
+        <span class="n">download_mlflow_artifacts</span><span class="p">()</span>
+        <span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">load_model_tokenizer</span><span class="p">()</span>
+        <span class="n">review_processed</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">texts_to_sequences</span><span class="p">(</span><span class="n">review_processed</span><span class="p">)</span>
+        <span class="n">review_processed</span> <span class="o">=</span> <span class="n">pad_sequences</span><span class="p">(</span><span class="n">review_processed</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s1">'post'</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">prediction</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">review_processed</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">"prediction"</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">prediction</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+            <span class="p">}</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">"error"</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)}</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">uvicorn</span>
+
+    <span class="n">uvicorn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s2">"0.0.0.0"</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">8000</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We then need to create a <code>Dockerfile</code>. I use <code>pipenv</code> in this project to be able to have isolated virtual environment for each project. You can learn more about it <a href="https://pipenv.pypa.io/en/latest/">here</a>. Our Dockerfile would be as follows:</p>
+<div class="highlight"><pre><span></span><span class="k">FROM</span> <span class="s">python:3.9-slim</span>
+
+<span class="k">RUN</span> pip install -U pip
+<span class="k">RUN</span> pip install pipenv 
+
+<span class="k">EXPOSE</span><span class="s"> 8080</span>
+<span class="k">ENV</span> EXPERIMENT_ID <span class="m">2</span>
+<span class="k">ENV</span> RUN_ID 7e6fc298380e484ba7cac0ab029ba510
+
+<span class="k">WORKDIR</span><span class="s"> /app</span>
+
+<span class="k">COPY</span> . .
+
+<span class="k">RUN</span> pipenv install --system --deploy
+
+<span class="k">CMD</span> <span class="p">[</span><span class="s2">"uvicorn"</span><span class="p">,</span> <span class="s2">"main:app"</span><span class="p">,</span> <span class="s2">"--host"</span><span class="p">,</span> <span class="s2">"0.0.0.0"</span><span class="p">,</span> <span class="s2">"--port"</span><span class="p">,</span> <span class="s2">"8080"</span><span class="p">]</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We use <code>uvicorn</code> web server for FastAPI here. You can also see that I set <code>EXPERIMENT_ID</code> and <code>RUN_ID</code> as environment variables to be used in my python code.</p>
+<p>Then we can build the image and test locally first. Follow the steps below to do so:</p>
+<ul>
+<li>
+<p>Build the image</p>
+<div class="highlight"><pre><span></span>docker build -t sentiment:v1 .
+</pre></div>
+</li>
+<li>
+<p>Run the econtainer</p>
+<div class="highlight"><pre><span></span>docker run -it --rm -p <span class="m">8080</span>:8080 sentiment:v1
+</pre></div>
+</li>
+<li>
+<p>Then visit <a href="http://localhost:8080/docs">http://localhost:8080/docs</a> to view your fastapi app. You will see the following page which you can play with the API interactively:</p>
+</li>
+</ul>
+<p><img src="/blog/images/copied_from_nb/images/model-deployment/5.jpg" alt=""></p>
+<ul>
+<li>You can use this test sentence to test the API: <code>Like it, but don't love it.</code>
+</li>
+</ul>
+<p>If everything works fine, you can deploy the app on Google Cloud using the following commands:</p>
+<ul>
+<li>Set project ID variable:</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">PROJECT_ID</span><span class="o">=</span>&lt;your gcp project id&gt;
+</pre></div>
+<ul>
+<li>
+<p>Build the image:</p>
+<div class="highlight"><pre><span></span>gcloud builds submit --tag gcr.io/<span class="nv">$PROJECT_ID</span>/sentiment
+</pre></div>
+</li>
+<li>
+<p>Deploy on cloud run:</p>
+<div class="highlight"><pre><span></span>gcloud run deploy sentiment --image gcr.io/<span class="nv">$PROJECT_ID</span>/sentiment --platform managed --allow-unauthenticated
+</pre></div>
+</li>
+</ul>
+<p>You then should be able to use the endpoint link and see the same page as before.</p>
+
 </div>
 </div>
 </div>

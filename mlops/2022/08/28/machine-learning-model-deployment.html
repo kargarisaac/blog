@@ -121,7 +121,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      9 min read
+      10 min read
     
 </span></p>
 
@@ -342,7 +342,7 @@ It's really informative and I highly recommend check it out.</p>
     <span class="n">version</span><span class="o">=</span><span class="s2">"0.0.1"</span><span class="p">,</span>
     <span class="n">contact</span><span class="o">=</span><span class="p">{</span>
         <span class="s2">"name"</span><span class="p">:</span> <span class="s2">"Isaac Kargar"</span><span class="p">,</span>
-        <span class="s2">"email"</span><span class="p">:</span> <span class="s2">"kargarisaac@yahoo.com"</span><span class="p">,</span>
+        <span class="s2">"email"</span><span class="p">:</span> <span class="s2">"Isaac@email.com"</span><span class="p">,</span>
     <span class="p">},</span>
 <span class="p">)</span>
 
@@ -360,7 +360,7 @@ It's really informative and I highly recommend check it out.</p>
     <span class="n">storage_client</span> <span class="o">=</span> <span class="n">storage</span><span class="o">.</span><span class="n">Client</span><span class="o">.</span><span class="n">from_service_account_json</span><span class="p">(</span><span class="s1">'key.json'</span><span class="p">)</span>
     <span class="c1"># storage_client = storage.Client()</span>
     <span class="c1"># get bucket with name</span>
-    <span class="n">bucket</span> <span class="o">=</span> <span class="n">storage_client</span><span class="o">.</span><span class="n">get_bucket</span><span class="p">(</span><span class="s1">'mlflow-demo-1360'</span><span class="p">)</span>
+    <span class="n">bucket</span> <span class="o">=</span> <span class="n">storage_client</span><span class="o">.</span><span class="n">get_bucket</span><span class="p">(</span><span class="s1">'mlflow'</span><span class="p">)</span>
     <span class="c1"># get bucket data as blob</span>
     <span class="n">blobs</span> <span class="o">=</span> <span class="n">bucket</span><span class="o">.</span><span class="n">list_blobs</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="n">path_on_gcs</span><span class="p">)</span> 
 
@@ -492,6 +492,59 @@ It's really informative and I highly recommend check it out.</p>
 </li>
 </ul>
 <p>You then should be able to use the endpoint link and see the same page as before.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We also developed a simple UI using streamlit package to get user review about a product and analyze it. The code for UI is as follows:</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">streamlit</span> <span class="k">as</span> <span class="nn">st</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="n">st</span><span class="o">.</span><span class="n">set_page_config</span><span class="p">(</span>
+    <span class="n">page_title</span><span class="o">=</span><span class="s2">"Fashion Sentiment Analysis"</span><span class="p">,</span>
+    <span class="n">page_icon</span><span class="o">=</span><span class="s2">"📈"</span><span class="p">,</span>
+    <span class="n">layout</span><span class="o">=</span><span class="s2">"wide"</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">st</span><span class="o">.</span><span class="n">header</span><span class="p">(</span><span class="s2">"Fashion Sentiment Analysis UI"</span><span class="p">)</span>
+
+<span class="n">st</span><span class="o">.</span><span class="n">image</span><span class="p">(</span><span class="s2">"https://krm-stc-ms.azureedge.net/-/media/Images/Ecco/Products/MENS/BROWN/ECCO-SOFT-7-M/470364-02053-main.webp?Crop=1&amp;Size=ProductDetailsMedium1x"</span><span class="p">)</span>
+
+<span class="n">review_text</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">text_input</span><span class="p">(</span><span class="s1">'User review about the product:'</span><span class="p">,</span> <span class="s1">'Input your review here'</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">st</span><span class="o">.</span><span class="n">button</span><span class="p">(</span><span class="s2">"Analyze"</span><span class="p">):</span>
+    <span class="n">endpoint</span> <span class="o">=</span> <span class="s2">"&lt;url for the deployed model on cloud run&gt;"</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">endpoint</span><span class="si">}</span><span class="s1">/predict?review=</span><span class="si">{</span><span class="n">review_text</span><span class="si">}</span><span class="s1">'</span>
+
+    <span class="n">prediction</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">"Prediction:"</span><span class="p">,</span> <span class="n">prediction</span><span class="p">)</span>
+</pre></div>
+<p>The Docker file would be as follows:</p>
+<div class="highlight"><pre><span></span>
+</pre></div>
+<p>You can again dockerize this and deploy it on Cloud Run as another microservice by following the steps below:</p>
+<ul>
+<li>
+<p>Set project ID variable:</p>
+<div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">PROJECT_ID</span><span class="o">=</span><span class="k">$(</span>gcloud config get-value core/project<span class="k">)</span>
+</pre></div>
+</li>
+<li>
+<p>build the image:</p>
+<div class="highlight"><pre><span></span>gcloud builds submit --tag gcr.io/<span class="nv">$PROJECT_ID</span>/sentiment_ui
+</pre></div>
+</li>
+<li>
+<p>deploy on cloud run:</p>
+<div class="highlight"><pre><span></span>gcloud run deploy sentiment_ui --image gcr.io/<span class="nv">$PROJECT_ID</span>/sentiment_ui --platform managed --allow-unauthenticated
+</pre></div>
+</li>
+</ul>
+<p>By following the url for the <code>sentiment_ui</code> endpoint, you would see a UI wo as follows:</p>
+<p>image source: <a href="https://be.ecco.com/nl-BE/product/5643183598/ECCO-SOFT-7-M?dfw_tracker=25318-5643183603&amp;gclid=CjwKCAjw9suYBhBIEiwA7iMhNIahBjBQOZsqjVd9PhdZIbIviG_z_5BTMoPgxxhSqSlX48jdDu7qfBoCJpwQAvD_BwE&amp;gclsrc=aw.ds">https://be.ecco.com/nl-BE/product/5643183598/ECCO-SOFT-7-M?dfw_tracker=25318-5643183603&amp;gclid=CjwKCAjw9suYBhBIEiwA7iMhNIahBjBQOZsqjVd9PhdZIbIviG_z_5BTMoPgxxhSqSlX48jdDu7qfBoCJpwQAvD_BwE&amp;gclsrc=aw.ds</a></p>
 
 </div>
 </div>

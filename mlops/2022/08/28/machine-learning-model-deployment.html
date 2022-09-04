@@ -162,10 +162,7 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h3"><a href="#Streaming">Streaming </a></li>
 </ul>
 </li>
-</ul>
-</li>
-<li class="toc-entry toc-h1"><a href="#Model-Deployment-Tools">Model Deployment Tools </a>
-<ul>
+<li class="toc-entry toc-h2"><a href="#Model-Deployment-Tools">Model Deployment Tools </a></li>
 <li class="toc-entry toc-h2"><a href="#Cloud-Run">Cloud Run </a></li>
 <li class="toc-entry toc-h2"><a href="#Vertex-AI">Vertex AI </a></li>
 </ul>
@@ -269,9 +266,17 @@ window.onload = wrap_img;
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Model-Deployment-Tools">
+<p>In this blog post, we will deploy our app as a web server. To do this, we will use three approaches: Cloud Run, Vertex AI, and an open source MLOps tool.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Model-Deployment-Tools">
 <a class="anchor" href="#Model-Deployment-Tools" aria-hidden="true"><span class="octicon octicon-link"></span></a>Model Deployment Tools<a class="anchor-link" href="#Model-Deployment-Tools"> </a>
-</h1>
+</h2>
 <p>There are many ways to deploy your model into production. <a href="https://getindata.com/blog/machine-learning-model-serving-tools-comaprison-kserve-seldon-core-bentoml/">This blog post</a> does a nice comparison of three popular tools: <a href="https://www.seldon.io/solutions/open-source-projects/core">Seldon Core</a>, <a href="https://kserve.github.io/website/0.9/">KServe</a>, and <a href="https://www.bentoml.com/">BentoML</a>.</p>
 <p>The comparison is focused on 9 main areas of model serving tools:</p>
 <ul>
@@ -289,7 +294,7 @@ It's really informative and I highly recommend check it out.</p>
 </blockquote>
 </li>
 </ul>
-<p>In this blog post, I show how to deploy our own example, customer sentiment analysis, as a web service. I will do it in three ways: Google Cloud Run, Vertex-AI, and KServe with ZenML.</p>
+<p>From the above tools, I will use KServe in a ZenML stack to deploy our model. But first, let's see how to deploy the model as an endpoint using Cloud Run and Vertex AI.</p>
 
 </div>
 </div>
@@ -307,7 +312,7 @@ It's really informative and I highly recommend check it out.</p>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>In the previous posts, we trained the model on Vertex AI on GCP and used MLflow for experiment tracking. MLflow will save model artifacts on GCS. Here we just use those artifacts in our endpoint for prediction. I use a solution here to download the model based on experiment ID and run ID and pass these values as environment variable in the docker file. If you use Cloud Run for deployment, you can also set these variables using cloud commands. Check <a href="https://cloud.google.com/run/docs/configuring/environment-variables#console">here</a> for more information.</p>
-<p>We develop a single endpoint for prediction using FastAPI. To access GCS, one way is to use service account. You can create the service account from Google Console and give it the required access to storage. I give it storage admin role here, but in production, you can give more limited access. Then you need to generate the JSON key file and same it with the name of <code>key.json</code> it in root folder. Be carefull to add this file to your <code>.gitignore</code> file as you don't want to push it into Github.</p>
+<p>We develop a single endpoint for prediction using FastAPI. To access GCS, one way is to use service account. You can create the service account from Google Console and give it the required access to storage. I give it storage admin role here, but in production, you can give more limited access. Then you need to generate the JSON key file and same it with the name of <code>key.json</code> it in the root folder. Be carefull to add this file to your <code>.gitignore</code> file as you don't want to push it into Github.</p>
 
 </div>
 </div>
@@ -433,8 +438,8 @@ It's really informative and I highly recommend check it out.</p>
 <span class="k">RUN</span> pip install pipenv 
 
 <span class="k">EXPOSE</span><span class="s"> 8080</span>
-<span class="k">ENV</span> EXPERIMENT_ID <span class="m">2</span>
-<span class="k">ENV</span> RUN_ID 7e6fc298380e484ba7cac0ab029ba510
+<span class="k">ENV</span> EXPERIMENT_ID &lt;mlflow experiment id&gt;
+<span class="k">ENV</span> RUN_ID &lt;mlflow run id&gt;
 
 <span class="k">WORKDIR</span><span class="s"> /app</span>
 
@@ -470,9 +475,9 @@ It's really informative and I highly recommend check it out.</p>
 </ul>
 <p><img src="/blog/images/copied_from_nb/images/model-deployment/5.jpg" alt=""></p>
 <ul>
-<li>You can use this test sentence to test the API: <code>Like it, but don't love it.</code>
-</li>
+<li>You can then interact with it and test:</li>
 </ul>
+<p><img src="/blog/images/copied_from_nb/images/model-deployment/6.jpg" alt=""></p>
 <p>If everything works fine, you can deploy the app on Google Cloud using the following commands:</p>
 <ul>
 <li>Set project ID variable:</li>
@@ -506,7 +511,7 @@ It's really informative and I highly recommend check it out.</p>
 <span class="n">st</span><span class="o">.</span><span class="n">set_page_config</span><span class="p">(</span>
     <span class="n">page_title</span><span class="o">=</span><span class="s2">"Fashion Sentiment Analysis"</span><span class="p">,</span>
     <span class="n">page_icon</span><span class="o">=</span><span class="s2">"📈"</span><span class="p">,</span>
-    <span class="n">layout</span><span class="o">=</span><span class="s2">"wide"</span><span class="p">,</span>
+    <span class="n">layout</span><span class="o">=</span><span class="s2">"wide"</span>
 <span class="p">)</span>
 
 <span class="n">st</span><span class="o">.</span><span class="n">header</span><span class="p">(</span><span class="s2">"Fashion Sentiment Analysis UI"</span><span class="p">)</span>
@@ -522,8 +527,21 @@ It's really informative and I highly recommend check it out.</p>
     <span class="n">prediction</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
     <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">"Prediction:"</span><span class="p">,</span> <span class="n">prediction</span><span class="p">)</span>
 </pre></div>
-<p>The Docker file would be as follows:</p>
-<div class="highlight"><pre><span></span>
+<p>And the Docker file would be as follows:</p>
+<div class="highlight"><pre><span></span><span class="k">FROM</span> <span class="s">python:3.9-slim</span>
+
+<span class="k">RUN</span> pip install -U pip
+<span class="k">RUN</span> pip install pipenv 
+
+<span class="k">EXPOSE</span><span class="s"> 8080</span>
+
+<span class="k">WORKDIR</span><span class="s"> /app</span>
+
+<span class="k">COPY</span> . .
+
+<span class="k">RUN</span> pipenv install --system --deploy
+
+<span class="k">CMD</span> streamlit run --server.port <span class="m">8080</span> --server.enableCORS<span class="o">=</span><span class="nb">false</span> app.py
 </pre></div>
 <p>You can again dockerize this and deploy it on Cloud Run as another microservice by following the steps below:</p>
 <ul>
@@ -539,12 +557,12 @@ It's really informative and I highly recommend check it out.</p>
 </li>
 <li>
 <p>deploy on cloud run:</p>
-<div class="highlight"><pre><span></span>gcloud run deploy sentiment_ui --image gcr.io/<span class="nv">$PROJECT_ID</span>/sentiment_ui --platform managed --allow-unauthenticated
+<div class="highlight"><pre><span></span>gcloud run deploy sentimentui --image gcr.io/<span class="nv">$PROJECT_ID</span>/sentiment_ui --platform managed --allow-unauthenticated
 </pre></div>
 </li>
 </ul>
-<p>By following the url for the <code>sentiment_ui</code> endpoint, you would see a UI wo as follows:</p>
-<p>image source: <a href="https://be.ecco.com/nl-BE/product/5643183598/ECCO-SOFT-7-M?dfw_tracker=25318-5643183603&amp;gclid=CjwKCAjw9suYBhBIEiwA7iMhNIahBjBQOZsqjVd9PhdZIbIviG_z_5BTMoPgxxhSqSlX48jdDu7qfBoCJpwQAvD_BwE&amp;gclsrc=aw.ds">https://be.ecco.com/nl-BE/product/5643183598/ECCO-SOFT-7-M?dfw_tracker=25318-5643183603&amp;gclid=CjwKCAjw9suYBhBIEiwA7iMhNIahBjBQOZsqjVd9PhdZIbIviG_z_5BTMoPgxxhSqSlX48jdDu7qfBoCJpwQAvD_BwE&amp;gclsrc=aw.ds</a></p>
+<p>By following the url for the <code>sentimentui</code> endpoint, you would see a UI wo as follows:</p>
+<p><img src="/blog/images/copied_from_nb/images/model-deployment/7.jpg" alt=""></p>
 
 </div>
 </div>

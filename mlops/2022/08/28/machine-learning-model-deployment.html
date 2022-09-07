@@ -16,7 +16,7 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2022-08-28T00:00:00-05:00" />
 <script type="application/ld+json">
-{"headline":"MLOps project - part 3a: Machine Learning Model Deployment","dateModified":"2022-08-28T00:00:00-05:00","datePublished":"2022-08-28T00:00:00-05:00","description":"Deploying machine learning models in production.","image":"https://kargarisaac.github.io/blog/images/some_folder/your_image.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://kargarisaac.github.io/blog/mlops/2022/08/28/machine-learning-model-deployment.html"},"@type":"BlogPosting","url":"https://kargarisaac.github.io/blog/mlops/2022/08/28/machine-learning-model-deployment.html","@context":"https://schema.org"}</script>
+{"description":"Deploying machine learning models in production.","@type":"BlogPosting","headline":"MLOps project - part 3a: Machine Learning Model Deployment","dateModified":"2022-08-28T00:00:00-05:00","datePublished":"2022-08-28T00:00:00-05:00","url":"https://kargarisaac.github.io/blog/mlops/2022/08/28/machine-learning-model-deployment.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://kargarisaac.github.io/blog/mlops/2022/08/28/machine-learning-model-deployment.html"},"image":"https://kargarisaac.github.io/blog/images/some_folder/your_image.png","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/blog/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://kargarisaac.github.io/blog/feed.xml" title="Isaac Kargar" /><!-- the google_analytics_id gets auto inserted from the config file -->
 
@@ -38,7 +38,7 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2022-08-28T00:00:00-05:00" />
 <script type="application/ld+json">
-{"headline":"MLOps project - part 3a: Machine Learning Model Deployment","dateModified":"2022-08-28T00:00:00-05:00","datePublished":"2022-08-28T00:00:00-05:00","description":"Deploying machine learning models in production.","image":"https://kargarisaac.github.io/blog/images/some_folder/your_image.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://kargarisaac.github.io/blog/mlops/2022/08/28/machine-learning-model-deployment.html"},"@type":"BlogPosting","url":"https://kargarisaac.github.io/blog/mlops/2022/08/28/machine-learning-model-deployment.html","@context":"https://schema.org"}</script>
+{"description":"Deploying machine learning models in production.","@type":"BlogPosting","headline":"MLOps project - part 3a: Machine Learning Model Deployment","dateModified":"2022-08-28T00:00:00-05:00","datePublished":"2022-08-28T00:00:00-05:00","url":"https://kargarisaac.github.io/blog/mlops/2022/08/28/machine-learning-model-deployment.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://kargarisaac.github.io/blog/mlops/2022/08/28/machine-learning-model-deployment.html"},"image":"https://kargarisaac.github.io/blog/images/some_folder/your_image.png","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 <link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
@@ -121,7 +121,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      10 min read
+      12 min read
     
 </span></p>
 
@@ -570,9 +570,65 @@ It's really informative and I highly recommend check it out.</p>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<p>Great. We deployed our model as an endpoint and developed a simple UI for people to write their comment on the product, and we then call the endpoint and make the inference.</p>
+<p>But, what if the model needs GPU for inference? For those models, we can go for Vertex AI. We can also use Vertex AI for models with CPU, but there are some points that we need to be aware of. 
+The absence of a downscale to zero is one of the main drawbacks of Vertex AI Endpoints. There is always at least one endpoint node active.
+It can cost more than 100$ per month for a single endpoint . Even if you receive no requests for predictions, you still have to pay the fee. It is absurd. This is acceptable if you just have one model deployed, but it adds up over time as you deploy more and more models. Additionally, keep in mind that prices increase with machine size.
+Consider deploying your model to Cloud Run rather than Vertex AI Endpoints if your model does not require the use of a GPU. Cloud Run is capable of scaling down to zero. On the other hand, keep in mind that if you use Cloud Run instead of Vertex AI, you lose some of the capabilities like Explainable AI or Model Monitoring. Check <a href="https://medium.com/google-cloud/how-to-reduce-your-ml-model-inference-costs-on-google-cloud-e3d5e043980f">this</a> blog post for more detailed comparison.</p>
+<p>Anyway, let's see how we can use Vertex AI to deploy our model as an endpoint. You can decide in each project if you want to use it or not.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Vertex-AI">
 <a class="anchor" href="#Vertex-AI" aria-hidden="true"><span class="octicon octicon-link"></span></a>Vertex AI<a class="anchor-link" href="#Vertex-AI"> </a>
 </h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Deploying a model as an endpoint on Vertex is really easy. You can check <a href="https://medium.com/nlplanet/deploy-a-pytorch-model-with-flask-on-gcp-vertex-ai-8e81f25e605f">this blog post</a> to learn how to do it using Google Cloud Console. I use <code>gcloud</code> here to do the same. Follow the steps below:</p>
+<ul>
+<li>Import model to Vertex AI model registry:</li>
+</ul>
+<div class="highlight"><pre><span></span>gcloud ai models upload <span class="se">\</span>
+  --region<span class="o">=</span>europe-west1 <span class="se">\</span>
+  --display-name<span class="o">=</span>sentiment2 <span class="se">\</span>
+  --container-image-uri<span class="o">=</span>gcr.io/<span class="nv">$PROJECT_ID</span>/sentiment_ui
+</pre></div>
+<ul>
+<li>Create an endpoint:</li>
+</ul>
+<div class="highlight"><pre><span></span>gcloud ai endpoints create <span class="se">\</span>
+  --region<span class="o">=</span>europe-west1 <span class="se">\</span>
+  --display-name<span class="o">=</span>sentiment2
+</pre></div>
+<ul>
+<li>Get the ID for model and endpoint:</li>
+</ul>
+<div class="highlight"><pre><span></span>gcloud ai endpoints list --region<span class="o">=</span>europe-west1
+gcloud ai models list --region<span class="o">=</span>europe-west1
+</pre></div>
+<ul>
+<li>Deploy the model to the endpoint using the above IDs:</li>
+</ul>
+<div class="highlight"><pre><span></span>gcloud ai endpoints deploy-model &lt;ENDPOINT_ID&gt; <span class="se">\</span>
+  --region<span class="o">=</span>europe-west1 <span class="se">\</span>
+  --model<span class="o">=</span>&lt;MODEL_ID&gt; <span class="se">\</span>
+  --display-name<span class="o">=</span>sentiment2
+
+gcloud ai endpoints deploy-model <span class="m">3509588339302858752</span> <span class="se">\</span>
+  --region<span class="o">=</span>europe-west1 <span class="se">\</span>
+  --model<span class="o">=</span><span class="m">4628381002983538688</span> <span class="se">\</span>
+  --display-name<span class="o">=</span>sentiment2
+</pre></div>
+<p>You can use the <code>--accelerator</code> flag if you want to use GPU. Check <a href="https://cloud.google.com/sdk/gcloud/reference/ai/endpoints/deploy-model">here</a> to learn more.</p>
+
 </div>
 </div>
 </div>
